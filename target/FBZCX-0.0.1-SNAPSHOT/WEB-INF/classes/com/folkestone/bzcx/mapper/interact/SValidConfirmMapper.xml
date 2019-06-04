@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.interact.SValidConfirmMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.interact.ValidConfirmVo" >
+    <result column="VALID_CONFIRM_ID" property="validConfirmId" jdbcType="VARCHAR" />
+    <result column="STANDARD_ID" property="standardId" jdbcType="VARCHAR" />
+    <result column="SUGGEST_STATUS" property="suggestStatus" jdbcType="INTEGER" />
+    <result column="APPLY_USER" property="applyUser" jdbcType="VARCHAR" />
+    <result column="AUDIT_USER" property="auditUser" jdbcType="VARCHAR" />
+    <result column="APPLY_DATE" property="applyDate" jdbcType="TIMESTAMP" />
+    <result column="AUDIT_DATE" property="auditDate" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="NOW_STATUS" property="nowStatus" jdbcType="INTEGER" />
+    <result column="VALID_SHOW" property="validShow" jdbcType="INTEGER" />
+      <result column="COMMENT" property="comment" jdbcType="LONGVARCHAR" />
+    <result column="AUDIT_COMMENT" property="auditComment" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+ <!-- 标准意见反馈单列表 -->
+  <select id="listByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+		select * from  S_VALID_CONFIRM   
+		<where>
+			<if test="validConfirmId != null">
+			 VALID_CONFIRM_ID like CONCAT('%',#{validConfirmId},'%')
+			</if>
+			<if test="show != null">
+			 AND VALID_SHOW = #{show}
+			</if>
+	 </where>
+	 ORDER BY APPLY_DATE DESC
+ </select>
+ 
+ <select id="OneByValid" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+ 	SELECT * S_VALID_CONFIRM WHERE VALID_CONFIRM_ID=#{validConfirmId}
+ </select>
+ 
+ <!-- 删除标准意见反馈单 -->
+  <delete id="deleteByIds" parameterType="String">
+       delete from S_VALID_CONFIRM where VALID_CONFIRM_ID = #{0}
+  </delete>
+  
+    <delete id="deleteBystanIds" parameterType="String">
+       delete from S_VALID_CONFIRM where STANDARD_ID = #{0}
+  </delete>
+ 
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.interact.S_Valid_ConfirmDo" >
+    insert into S_VALID_CONFIRM
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="validConfirmId != null" >
+        VALID_CONFIRM_ID,
+      </if>
+      <if test="standardId != null" >
+        STANDARD_ID,
+      </if>
+      <if test="suggestStatus != null" >
+        SUGGEST_STATUS,
+      </if>
+      <if test="comment != null" >
+        "COMMENT",
+      </if>
+      <if test="applyUser != null" >
+        APPLY_USER,
+      </if>
+      <if test="auditUser != null" >
+        AUDIT_USER,
+      </if>
+      <if test="applyDate != null" >
+        APPLY_DATE,
+      </if>
+      <if test="auditDate != null" >
+        AUDIT_DATE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="auditComment != null" >
+        AUDIT_COMMENT,
+      </if>
+      <if test="nowStatus != null">
+      	NOW_STATUS,
+      </if>
+      <if test="show != null">
+      	VALID_SHOW
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="validConfirmId != null" >
+        #{validConfirmId,jdbcType=VARCHAR},
+      </if>
+      <if test="standardId != null" >
+        #{standardId,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestStatus != null" >
+        #{suggestStatus,jdbcType=DECIMAL},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=LONGVARCHARLONGVARCHAR},
+      </if>
+      <if test="applyUser != null" >
+        #{applyUser,jdbcType=LONGVARCHARLONGVARCHAR},
+      </if>
+      <if test="auditUser != null" >
+        #{auditUser,jdbcType=LONGVARCHARLONGVARCHAR},
+      </if>
+      <if test="applyDate != null" >
+        #{applyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditDate != null" >
+        #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="auditComment != null" >
+        #{auditComment,jdbcType=LONGVARCHARLONGVARCHAR},
+      </if>
+      <if test="nowStatus != null">
+      	#{nowStatus,jdbcType=DECIMAL}
+      </if>
+      <if test="show != null">
+      	#{show,jdbcType=DECIMAL}
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByValidConfirmId" parameterType="com.folkestone.bzcx.bean.bean_do.interact.S_Valid_ConfirmDo">
+    update S_VALID_CONFIRM
+    <set >
+      <if test="standardId != null" >
+        STANDARD_ID = #{standardId,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestStatus != null" >
+        SUGGEST_STATUS = #{suggestStatus,jdbcType=DECIMAL},
+      </if>
+      <if test="comment != null" >
+        "COMMENT" = #{comment,jdbcType=LONGVARCHARLONGVARCHAR},
+      </if>
+      <if test="applyUser != null" >
+        APPLY_USER = #{applyUser,jdbcType=LONGVARCHARLONGVARCHAR},
+      </if>
+      <if test="auditUser != null" >
+        AUDIT_USER = #{auditUser,jdbcType=LONGVARCHARLONGVARCHAR},
+      </if>
+      <if test="applyDate != null" >
+        APPLY_DATE = #{applyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditDate != null" >
+        AUDIT_DATE = #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="auditComment != null" >
+        "AUDIT_COMMENT" = #{auditComment,jdbcType=LONGVARCHARLONGVARCHAR},
+      </if>
+      <if test="nowStatus != null">
+      	NOW_STATUS = #{nowStatus,jdbcType=DECIMAL},
+      </if>
+      <if test="show != null">
+      	VALID_SHOW = #{show,jdbcType=DECIMAL}
+      </if>
+    </set>
+    where VALID_CONFIRM_ID = #{validConfirmId,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

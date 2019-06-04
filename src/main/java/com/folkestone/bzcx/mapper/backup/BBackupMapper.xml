@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.backup.BBackupMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.backup.BackupVo" >
+    <result column="BACKUP_ID" property="backupId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="RECOVERY_DATE" property="recoveryDate" jdbcType="TIMESTAMP" />
+    <result column="BGROUP" property="bgroup" jdbcType="INTEGER" />
+    <result column="OPERUSER" property="operuser" jdbcType="VARCHAR" />
+    <result column="PATH" property="path" jdbcType="VARCHAR" />
+  </resultMap>
+ <sql id="Base_Column_List" >
+    BACKUP_ID, CREATE_DATE, RECOVERY_DATE, BGROUP, OPERUSER, PATH
+  </sql>
+  
+  <select id="selectByGroup" parameterType="Integer" resultMap="BaseResultMap">
+  	select * from B_BACKUP
+    where BGROUP = #{bGroup,jdbcType=INTEGER}
+  </select>
+
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from B_BACKUP
+    where BACKUP_ID = #{backupId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.backup.B_BackupDo" >
+    insert into B_BACKUP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="backupId != null" >
+        BACKUP_ID,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="recoveryDate != null" >
+        RECOVERY_DATE,
+      </if>
+      <if test="bgroup != null" >
+        BGROUP,
+      </if>
+      <if test="operuser != null" >
+        OPERUSER,
+      </if>
+      <if test="path != null" >
+        PATH,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="backupId != null" >
+        #{backupId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recoveryDate != null" >
+        #{recoveryDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bgroup != null" >
+        #{bgroup,jdbcType=INTEGER},
+      </if>
+      <if test="operuser != null" >
+        #{operuser,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.backup.B_BackupDo" >
+    update B_BACKUP
+    <set >
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recoveryDate != null" >
+        RECOVERY_DATE = #{recoveryDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bgroup != null" >
+        BGROUP = #{bgroup,jdbcType=INTEGER},
+      </if>
+      <if test="operuser != null" >
+        OPERUSER = #{operuser,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        PATH = #{path,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where BACKUP_ID = #{backupId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>简单查询</title>
+    <link rel="stylesheet" href="css/userAttention.css">
+    <style>
+    	body{
+    		margin:0;
+    		padding:0;
+            font-size:0;
+    	}
+    	ul{
+    		list-style:none;
+    		margin:0;
+    		padding:0;
+    	}
+        .plainTop{
+            width: 100%;
+            height: 1.4rem;
+            background: rgba(29,40,73,1);
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            font-size: .3rem;
+        }
+        .topLeft img{
+            transform: scale(0.5)
+        }
+        .topRight img{
+            transform: scale(0.5)
+        }
+        .topLeft{
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 15%;
+            height: 100%;
+        }
+        .topRight{
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex: 1;
+            height:60%;
+            background: #fff;
+            margin-right: .2rem;
+            padding-left:.1rem;
+            border-radius: 6px;
+        }
+        .topRight div{
+            width: 33%;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+        }
+        .topRight input{
+            flex:1;
+            /* height:46%; */
+            border: none;
+            outline: none;
+            font-size: 0.3rem;
+            width: 40%;
+        }
+        .topRight input::placeholder{
+            font-size: .3rem;
+            color: #a2a2a2;
+        }
+        .searchBtn{
+            width: 14%;
+            height: 100%;
+            border: none;
+            outline: none;
+            background-image: url('img/button_nor_search.png');
+            background-repeat:no-repeat;
+            background-size: 0.4rem;
+            background-position: center;
+            background-color:#fff;
+            border-radius:0 6px 6px 0;
+        }
+        .select_hy{
+        	position:relative;
+        }
+        .select_hy>ul{
+        	position:absolute;
+        	background:#fff;
+        	color:#333333;
+        	z-index:10;
+        	box-shadow:0px 0px 7px 0px rgba(0, 0, 0, 0.2);
+			border-radius:3px;
+			left:-0.1rem;
+			top:0.64rem;
+			text-align:center;
+			display:none;
+        }
+        .select_hy>ul>li{
+        	padding:0.3rem 0;
+        	width:2.19rem;
+            font-size:0.3rem;
+        	display:inline-block;
+        }
+        .select_hy img{
+            width:0.5rem;
+            height:0.4rem;
+        }
+        .select_hy span{
+            font-size:0.3rem;
+            display: inline-block;
+           
+        }
+        .searchBtn:active{
+            background-image: url('img/button_sel_search.png');
+            background-size: 1rem;
+        }
+        .highCon{
+            width: 100%;
+            height: .8rem;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            font-size: .3rem;
+            color: #333;
+            position: relative;
+        }
+        .standard{
+            flex: 2;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            border-right: 1px solid #dcdcdc;          
+            text-align:center;
+            position: relative;
+        }
+        .standardName{
+            flex: 3;   
+            padding-left:.1rem;
+            padding-right:.1rem;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;                
+            text-align:center;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            position: relative;
+        }
+        .conBlue{
+            color: #fff;
+            background: #004BE2;
+        }
+        .tradeDiv{
+            width: 100%;
+            height:100%;            
+            /* position: fixed; */
+            top:0;
+            left:100%;              
+            color:#333;  
+            z-index:999;                        
+        }
+        .scrollDiv{
+        	width:100%;
+        	height:100%;  
+            overflow:auto;
+        }             
+        .tradeList{
+        	width:100%;
+        	display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+        }
+        #shadow{
+            flex: 1;            
+            background: #000;
+            opacity: 0.5;
+        }
+        .tradeDivShow{
+        	flex: 3.05;           
+            background: #fff;
+            padding-left: .2rem;
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            justify-content:space-between;
+            height: .8rem;
+            font-size: .3rem;
+            border-bottom:1px solid #ececec; 
+        }  
+        .tradeText{
+        	flex:8;
+        	overflow: hidden;
+        }  
+        .tradeDivShow img{
+        	flex:1;   
+        	transform: scale(0.65)     	
+        }
+        #listTop{
+        	width:100%;
+            height: 1rem;
+            display: -webkit-flex;
+            display: flex;
+            border-bottom: 1px sole red;
+            margin-right: .2rem;
+            justify-content: space-around;
+        }
+		.btnColor{
+			color:#FFBE00;
+		}        
+        .btnRed{
+            width: 30%;
+            border: none;
+            outline: none;
+        }            
+        .searchDiv{
+       		display:none;
+            flex-wrap: wrap;
+            background-image: url('img/bj_search.png');
+            background-repeat: no-repeat;
+            background-size: 10rem;
+            background-position: center;
+            font-size: .25rem;
+            color: #fff;
+            padding-left:.2rem; 
+            padding-right:.2rem; 
+        }
+        .hotDiv,.historyDiv{
+            width: 100%;
+        }
+        .hotTop,.historyTop{
+            opacity: 0.6;
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: .6rem;
+        }
+        .historyTop{
+            justify-content: space-between;
+        }
+        .historyTop img{
+            transform: scale(.6);
+            margin-right: -.4rem;
+        }
+        .hotCon,.historyCon{
+            display: -webkit-flex;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            line-height: 0.7rem;
+            color: #ececec;
+        }
+        .singular{
+            background: #fff; /*单行背景色为白色*/
+        }
+        .dual{
+            background: #ececec;/*双行背景色为灰色*/
+        }
+        .loadDiv{
+        	width: 100%;
+            height:.8rem;
+            font-size: .3rem;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            left: 100%;
+            bottom: 0;
+            z-index: 99;
+        }
+        .loadDiv img{
+        	transform: scale(0.4);
+            margin-right: -.2rem;
+        }
+        .botm{
+        	width:100%;
+        	height:.8rem;
+        	display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size:.3rem;
+            background: #fff;
+            position: fixed;
+            left: 100%;
+            bottom: 0;
+            z-index: 199;
+            color:#ccc;
+        }
+        .error{        	
+        	display: -webkit-flex;
+        	display: flex;
+        	justify-content: center;
+        }
+        #error img{
+        	transform: scale(0.5);
+        }
+        .errorHide{
+        	display:none;
+        }
+        /*用户未关注头部显示*/
+        .attention{  
+        	width:100%;
+        	height:1.6rem;
+        	background:#ececec;
+        	display:-webkit-flex;
+        	display:flex;
+        	align-items:center;
+        	justify-content: space-between ;
+        }
+        .attention img{       
+        	margin-left:-.75rem;       	
+        	transform: scale(0.5);
+        }
+        .attention button{
+        	border:1px solid #004BE2;
+        	height:.56rem;
+        	width:1.66rem;
+        	color:#004BE2;
+        	background:#ececec;
+        	outline:none;  
+        	border-radius:2px;
+        	margin-right:.42rem;      	
+        }
+        .attention button:active{
+        	color:#fff;
+        	background:#004BE2;
+        }
+        .attentionHide{
+        	display:none;
+        }
+          /*我加的===================*/
+        .news{
+            width:100%;
+            height:10rem;
+            /* background:red; */
+        }
+        .news ul{
+            list-style: none;
+            margin:0;
+            padding:0;
+        }
+        .news li{
+            display: block;
+            background: #fff;
+            border-bottom:1px solid #eee;
+            height:1.3rem;
+            width:100%;
+            position:relative;
+        }
+        .news li .news_title{
+            font-size:0.3rem;
+            font-family:SourceHanSansCN-Medium;
+            font-weight:500;
+            color:rgba(51,51,51,1);
+            line-height:0.3rem;
+            position:absolute;
+            top:0.22rem;
+            left:0.15rem;
+        }
+        .news li .news_time,.news li .news_class{
+            font-size:0.2rem;
+            font-family:SourceHanSansCN-Regular;
+            font-weight:400;
+            color:#999999;
+            position:absolute;
+            top:0.80rem;
+            left:0.15rem;
+            line-height:0.2rem;
+        }
+        .news li .news_class{
+            left:3.35rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="plain">
+    	<div class="attention attentionHide" id="follow">  <!-- 未关注的用户显示 -->
+    		<img src="img/gz_logo.png"/>
+    		<button>关注</button>
+    	</div>
+        <div class="plainTop">
+            <div class="topLeft"><img src="img/logo1.png" alt=""></div>
+            <div class="topRight">
+                <div class="select_hy" onclick="simple_changetype()">
+                   	<span class="tradeSpan">标准信息</span>
+                    <img src="img/icon_sanjiao.png" alt="">
+                    <ul>
+                    	<li>标准信息</li>
+                    	<li>法律法规</li>
+                    </ul>
+                </div>
+                <input type="text" value ="" placeholder="标准号与标准名称" id="simple_input">
+                <button class="searchBtn" onclick="simple_search()">
+                </button>               
+            </div>
+        </div>
+        <div class="searchDiv">  <!--热门搜索和历史搜索-->
+            <div class="hotDiv">
+                <div class="hotTop">                	
+                                                       热门搜索                                                                               
+                </div>
+                <div class="hotCon" id="simple_host">
+                    
+                </div>
+            </div>
+            <div class="historyDiv">
+                <div class="historyTop">
+                    <span>历史搜索</span>                   
+                    <img src="img/button_delte.png" alt="" onclick="simple_clean_history()">                                    
+                </div>
+                <div class="historyCon" id="simple_history">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="standard_show">
+        	<div class="highCon conBlue">
+	            <div class="standard">标准号</div>
+	            <div class="standardName">标准名称</div>
+	        </div>
+	        <div id="simplen_seach">
+	        	
+	        </div>      
+        </div>
+         
+        <div class="tradeDiv" id="simple_type">
+	         <div class="news scrollDiv">
+	         	<!-- 行业div -->  
+	         	<ul>
+                   
+	         	</ul>       		         		         	             		           		           		
+	         </div>	              
+        </div>   
+        <div class="loadDiv">
+	        <img src="img/5.png" alt="暂无图片">
+	        Loading...
+    	</div> 
+    	<div class="botm">
+    		已经到底部了
+    	</div> 
+    	<div id="error" class="errorHide">
+        	<img src="img/pic_weikong.png">
+        </div>
+    </div>
+     <script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js "></script>
+    <script src="js/rem.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.pagination.min.js"></script>
+     <script src="js/common.js"></script>
+    <script src="js/simple.js"></script>
+</body>
+</html>

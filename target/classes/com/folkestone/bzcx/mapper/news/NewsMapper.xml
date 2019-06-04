@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.news.NewsMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.news.NewsVo" >
+    <id column="NEWS_ID" property="newsId" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="OTHER" />
+    <result column="AUTHOR" property="author" jdbcType="OTHER" />
+    <result column="NEWS_SOURCE" property="newsSource" jdbcType="OTHER" />
+    <result column="SORT_CODE" property="sortCode" jdbcType="DECIMAL" />
+    <result column="HITS" property="hits" jdbcType="DECIMAL" />
+    <result column="HOT" property="hot" jdbcType="DECIMAL" />
+    <result column="PUBLISH_DATE" property="publishDate" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="DECIMAL" />
+    <result column="IMG_PATH" property="imgPath" jdbcType="OTHER" />
+    <result column="PROPERTY2" property="property2" jdbcType="OTHER" />
+    <result column="NEWS_CATE" property="newsCate" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="firstNews">
+  	SELECT * FROM N_NEWS 
+  	<where>
+  		<if test="newsCate != null">
+  			NEWS_CATE = #{newsCate}
+  		</if>
+  	</where>
+  </sql>
+  
+  <select id="getNewsById" parameterType="string" resultMap="BaseResultMap">
+	select * from N_NEWS where NEWS_ID = #{0}
+  </select>
+  
+   <select id="listNewsByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+	select * from N_NEWS 
+	<where> 
+	    <if test="newsCate != null">
+		 NEWS_CATE = #{newsCate}
+		</if>
+		<if test="title != null">
+		 ${relation} TITLE like '%' || #{title} || '%'
+		</if>
+		<if test="author != null">
+		 ${relation} AUTHOR like '%' || #{author} || '%'
+		</if>
+		<if test="newsSource != null">
+		${relation} NEWS_SOURCE like '%' || #{newsSource} || '%'
+		</if>
+		<if test="hasImg == '1'.toString()">
+		 ${relation} IMG_PATH is not null
+		</if>
+		<if test="hasImg == '2'.toString()">
+		 ${relation} IMG_PATH is null
+		</if> 
+  	</where>
+  	order by PUBLISH_DATE desc,SORT_CODE desc
+  </select>
+  
+  <select id="listPicture"  parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+  	SELECT * FROM N_NEWS WHERE IMG_PATH IS NOT NULL ORDER BY SORT_CODE,PUBLISH_DATE DESC
+  </select>
+  
+  <!-- 下一条 -->
+  <select id="downNews"  parameterType="string" resultMap="BaseResultMap">
+  	SELECT * FROM 
+(select row_number() over(order by SORT_CODE,PUBLISH_DATE) rn,N_NEWS.* from N_NEWS) 
+WHERE RN = ("TO_NUMBER"((SELECT RN FROM 
+(select row_number() over(order by SORT_CODE,PUBLISH_DATE) rn,N_NEWS.* from N_NEWS) 
+WHERE NEWS_ID = #{0}), 999)+1)
+  </select>
+  
+  
+  <!-- 上一条 -->
+   <select id="upNews"  parameterType="string" resultMap="BaseResultMap">
+  	SELECT * FROM 
+(select row_number() over(order by SORT_CODE,PUBLISH_DATE) rn,N_NEWS.* from N_NEWS) 
+WHERE RN = ("TO_NUMBER"((SELECT RN FROM 
+(select row_number() over(order by SORT_CODE,PUBLISH_DATE) rn,N_NEWS.* from N_NEWS) 
+WHERE NEWS_ID = #{0}), 999)-1)
+  </select>
+  
+  <select id="listNewsBySthing" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+  	select * from 
+  	(<include refid="firstNews"/>)
+	<where> 
+		<if test="title != null">
+		 ${relation} TITLE like '%' || #{title} || '%'
+		</if>  
+		<if test="author != null">
+		 ${relation} AUTHOR like '%' || #{author} || '%'
+		</if>
+		<if test="newsSource != null">
+		${relation} NEWS_SOURCE like '%' || #{newsSource} || '%'
+		</if>
+		<if test="hasImg == '1'.toString()">
+		 ${relation} IMG_PATH is not null
+		</if>
+		<if test="hasImg == '2'.toString()">
+		 ${relation} IMG_PATH is null
+		</if> 
+  	</where>
+  	order by SORT_CODE desc，PUBLISH_DATE desc
+  </select>
+  
+  <delete id="deleteById" parameterType="string">
+      delete from N_NEWS where NEWS_ID = #{0}
+  </delete>
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.news.N_NewsDo" >
+    insert into N_NEWS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="newsId != null" >
+        NEWS_ID,
+      </if>
+      <if test="title != null" >
+        TITLE,
+      </if>
+      <if test="author != null" >
+        AUTHOR,
+      </if>
+      <if test="newsSource != null" >
+        NEWS_SOURCE,
+      </if>
+      <if test="sortCode != null" >
+        SORT_CODE,
+      </if>
+      <if test="hits != null" >
+        HITS,
+      </if>
+      <if test="hot != null" >
+        HOT,
+      </if>
+      <if test="publishDate != null" >
+        PUBLISH_DATE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="imgPath != null" >
+        IMG_PATH,
+      </if>
+      <if test="property2 != null" >
+        PROPERTY2,
+      </if>
+      <if test="newsCate != null" >
+        NEWS_CATE,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="newsId != null" >
+        #{newsId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=OTHER},
+      </if>
+      <if test="author != null" >
+        #{author,jdbcType=OTHER},
+      </if>
+      <if test="newsSource != null" >
+        #{newsSource,jdbcType=OTHER},
+      </if>
+      <if test="sortCode != null" >
+        #{sortCode,jdbcType=DECIMAL},
+      </if>
+      <if test="hits != null" >
+        #{hits,jdbcType=DECIMAL},
+      </if>
+      <if test="hot != null" >
+        #{hot,jdbcType=DECIMAL},
+      </if>
+      <if test="publishDate != null" >
+        #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="imgPath != null" >
+        #{imgPath,jdbcType=OTHER},
+      </if>
+      <if test="property2 != null" >
+        #{property2,jdbcType=OTHER},
+      </if>
+      <if test="newsCate != null" >
+        #{newsCate,jdbcType=DECIMAL},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.news.N_NewsDo" >
+    update N_NEWS
+    <set >
+      <if test="newsId != null" >
+        NEWS_ID = #{newsId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        TITLE = #{title,jdbcType=OTHER},
+      </if>
+      <if test="author != null" >
+        AUTHOR = #{author,jdbcType=OTHER},
+      </if>
+      <if test="newsSource != null" >
+        NEWS_SOURCE = #{newsSource,jdbcType=OTHER},
+      </if>
+      <if test="sortCode != null" >
+        SORT_CODE = #{sortCode,jdbcType=DECIMAL},
+      </if>
+      <if test="hits != null" >
+        HITS = #{hits,jdbcType=DECIMAL},
+      </if>
+      <if test="hot != null" >
+        HOT = #{hot,jdbcType=DECIMAL},
+      </if>
+      <if test="publishDate != null" >
+        PUBLISH_DATE = #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="imgPath != null" >
+        IMG_PATH = #{imgPath,jdbcType=OTHER},
+      </if>
+      <if test="property2 != null" >
+        PROPERTY2 = #{property2,jdbcType=OTHER},
+      </if>
+      <if test="newsCate != null" >
+        NEWS_CATE = #{newsCate,jdbcType=DECIMAL},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=CLOB},
+      </if>
+    </set>
+  	 	where NEWS_ID = #{newsId,jdbcType=VARCHAR}
+  </update>
+
+ 
+</mapper>

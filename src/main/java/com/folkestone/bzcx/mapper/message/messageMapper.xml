@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.message.messageMapper" >
+
+<resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.message.message" >
+    <id column="NAMEMESSAGE" property="namemessage" jdbcType="VARCHAR" />
+    <result column="SUMMESSAGE" property="summessage" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="SumMessage" resultMap="BaseResultMap">
+  	SELECT '意见反馈维护'namemessage,COUNT(*)summessage FROM FE_FEEDBACK WHERE STATUS = 1 
+	UNION
+	SELECT '标准提案'namemessage,COUNT(*)summessage FROM R_REQ_COLLECT WHERE STATUS = 1
+	UNION 
+	SELECT '有效性确认维护'namemessage,COUNT(*)summessage FROM S_VALID_CONFIRM WHERE STATUS = 1
+  </select>
+  
+</mapper>

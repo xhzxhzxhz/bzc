@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<title>分类查询</title>
+	<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		body{
+			background: #ececec;
+		}
+		.cit{
+            width: 100%;           
+        }
+        .cit_top{
+        	height:.92rem;
+        	display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            font-size:.26rem;
+            padding-left:.28rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .go_info{
+        	color:#333;
+        	margin-right:5px;
+        }
+        .industry{
+        	color:#888;
+        	margin-left:5px;
+        	margin-right:.28rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .content{
+        	width:100%;        	
+        }
+        .listDiv{
+        	width:100%;
+        	background:#fff;        	
+        	font-size:.3rem;       	
+        	margin-bottom:.14rem;
+        }
+        .second,.three_con{
+        	padding-left:.28rem;       	
+        	height:.88rem;
+        	display: -webkit-flex;
+        	display:flex;
+        	align-items: center;
+        	justify-content: space-between;
+        }
+        .c_blue{
+       		width:.96rem;
+        	color:#004BE2;
+        }
+        .list_content{
+        	flex:1;
+        	margin-left:.24rem;       	
+        	color:#333;
+        	font-weight:400;
+        	text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .second img{
+        	width:.76rem;
+        	height:.76rem;
+        	border:none;
+        }
+        img[src=""],img:not([src]){opacity:0;}  /*这样可以实现在路径为空时隐藏*/       
+        .Fully{
+        	width:100%;   
+        	display:none;	 
+        }
+        .three_con{
+        	border-top:1px solid #E8E8E8;
+        } 
+        .c_gray{
+        	width:1.26rem;
+        	color:#999;
+        }
+        .diamonds{
+        	padding:.08rem;
+        	display: -webkit-flex;
+        	display:flex;
+        	justify-content:center;
+        	align-items: center;
+        	background:#F76260;
+        	color:#fff;
+        	margin-right:.28rem;
+        	font-size:.22rem;
+        	border-radius:.1rem;
+        }
+        .color-gray{
+        	color:#999
+        }
+        .bg-gray{
+        	background:#CCC;
+        }
+        .second:active,.three_con:active{
+        	background:#dfe0e3;
+        }
+	</style>
+</head>
+<body>
+	<div class='cit'>
+		<div class='cit_top'>
+			<span class='go_info'>首页</span>
+			<span>></span>
+			<span class='industry'>社会学、服务、公司(企业)的组织和管理、行政、运输</span>
+		</div>
+		<div class='content'>
+			<!-- <div class='listDiv'>
+				<div class='second'>
+					<span class='c_blue'>01.020</span>
+					<span class='list_content'>术语学(原则和协调配合)</span>
+					<img >
+				</div>
+				<div class='Fully'>
+					
+				</div>
+			</div>
+			<div class='listDiv'>
+				<div class='second'>
+					<span class='c_blue'>01.020</span>
+					<span class='list_content'>术语学(原则和协调配合)</span>
+					<img src='img/btn_shous.png'>
+				</div>
+				<div class='Fully'>
+					<div class='three_con'>
+						<span class='c_gray'>01.100.01</span>
+						<span class='list_content'>术语学(原则和协调配合)</span>
+						<span class='diamonds'>93</span>
+					</div>
+					<div class='three_con'>
+						<span class='c_gray'>01.100.01</span>
+						<span class='list_content'>术语学(原则和协调配合)</span>
+						<span class='diamonds'>193</span>
+					</div>
+				</div>
+			</div>
+			<div class='listDiv'>
+				<div class='second'>
+					<span class='c_blue'>01.020</span>
+					<span class='list_content'>术语学(原则和协调配合)</span>					
+					<img src='img/btn_zhank.png'>
+				</div>
+				<div class='Fully'>
+					
+				</div>
+			</div> -->
+		</div>
+	</div>
+</body>
+<script src="js/rem.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/class_info_two.js"></script>
+</html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.interact.FeReplyMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.interact.FeReplyVo" >
+    <result column="REPLY_ID" property="replyId" jdbcType="VARCHAR" />
+    <result column="FEEDBACK_ID" property="feedbackId" jdbcType="VARCHAR" />
+    <result column="REPLY_USER" property="replyUser" jdbcType="VARCHAR" />
+    <result column="RECEIVER_USER" property="receiverUser" jdbcType="VARCHAR" />
+    <result column="REPLY_DATE" property="replyDate" jdbcType="TIMESTAMP" />
+     <result column="CONTENT" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+ 
+ <!-- 根据反馈ID查询回复人 -->
+ <select id="selectReceiverUserByFeedbackId" parameterType="string" resultMap="BaseResultMap">
+		select * from  FE_REPLY  
+		where FEEDBACK_ID = #{0} ORDER BY REPLY_DATE
+ </select> 
+ 
+ <select id="listqueryByFeedbackId" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+ 	select * from  FE_REPLY  
+		where FEEDBACK_ID = #{feedbackId} ORDER BY REPLY_DATE
+ </select>
+ 
+ 
+ <!-- 只查询第一条回复 -->
+ <select id="justOneReply" parameterType="string" resultMap="BaseResultMap">
+ 	SELECT a.* FROM (
+					SELECT * FROM FE_REPLY 
+							WHERE FEEDBACK_ID = #{0} ORDER BY REPLY_DATE
+					)a WHERE ROWNUM = 1
+ </select>
+ 
+   <!-- 根据反馈回复ID查询反馈详情 -->
+ <select id="getReplyById" parameterType="com.folkestone.bzcx.bean.bean_vo.interact.FeReplyVo" resultMap="BaseResultMap">
+		select * from  FE_REPLY  
+		<where>
+			<if test="replyId != null">
+				REPLY_ID = #{0}
+			</if>
+			<if test="feedbackId != null">
+				 and FEEDBACK_ID=#{feedbackId}
+			</if>
+			<if test="replyUser != null">
+				and REPLY_USER=#{replyUser}
+			</if>
+			<if test="receiverUser != null">
+				and RECEIVER_USER=#{receiverUser}
+			</if>
+		</where>
+ </select> 
+ 
+  <!-- 意见反馈回复信息列表 -->
+  <select id="listReplyByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+		select * from  FE_REPLY
+  </select>
+ 
+ <!-- 保存意见反馈回复信息 -->
+  <insert id="insertReply" parameterType="com.folkestone.bzcx.bean.bean_vo.interact.FeReplyVo" >
+    insert into FE_REPLY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="replyId != null" >
+        REPLY_ID,
+      </if>
+      <if test="feedbackId != null" >
+        FEEDBACK_ID,
+      </if>
+      <if test="replyUser != null" >
+        REPLY_USER,
+      </if>
+      <if test="receiverUser != null">
+        RECEIVER_USER,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="replyDate != null" >
+        REPLY_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="replyId != null" >
+        #{replyId,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId != null" >
+        #{feedbackId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyUser != null" >
+        #{replyUser,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverUser != null" >
+        #{receiverUser,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="replyDate != null" >
+        #{replyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  
+
+ 
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_vo.interact.FeReplyVo" >
+    update FE_REPLY
+    <set >
+      <if test="feedbackId != null" >
+        FEEDBACK_ID = #{feedbackId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyUser != null" >
+        REPLY_USER = #{replyUser,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverUser != null" >
+        RECEIVER_USER = #{receiverUser,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="replyDate != null" >
+        REPLY_DATE = #{replyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where REPLY_ID = #{replyId,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

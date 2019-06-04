@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.folkestone.bzcx.mapper.user.RResourceMapper">
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.user.ResourceVo">
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="PARENT_ID" jdbcType="VARCHAR" property="parentId" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="STATUS" jdbcType="BIGINT" property="status" />
+    <result column="NOTE" jdbcType="VARCHAR" property="note" />
+    <result column="PATH" property="path" jdbcType="VARCHAR" />
+  </resultMap>
+  
+ <!--  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.folkestone.bzcx.bean.bean_do.user.RResource">
+    <result column="PATH" jdbcType="LONGVARCHAR" property="path" />
+  </resultMap> -->
+ 
+   <select id="getResourceById" parameterType="string" resultMap="BaseResultMap">
+ 	select * from r_resource where ID like concat('%', #{0}, '%')
+  </select>
+  
+    <select id="listResourceByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap"  >
+		 SELECT * FROM r_resource  
+		<where>
+			 <if test ="parentId != null">
+			  PARENT_ID = #{parentId}
+			 </if>
+			 <if test ="keyword != null">
+			 and (
+			 NAME like concat('%', #{keyword}, '%')
+			 or TYPE like concat('%', #{keyword}, '%') 
+			   	  )
+			 </if>
+			 <if test ="path != null">
+			  and PATH like CONCAT('%',#{path},'%')
+			 </if>
+		</where>
+  </select>
+  
+    <select id="getResourceByQuery" resultMap="BaseResultMap" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" >
+         SELECT * from r_resource r 
+         <where>
+         <if test="resourceId != null">
+         and r.ID = #{resourceId}
+         </if>
+         <if test="status != null">
+         and r.status = #{status}
+         </if>
+         </where>
+  </select>
+    
+     <select id="listResourceByRoleId" parameterType="string" resultMap="BaseResultMap">
+  		 select * from r_resource r 
+  		 LEFT JOIN r_role_resource rr on r.ID = rr.RESOURCE_ID
+  		 where rr.ROLE_ID = #{0} and r.status = 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from r_resource
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.user.R_ResourceDo">
+    insert into r_resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="url != null">
+        URL,
+      </if>
+      <if test="parentId != null">
+        PARENT_ID,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="note != null">
+        NOTE,
+      </if>
+      <if test="path != null">
+        PATH,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIGINT},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.user.R_ResourceDo">
+    update r_resource
+    <set>
+      <if test="record.name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.url != null">
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null">
+        PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="record.note != null">
+        NOTE = #{note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    	where ID = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.user.RUserRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.user.UserRoleVo" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+    <result column="ALLOW_TYPE" property="allowType" jdbcType="BIGINT" />
+    <result column="ALLOW_ID" property="allowId" jdbcType="VARCHAR" />
+    <result column="LASTOPERATE_TIME" property="lastoperateTime" jdbcType="TIMESTAMP" />
+    <result column="LASTOPERATE_USER" property="lastoperateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="listUserRoleByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+	  	select * from r_user_role where 1 = 1
+	  	<if test="userId != null">
+	  		and ALLOW_ID = #{userId}
+	  	</if>
+	  	<if test="roleId != null">
+	  		and ROLE_ID = #{roleId}
+	  	</if>
+  </select>
+  
+  <delete id="deleteByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query">
+  	delete from r_user_role where 1 = 1
+  	<if test="userId != null">
+  		and ALLOW_ID = #{userId}
+  	</if>
+  	<if test="roleId != null">
+  		and ROLE_ID = #{roleId}
+  	</if>
+  </delete>
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.user.R_User_RoleDo" >
+    insert into r_user_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="roleId != null" >
+        ROLE_ID,
+      </if>
+      <if test="allowType != null" >
+        ALLOW_TYPE,
+      </if>
+      <if test="allowId != null" >
+        ALLOW_ID,
+      </if>
+      <if test="lastoperateTime != null" >
+        LASTOPERATE_TIME,
+      </if>
+      <if test="lastoperateUser != null" >
+        LASTOPERATE_USER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="allowType != null" >
+        #{allowType,jdbcType=BIGINT},
+      </if>
+      <if test="allowId != null" >
+        #{allowId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastoperateTime != null" >
+        #{lastoperateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastoperateUser != null" >
+        #{lastoperateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

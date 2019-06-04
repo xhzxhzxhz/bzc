@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.type.StandardTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.type.StandardTypeVo" >
+    <result column="TYPE_ID" property="typeId" jdbcType="VARCHAR" />
+    <result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="TYPE_LETTER" property="typeLetter" jdbcType="VARCHAR" />
+     <result column="COMMENT" property="comment" jdbcType="VARCHAR" />
+     <result column="DICTIONARIES_NAME" property="dictionariesName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectDictionforLetter" parameterType="java.lang.String" resultMap="BaseResultMap">
+       SELECT * FROM standard_type s LEFT JOIN type_dictionaries t ON s.TYPE_ID = t.TYPE_ID
+       <where>
+           <if test="dictionariesName != null">
+              t.DICTIONARIES_NAME = #{dictionariesName}
+           </if>
+       </where>
+  </select>
+  
+  <select id="selectAll" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+      select * from standard_type
+  </select>
+  
+  <select id="selectByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+      select * from standard_type
+      <where>
+          <if test="typeId != null">
+              TYPE_ID = #{typeId}
+          </if>
+          <if test="typeName != null">
+              TYPE_NAME like concat('%', #{typeName}, '%')
+          </if>
+          <if test="typeLetter != null">
+              TYPE_LETTER = #{typeLetter}
+          </if>
+      </where>
+  </select>
+  
+  
+  <delete id="delete">
+    delete from standard_type
+    where TYPE_ID in
+        <foreach collection="array" item="typeId" separator="," open="(" close=")">
+            #{typeId}
+        </foreach>
+  </delete>
+  
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.type.StandardTypeDo" >
+    insert into standard_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        TYPE_ID,
+      </if>
+      <if test="typeName != null" >
+        TYPE_NAME,
+      </if>
+      <if test="typeLetter != null" >
+        TYPE_LETTER,
+      </if>
+      <if test="comment != null">
+          COMMENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeLetter != null" >
+        #{typeLetter,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+          #{comment,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.type.StandardTypeDo" >
+    update standard_type
+    <set >
+      <if test="typeName != null" >
+        TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeLetter != null" >
+        TYPE_LETTER = #{typeLetter,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+          COMMENT = #{comment,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <where>
+         <if test="typeId != null" >
+      		TYPE_ID =  #{typeId,jdbcType=VARCHAR}
+    	</if>
+    </where>
+  </update>
+</mapper>

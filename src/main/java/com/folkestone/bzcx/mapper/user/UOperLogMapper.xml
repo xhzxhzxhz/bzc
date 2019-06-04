@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.user.UOperLogMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.user.OperLogVo" >
+    <result column="OPER_ID" property="operId" jdbcType="VARCHAR" />
+    <result column="OPER_USER" property="operUser" jdbcType="VARCHAR" />
+    <result column="OPER_DATE" property="operDate" jdbcType="TIMESTAMP" />
+    <result column="OPER_TYPE" property="operType" jdbcType="VARCHAR" />
+    <result column="OPER_DETAIL" property="operDetail" jdbcType="VARCHAR" />
+    <result column="MAPPING_ID" property="mappingId" jdbcType="VARCHAR" />
+    <result column="CLIENT_TYPE" property="clientType" jdbcType="INTEGER" />
+    <result column="OPER_URL" property="operUrl" jdbcType="VARCHAR" />
+    <result column="REALNAME" property="userName" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.user.U_Oper_LogDo" >
+    insert into U_OPER_LOG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operUser != null" >
+        OPER_USER,
+      </if>
+      <if test="operDate != null" >
+        OPER_DATE,
+      </if>
+      <if test="operType != null" >
+        OPER_TYPE,
+      </if>
+      <if test="operDetail != null" >
+        OPER_DETAIL,
+      </if>
+      <if test="mappingId != null" >
+        MAPPING_ID,
+      </if>
+      <if test="clientType != null" >
+        CLIENT_TYPE,
+      </if>
+      <if test="operUrl != null" >
+        OPER_URL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="operId != null" >
+        #{operId,jdbcType=VARCHAR},
+      </if>
+      <if test="operUser != null" >
+        #{operUser,jdbcType=VARCHAR},
+      </if>
+      <if test="operDate != null" >
+        #{operDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operType != null" >
+        #{operType,jdbcType=VARCHAR},
+      </if>
+      <if test="operDetail != null" >
+        #{operDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="mappingId != null" >
+        #{mappingId,jdbcType=VARCHAR},
+      </if>
+      <if test="clientType != null" >
+        #{clientType,jdbcType=INTEGER},
+      </if>
+      <if test="operUrl != null" >
+        #{operUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="listOperLogByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+		select * from U_OPER_LOG left join R_USER on U_OPER_LOG.OPER_USER = R_USER.ID
+		<where> 
+		    <if test="userName != null">
+			 ${relation} R_USER.REALNAME like CONCAT('%',#{userName},'%')
+			</if>
+			<if test="operType != null">
+			 ${relation} OPER_TYPE like CONCAT('%',#{operType},'%')
+			</if>
+			<if test="operDetail != null">
+			 ${relation} OPER_DETAIL like CONCAT('%',#{operDetail},'%')
+			</if>
+			<if test="operUrl != null">
+			 ${relation} OPER_URL like CONCAT('%',#{operUrl},'%')
+			</if>
+			<!-- <if test="startTime != null and startTime != ''">
+            	<![CDATA[and OPER_DATE >= to_date('${startTime} 00:00:00','yyyy-mm-dd hh24:mi:ss')]]>
+         	</if>
+		 	<if test="endTime != null and endTime != ''">
+		    	<![CDATA[and OPER_DATE <= to_date('${endTime} 00:00:00','yyyy-mm-dd hh24:mi:ss')]]>
+		 	</if>  -->
+	  	</where>
+	  	<choose>
+        <when test="order != null and sort != null">
+            order by ${order} ${sort}
+        </when>
+        <otherwise>
+            order by OPER_DATE DESC
+        </otherwise>
+    </choose>
+  </select>
+  <delete id="deleteById" parameterType="string"> 
+   	 delete from U_OPER_LOG where OPER_ID = #{0}
+  </delete>
+ <!--  <delete id="deleteByDate" parameterType="string"> 
+   	 <![CDATA[delete from U_OPER_LOG where OPER_DATE <= to_date(#{0},'yyyy-mm-dd')]]>
+  </delete> -->
+  
+  
+</mapper>

@@ -1,0 +1,281 @@
+#main{
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+#main_top{
+    margin-top: 30px;
+}
+#main_top ul{
+    overflow: hidden;
+    border-bottom: 1px solid #E6E6E6;
+    padding-bottom: 6px;
+}
+#main_top ul li{
+    float: left;
+    overflow: hidden;
+    font-size: 14px;
+}
+#main_top ul li:nth-of-type(1) i{
+    float: left;
+    width: 19px;
+    height: 19px;
+    background: url("../imgs/search/home.png") no-repeat;
+}
+#main_top ul li a{
+    float: left;
+    margin: 0 10px;
+    color: #1446A7;
+}
+#main_top ul li:last-of-type a{
+    color: #868686;
+}
+#main_top ul li span{
+    float: left;
+    color: #7F7F7F;
+}
+#main_center{
+    overflow: hidden;
+}
+#main_center_left{
+    float: left;
+    width: 860px;
+    overflow: hidden;
+}
+#main_center_right{
+    float: right;
+    width: 320px;
+    overflow: hidden;
+}
+.main-center-top h2{
+    color: #1446A7;
+    text-align: center;
+    font-size: 28px;
+    font-weight: normal;
+    margin-top: 36px;
+}
+.news-detail-detail{
+    margin-top: 40px;
+    overflow: hidden;
+    padding: 0 20px;
+    display: -webkit-flex; /* Safari，Chrome */
+    display: flex;
+    justify-content:space-between;
+    color: #868686;
+}
+.main-center-mid{
+    min-height: 948px;
+    box-sizing: border-box;
+    padding: 20px;
+    border: 1px solid #AFCAED;
+    margin-top: 14px;
+}
+.main-center-bot{
+    overflow: hidden;
+    color: #868686;
+    margin-top: 20px;
+}
+.main-center-bot-left{
+    float: left;
+    cursor: pointer;
+    overflow: hidden;
+}
+.main-center-bot-left i{
+    float: left;
+    width: 13px;
+    height: 22px;
+    background: url("../imgs/news/prev.png") no-repeat;
+}
+.main-center-bot-left b{
+    float: left;
+    margin-left: 10px;
+}
+.main-center-bot-left span{
+    float: left;
+    max-width: 310px;
+    height: 21px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+.main-center-bot-right{
+    float: right;
+    cursor: pointer;
+    overflow: hidden;
+}
+.main-center-bot-right i{
+    float: right;
+    width: 13px;
+    height: 22px;
+    background: url("../imgs/news/next.png") no-repeat;
+}
+.main-center-bot-right b{
+    float: right;
+}
+.main-center-bot-right span{
+    float: right;
+    margin-right: 10px;
+    max-width: 310px;
+    height: 21px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+.main-center-right-top{
+    margin-top: 20px;
+}
+.mypanel{
+    box-sizing: border-box;
+    border: 1px solid #95B9E7;
+}
+.panel-title{
+    height: 52px;
+    border-bottom: 1px solid #95B9E7;
+    background: #E8F2FF;
+    position: relative;
+}
+.panel-title i{
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    margin-top: -7.5px;
+    background: url("../imgs/news/search.png") no-repeat;
+}
+.panel-title p{
+    color: #2A4572;
+    font-size: 18px;
+    height: 22px;
+    position: absolute;
+    top: 50%;
+    left: 36px;
+    margin-top: -12px;
+}
+.news-search-con{
+    padding: 0 12px;
+    overflow: hidden;
+}
+.news-search-con-top{
+    margin-top: 30px;
+}
+/*复写下拉框样式*/
+.news-search-con select{
+    width: 65px;
+    height: 30px;
+    /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+    border: 1px solid #95B9E7;
+
+    /*很关键：将默认的select选择框样式清除*/
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+
+    /*在选择框的最右侧中间显示小箭头图片*/
+    background: url("../imgs/news/select.png") no-repeat scroll 45px center transparent;
+
+
+    /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+    padding:0 18px 0 10px;
+}
+/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+select::-ms-expand { display: none; }
+.news-search-con input[type='text']{
+    width: 153px;
+    height: 30px;
+    border: 1px solid #95B9E7;
+    margin-left: 6px;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+.news-search-con button{
+    margin-left: 5px;
+    box-sizing: border-box;
+    height: 30px;
+    width: 55px;
+    background: #1446A7;
+    color: #ffffff;
+}
+.news-search-con-bot{
+    margin-top: 25px;
+}
+.news-search-con-bot ul li{
+    width: 147px;
+    overflow: hidden;
+    cursor: pointer;
+    float: left;
+    font-size: 14px;
+    height: 19px;
+    margin-bottom: 20px;
+}
+.news-search-con-bot ul li span{
+    height: 18px;
+    margin-top: 1px;
+    width: 4px;
+    background: #BBCADF;
+    border-radius: 4px;
+    float: left;
+}
+.news-search-con-bot ul li p{
+    float: left;
+    margin-left: 7px;
+    width: 136px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+.main-center-right-bot{
+    margin-top: 22px;
+}
+.main-center-right-bot-tit{
+    border-bottom: 1px solid #E6E6E6;
+    font-size: 18px;
+    overflow: hidden;
+    color: #2A4572;
+}
+.main-center-right-bot-tit span{
+    padding: 2px 4px;
+    float: left;
+    border-bottom: 3px solid #1446A7;
+}
+.main-center-right-bot-con{
+    height: 650px;
+    overflow: auto;
+}
+.main-center-right-bot-con ul li{
+    height: 188px;
+    position: relative;
+    cursor: pointer;
+    margin-top: 28px;
+}
+.main-center-right-bot-con ul li img{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.mb{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+   	background: rgba(0,0,0,0.3);
+}
+.mb-tit{
+    width: 100%;
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    background: rgba(0,0,0,0.5);
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 28px;
+    padding: 0 12px;
+    height: 28px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8>
+<meta name=viewport
+	content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<title>标题</title>
+<script>
+	(function(doc, win, undefined) {
+		var docEl = doc.documentElement, resizeEvt = 'orientationchange' in window ? 'orientationchange'
+				: 'resize', recalc = function() {
+			var clientWidth = docEl.clientWidth;
+			if (clientWidth === undefined)
+				return;
+			docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+		};
+		if (doc.addEventListener === undefined)
+			return;
+		win.addEventListener(resizeEvt, recalc, false);
+		doc.addEventListener('DOMContentLoaded', recalc, false)
+	})(document, window);
+</script>
+<link href=./static/css/app.b9504ed1621e4ede9b677c429f21c3c4.css
+	rel=stylesheet>
+</head>
+<body>
+	<div id=app></div>
+	<script type=text/javascript
+		src=./static/js/manifest.3ad1d5771e9b13dbdad2.js></script>
+	<script type=text/javascript
+		src=./static/js/vendor.c60b127514b1e3625e79.js></script>
+	<script type=text/javascript
+		src=./static/js/app.00e97257d4338da76c83.js></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+#main_center{
+    margin-top: 0px;
+}
+.main-center-inner{
+    width: 800px;
+    height: 600px;
+    margin: 0 auto;
+    background: #F2F2F2;
+}
+.main-center-inner>p{
+    color: #606060;
+    text-align: center;
+    font-size: 18px;
+    height: 60px;
+    line-height: 60px;
+}
+.main-center-inner-con{
+    width: 770px;
+    height: 510px;
+    background: #ffffff;
+    margin: 0 auto;
+    padding-bottom: 60px;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+}
+/*一问一答*/
+.close-win{
+    display: block;
+    cursor: pointer;
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    margin-left: -57px;
+    width: 112px;
+    height: 29px;
+    background: #ebebeb;
+    border: 1px solid #d5d5d5;
+    color: #787878;
+    text-align: center;
+    line-height: 29px;
+}
+.collect-btn {
+    height: 30px;
+    width: 100px;
+    background: #1446A7;
+    color: #ffffff;
+    position: absolute;
+    top: -5px;
+    right: 0px;
+}
+#main_bot ul li{
+    padding: 0px 18px 20px;
+    border-bottom: 1px solid #E6E6E6;
+}
+.vli1{
+    overflow: hidden;
+}
+.vli1-left{
+    float: left;
+    position: relative;
+    color: #4F74BD;
+    height: 40px;
+    line-height: 50px;
+    font-size: 18px;
+}
+.vli1-left i{
+    width: 19px;
+    height: 19px;
+    position: absolute;
+    right: -26px;
+    top: 9px;
+}
+.vli1-left span:nth-of-type(2){
+    margin-left: 10px;
+}
+.myOk{
+    background: url("../imgs/work/ok.png") no-repeat;
+}
+.myLine{
+    background: url("../imgs/work/line.png") no-repeat;
+}
+.myStar{
+    background: url("../imgs/work/star.png") no-repeat;
+}
+.vli1-right{
+    float: right;
+    margin-top: 12px;
+    font-size: 14px;
+    background: #F5F9FF;
+    padding: 3px 8px;
+}
+.vli1-right span:nth-of-type(1){
+    margin: 0 12px;
+}
+.vli2{
+    font-size: 14px;
+    color: #9F9F9F;
+}
+.vli3{
+    margin-top: 12px;
+    line-height: 28px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+.vli4{
+    font-size: 14px;
+    margin-top: 12px;
+    position: relative;
+}
+.vli4>span {
+    color: #4F74BD;
+}
+.adminA>h6{
+    color: #4F74BD;
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-weight: normal;
+}
+.adminA>p{
+    line-height: 28px;
+}

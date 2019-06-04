@@ -1,0 +1,329 @@
+<div class="easyui-layout" data-options="fit:true">
+    <!-- Begin of toolbar -->
+    <div id="system_toolbar">
+        <div class="wu-toolbar-button">
+            <a href="#" id="res-a54c761261d24e9b9b58d9b9a64a3c7b" class="easyui-linkbutton" iconCls="icon-add" onclick="openAdd()" plain="true">新建</a>
+            <a href="#" id="res-cf36f818a8224003b2282c21be8f9e06" class="easyui-linkbutton" iconCls="icon-remove" onclick="remove()" plain="true">删除</a>
+			<a href="#" id="res-42978098d3ad4357a0dd7dff033ef2da" class="easyui-linkbutton" iconCls="icon-edit" onclick="openEdit()" plain="true">修改</a>
+            <a href="#" id="res-3a52880c4d57408888bffb3d4f522d0f" class="easyui-linkbutton" iconCls="icon-disk-download" onclick="architectureImport()" plain="true">导入</a>
+            <a href="#" id="res-6888f5bbc70444979239620ecdd9d41a" class="easyui-linkbutton" iconCls="icon-disk-upload" onclick="systemExport()" plain="true">导出</a>
+        </div>
+    </div>
+    <!-- End of toolbar -->
+    <table id="system_datagrid" class="easyui-datagrid" toolbar="#system_toolbar"></table>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="system_add_dialog" class="easyui-dialog" data-options="closed:true" style="width:400px; padding:10px;">
+	<form id="system_add_form" enctype="multipart/form-data" method="post">
+        <table>
+            <tr>
+                <td width="80" align="right">体系中文名:</td>
+                <td><input type="text" name="architectureCnName" class="wu-text easyui-validatebox" data-options="required:true"/></td>
+            </tr>
+            <tr>
+                <td align="right">体系英文名:</td>
+                <td><input type="text" name="architectureEnName" class="wu-text"/></td>
+            </tr>
+            <!-- <tr>
+                <td align="right">体系代码:</td>
+                <td><input type="text" name="architectureCode" class="wu-text easyui-validatebox" data-options="required:true"/></td>
+            </tr> -->
+            <tr>
+                <td align="right">创建日期:</td>
+                <td><input editable="false" type="text" name="createDate" class="easyui-datebox wu-text" /></td>
+            </tr>
+			<tr>
+				<td align="right">发布日期:</td>
+				<td><input editable="false" type="text" name="publishDate" class="easyui-datebox wu-text"  id="publishDate"/></td>
+			</tr>
+			<tr>
+				<td align="right">实施日期:</td>
+				<td><input editable="false" type="text" name="effectDate" class="easyui-datebox wu-text"  id="effectDate"/></td>
+			</tr>
+			<tr>
+				<td align="right">作废日期:</td>
+				<td><input editable="false" type="text" name="invalidDate" class="easyui-datebox wu-text"  id="invalidDate"/></td>
+			</tr>
+			<tr>
+				<td align="right">发布单位:</td>
+				<td>
+				<input type="text" name="departmentName" class="wu-text easyui-validatebox" data-options="required:true" id="publishUnit_show" disabled/>
+					<input type="hidden" name="publishUnit" class="wu-text" id="publishUnit" /></td>
+			</tr>
+			<tr>
+				<td align="right"></td>
+				<td>
+					<div style="height: 100px;border: 1px #95b8e7 solid;overflow: auto;width: 266px">
+						<ul id="system_add_tree" class="easyui-tree"></ul>
+					</div>
+				</td>
+			</tr>
+			<tr id="architecture_file_tr" style="display:none">
+				<td align="right">体系文件:</td>
+				<td><input id="architecture_file_input" name="architectureFile"  type="file" class="easyui-filebox"/></td>
+			</tr>
+        </table>
+    </form>
+</div>
+<!-- End of easyui-dialog -->
+<script type="text/javascript">
+	
+	/**
+	 * Name 删除记录
+	 */
+	function remove(){
+		$.messager.confirm('信息提示','此体系及其体系下的节点将会被删除。', function(result){
+			if(result){
+				var items = $('#system_datagrid').datagrid('getSelections');
+				var ids = [];
+				$(items).each(function(){
+					ids.push(this.architectureId);	
+				});
+				console.info(ids);
+				$.ajax({
+					url:'/BZCX/admin/architecture/delete',
+					type:"POST",
+					data: {
+						architectureId : ids 
+					},
+					async : false,
+		            cache : false,
+		            traditional: true,
+					success:function(data){
+						if(data.code == 200){
+							$.messager.alert('信息提示',data.msg,'info');
+							systemHtml.reloadTable();
+						}
+						else
+						{
+							$.messager.alert('信息提示','删除失败。','info');
+						}
+					}	
+				});
+			}	
+		});
+	}
+	/**
+	* Name 打开添加窗口
+	*/
+	function openAdd(){
+		$('#system_add_form').form('clear');
+		$('#architecture_file_tr').hide();
+		$('#system_add_dialog').dialog({
+			closed: false,
+			modal:true,
+            title: "新建体系",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: function(){
+                	var importdata = $("#publishUnit_show").val();
+                	if(importdata == ""){
+                		$.messager.alert('信息提示','请选择所属部门','info');
+                		return;
+                	}
+                	$('#system_add_form').form('submit', {
+            			url:'/BZCX/admin/architecture/insert',
+            			success:function(data){
+            				data = JSON.parse(data);
+            				if(data.code == 200){
+            					$.messager.alert('信息提示','新增成功。','info');
+            					$('#system_add_dialog').dialog('close');
+            					systemHtml.reloadTable();
+            				}else if(data.code == 10006){ 	
+            					$.messager.alert('信息提示', data.msg, 'info');
+            				}else{
+            					$.messager.alert('信息提示','新增失败，请联系管理员','info');
+            				}
+            			}
+            		});
+                }
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#system_add_dialog').dialog('close');
+                }
+            }]
+        });
+	}
+	
+	/**
+	* Name 打开修改窗口
+	*/
+	function openEdit(){
+		$('#system_add_form').form('clear');
+		$('#architecture_file_tr').hide();
+		var item = $('#system_datagrid').datagrid('getSelected');
+		$.ajax({
+			url:'/BZCX/admin/architecture/detail',
+			type: "POST",
+			data:{
+				architectureId : item.architectureId
+			},
+			success:function(data){
+				$('#system_add_form').form('load', data.data);
+			}	
+		});
+		$('#system_add_dialog').dialog({
+			closed: false,
+			modal:true,
+            title: "修改体系",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: function(){
+                	var architectureId = $('#system_datagrid').datagrid('getSelected').architectureId;
+            		$('#system_add_form').form('submit', {
+            			url:'/BZCX/admin/architecture/update?architectureId=' + architectureId,
+            			success:function(data){
+            				data = JSON.parse(data);
+            				if(data.code == 200){
+            					$.messager.alert('信息提示','修改成功。','info');
+            					$('#system_add_dialog').dialog('close');
+            					$("#system_datagrid").datagrid('reload');
+            				}else if(data.code == 900){
+            					$.messager.alert('信息提示',data.msg,'info');
+            					$('#system_add_dialog').dialog('close');
+            				}
+            				else
+            				{
+            					$.messager.alert('信息提示','修改失败。','info');
+            				}
+            			}
+            		});
+                }
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#system_add_dialog').dialog('close');
+                }
+            }]
+        });
+	}
+	/**
+	 *打开导入表单
+	 */
+	function architectureImport(){
+		$('#architecture_file_tr').show();
+		$('#system_add_form').form('clear');
+		$('#system_add_dialog').dialog({
+			closed: false,
+			modal:true,
+            title: "导入体系",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: function(){
+                	var importdata = $("#publishUnit_show").val();
+                	if(importdata == ""){
+                		$.messager.alert('信息提示','请选择所属部门','info');
+                		return;
+                	}
+                	$('#system_add_form').form('submit', {
+            			url:'/BZCX/admin/architecture/import',
+            			success:function(data){
+            				data = JSON.parse(data);
+            				if(data.code == 200){
+            					$.messager.alert('信息提示','导入成功。','info');
+            					$('#system_add_dialog').dialog('close');
+            					$("#system_datagrid").datagrid('reload');
+            				}
+            				else
+            				{
+            					$.messager.alert('信息提示','导入失败。','info');
+            				}
+            			}
+            		});	
+                }
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#system_add_dialog').dialog('close');
+                }
+            }]
+        });
+	}
+	// 点击导出按钮
+	function systemExport(){
+		var architectureId = $('#system_datagrid').datagrid('getSelected').architectureId;
+		window.location = "/BZCX/admin/architecture/export?architectureId=" + architectureId;
+		/* $.ajax({
+			url:'/BZCX/admin/architecture/delete',
+			type:"POST",
+			data: {
+				architectureId : ids 
+			},
+			async : false,
+            cache : false,
+            traditional: true,
+			success:function(data){
+				if(data.code == 200){
+					$.messager.alert('信息提示',data.msg,'info');
+					systemHtml.reloadTable();
+				}
+				else
+				{
+					$.messager.alert('信息提示','删除失败。','info');
+				}
+			}	
+		}); */
+	}
+	/**
+	 * Name 点击查看
+	 */
+	function openDetail(name, id){
+		addTab(name,'temp/systemDetail.html?architectureId=' + id,'',true);
+	}
+	var systemHtml = {
+			initTable : function(data){
+				$('#system_datagrid').datagrid({
+					url:'/BZCX/admin/architecture/list',
+					rownumbers:true,
+					singleSelect:false,
+					pageSize:20,           
+					pagination:true,
+					multiSort:true,
+					fitColumns:true,
+					fit:true,
+					columns:[[
+						{ checkbox:true},
+						{ field:'architectureCnName',title:'体系中文名称',width:100,sortable:true},
+						{ field:'architectureEnName',title:'体系英文名称',width:180,sortable:true},
+						{ field:'publishDate',title:'发布时间',width:100,sortable:true},
+						{ field:'effectDate',title:'实施时间',width:100,sortable:true},
+						{ field:'invalidDate',title:'废止时间',width:100,sortable:true},
+						{ field:'departmentName',title:'发布单位',width:100,sortable:true},
+						{ field:'action',title:'操作',width:30,align:'center',
+							formatter:function(value,rec){
+								var btn = '<a onclick="openDetail(\''+ rec.architectureCnName + '\',' + '\'' + rec.architectureId + '\')" href="javascript:void(0)">查看</a>';
+								return btn;
+							}
+						}
+					]]
+				});
+			},
+			reloadTable : function(data){
+				$("#system_datagrid").datagrid('reload', data);
+			},
+			initTree : function(data){
+				$('#system_add_tree').tree({
+					url:'/BZCX/admin/department/tree',
+					onSelect:function(node){
+						$("#publishUnit_show").val(node.text);
+						$("#publishUnit").val(node.id);
+					}
+				});
+			}
+	}
+	$(function(){
+		// 先初始化表格
+		systemHtml.initTable();
+		// 再初始化树
+		systemHtml.initTree();
+		// 检查权限
+		commonUtil.checkRight();
+	});
+</script>

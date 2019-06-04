@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.interact.RMessagesMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_do.interact.R_MessagesDo" >
+    <result column="REQ_MSG_ID" property="reqMsgId" jdbcType="VARCHAR" />
+    <result column="REQ_ID" property="reqId" jdbcType="VARCHAR" />
+    <result column="REPLY_USER" property="replyUser" jdbcType="VARCHAR" />
+    <result column="RECEIVED_USER" property="receivedUser" jdbcType="VARCHAR" />
+    <result column="REPLY_DATE" property="replyDate" jdbcType="TIMESTAMP" />
+    <result column="CONTENT" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <!-- 查询需求征集列表 -->
+ <select id="replyListCollectByQuerymess" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+		select * from  R_MESSAGES WHERE REQ_ID=#{reqId} ORDER BY REPLY_DATE
+ </select> 
+  
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.interact.R_MessagesDo" >
+    insert into R_MESSAGES
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reqMsgId != null" >
+        REQ_MSG_ID,
+      </if>
+      <if test="reqId != null" >
+        REQ_ID,
+      </if>
+      <if test="replyUser != null" >
+        REPLY_USER,
+      </if>
+      <if test="receivedUser != null" >
+        RECEIVED_USER,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="replyDate != null" >
+        REPLY_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reqMsgId != null" >
+        #{reqMsgId,jdbcType=VARCHAR},
+      </if>
+      <if test="reqId != null" >
+        #{reqId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyUser != null" >
+        #{replyUser,jdbcType=VARCHAR},
+      </if>
+      <if test="receivedUser != null" >
+        #{receivedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="replyDate != null" >
+        #{replyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.folkestone.bzcx.bean.bean_do.interact.R_MessagesDo" >
+    update R_MESSAGES
+    <set >
+      <if test="reqId != null" >
+        REQ_ID = #{reqId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyUser != null" >
+        REPLY_USER = #{replyUser,jdbcType=VARCHAR},
+      </if>
+      <if test="receivedUser != null" >
+        RECEIVED_USER = #{receivedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="replyDate != null" >
+        REPLY_DATE = #{replyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where REQ_MSG_ID = #{reqMsgId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.dm.FileStatisticsMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.folkestone.bzcx.bean.bean_vo.dm.FileStatisticVo">
+		<result column="begin" property="begin" jdbcType="VARCHAR" />
+		<result column="end" property="end" jdbcType="VARCHAR" />
+		<result column="spare" property="spare" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- 1今日访问量 -->
+	<select id="getTodayAcess" resultMap="BaseResultMap">
+		select COUNT(*) begin FROM U_OPER_LOG
+		<where>
+			DATEDIFF(OPER_DATE,NOW())=0 and OPER_TYPE='1001' GROUP BY OPER_TYPE
+		</where>
+	</select>
+
+	<!-- 2累计访问量 -->
+	<select id="getCumulaAcess" resultMap="BaseResultMap">
+		select COUNT(*) begin FROM U_OPER_LOG
+		<where>
+			OPER_TYPE='1001'
+		</where>
+
+	</select>
+	<!-- 3过去三十天活跃用户数 -->
+<!-- 	<select id="getActiveUserNumber" resultMap="BaseResultMap">
+		select "COUNT"(distinct OPER_USER) begin FROM U_OPER_LOG
+		<where>
+			OPER_DATE >= (sysdate-30) AND OPER_TYPE='1001'
+		</where>
+	</select> -->
+	<!-- 4系统总用户数 -->
+	<select id="getTotalUserNumber" resultMap="BaseResultMap">
+		<!-- select * from F_FILE_SHARE -->
+		SELECT COUNT(1) begin FROM R_USER <!--  WHERE STATUS &lt; &gt; 4 -->
+	</select>
+	
+	<!-- 5今日检索次数 -->
+	<select id="getTodayRetrieval" resultMap="BaseResultMap">
+		select COUNT(1) begin FROM U_QUERY_HISTORY
+		<where>
+			DATEDIFF(QUERY_DATE,NOW())=0
+		</where>
+	</select>
+	<!-- 6累计检索次数 -->
+	<select id="getTotalRetrieval" resultMap="BaseResultMap">
+		select COUNT(1) begin
+		FROM U_QUERY_HISTORY
+	</select>
+	<!-- 7标准查看次数 -->
+	<select id="getStandardView" resultMap="BaseResultMap">
+		select COUNT(1) begin FROM U_OPER_LOG
+		<where>
+			OPER_TYPE='1004'
+		</where>
+	</select>
+
+	<!-- 8标准下载次数 -->
+	<select id="getStandardDownload" resultMap="BaseResultMap">
+		select COUNT(1) begin FROM U_OPER_LOG
+		<where>
+			OPER_TYPE='1005'
+		</where>
+	</select>
+
+
+	<!-- 9系统访问量排行 -->
+	<select id="getSystemAccess" resultMap="BaseResultMap">
+		select COUNT(1) begin ,DATE_FORMAT(OPER_DATE,'%Y-%m-%d') end FROM
+		U_OPER_LOG
+		<where>
+			OPER_TYPE='1001' GROUP BY end
+			ORDER BY end 
+		</where>
+	</select> 
+	<!-- 10标准分类统计 -->
+	<select id="getStandardClassificalis" resultMap="BaseResultMap">
+		select
+		COUNT(1) begin,STANDARD_TYPE end from S_STANDARD
+		GROUP BY STANDARD_TYPE 
+		ORDER BY begin ASC
+	</select>
+	<!-- 11检索词热度排行 -->
+	<select id="getSearchWordHeatlis" resultMap="BaseResultMap"
+		parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query">
+		SELECT COUNT(1) begin ,KEYWORD end FROM U_QUERY_HISTORY
+		<!-- <where>
+			<if test="changeTime != null">
+				QUERY_DATE >= (sysdate- #{changeTime})
+			</if>
+		</where> -->
+		GROUP BY KEYWORD order by begin desc
+	</select>
+	<!-- 12二级单位标准数量排行 -->
+	<!-- <select id="getTwoLevelQuantitylis" resultMap="BaseResultMap"
+		parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query">
+		select count(1) begin, aam.ARCHITECTURE_CN_NAME end from
+		A_ARCHITECTURE_MANAGE aam
+		LEFT JOIN R_DEPARTMENT rd on rd.ID =
+		aam.PUBLISH_UNIT
+		LEFT JOIN A_ARCHITECTURE_NODE aan on
+		aam.ARCHITECTURE_ID =
+		aan.ARCHITECTURE_ID
+		LEFT JOIN A_STANDARD_NODE asn
+		on aan.NODE_ID = asn.NODE_ID
+		<where>
+			rd.PARENT_ID =(select ID from R_DEPARTMENT where PARENT_ID
+			='0')  and asn.STANDARD_ID is NOT NULL
+			GROUP BY aam.ARCHITECTURE_CN_NAME
+
+		</where>
+		<if test="erjibiaozhun != null">
+			ORDER BY begin ${erjibiaozhun}
+		</if>
+		<if test="erjibiaozhun == null">
+			ORDER BY begin asc
+		</if>
+	</select> -->
+	<!-- 13二级单位访问量排行 -->
+	<!-- <select id="getTwoLevelAccesslis" resultMap="BaseResultMap">
+		select "COUNT"(1) begin, a.DEPARTMENT_NAME end from R_DEPARTMENT a
+		LEFT JOIN R_USER b on a.ID=b.DEPARTMENT_ID
+		LEFT JOIN U_OPER_LOG c ON
+		b.ID = c.OPER_USER
+		<where>
+			c.OPER_TYPE='1001' AND a.PARENT_ID =(select ID from
+			R_DEPARTMENT where PARENT_ID ='0')
+		</where>
+		GROUP BY a.DEPARTMENT_NAME 	ORDER BY begin DESC
+	</select>
+
+	14二级单位用户数排行
+	<select id="getTwoLevelUserlist" resultMap="BaseResultMap"
+		parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query">
+		select "COUNT"(1) begin,a.DEPARTMENT_NAME end from R_DEPARTMENT a
+		LEFT
+		JOIN R_USER b on a.ID=b.DEPARTMENT_ID
+		<where>
+			b.STATUS='1' and a.PARENT_ID =(select ID from R_DEPARTMENT where PARENT_ID ='0')
+		</where>
+		GROUP BY a.DEPARTMENT_NAME
+		<if test="erjiyonghu != null">
+			ORDER BY begin ${erjiyonghu}
+		</if>
+		<if test="erjiyonghu == null">
+			ORDER BY begin asc
+		</if>
+
+	</select> -->
+	<!-- 15标准使用率排行 -->
+	<select id="getStandardUsage" resultMap="BaseResultMap">
+		SELECT  t2.STANDARD_NO end , COUNT(1) begin FROM U_OPER_LOG t1
+           left join S_STD_FILE t2 ON t2.STD_FILE_ID = t1.MAPPING_ID
+		<where>
+			OPER_TYPE IN('1004','1005') GROUP BY  t2.STANDARD_NO ORDER BY begin asc
+		</where>
+	</select>
+	<!-- 16二级单位与检索词统计 -->
+	<!-- <select id="getRetWords" resultMap="BaseResultMap">
+		select a.DEPARTMENT_NAME begin,c.KEYWORD end ,count(c.KEYWORD) spare
+		from U_QUERY_HISTORY c
+		LEFT JOIN R_USER b on b.ID =c.SEARCH_USER
+		LEFT JOIN R_DEPARTMENT a ON a.ID=b.DEPARTMENT_ID
+		<where>
+			a.PARENT_ID =(select ID from R_DEPARTMENT where PARENT_ID ='0')
+		</where>
+		GROUP BY a.DEPARTMENT_NAME,c.KEYWORD
+		ORDER by begin,spare DESC
+	</select> -->
+
+</mapper>

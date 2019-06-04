@@ -1,0 +1,204 @@
+#basic_table.grid-manager-default tbody tr td:nth-of-type(2){
+	text-align:left;
+}
+#basic_table.grid-manager-default tbody tr td:nth-of-type(3){
+	text-align:left;
+}
+#basic_table.grid-manager-default tbody tr td:nth-of-type(5){
+	text-align:left;
+}
+#main{
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+#main_top{
+    margin-top: 30px;
+}
+#main_top ul{
+    overflow: hidden;
+    border-bottom: 1px solid #E6E6E6;
+    padding-bottom: 6px;
+}
+#main_top ul li{
+    float: left;
+    overflow: hidden;
+    font-size: 14px;
+}
+#main_top ul li:nth-of-type(1) i{
+    float: left;
+    width: 19px;
+    height: 19px;
+    background: url("../imgs/search/home.png") no-repeat;
+}
+#main_top ul li a{
+    float: left;
+    margin: 0 10px;
+    color: #1446A7;
+}
+#main_top ul li:last-of-type a{
+    color: #868686;
+}
+#main_top ul li span{
+    float: left;
+    color: #7F7F7F;
+}
+#main_bot{
+    margin-top: 22px;
+    border: 1px solid #95B9E7;
+}
+.search-p-title{
+    background: #E8F2FF;
+    box-sizing: border-box;
+    width: 100%;
+    height: 52px;
+    border-bottom: 1px solid #95B9E7;
+}
+.search-p-tab{
+    float: left;
+    width: 158px;
+    overflow: hidden;
+    border-right: 1px solid rgba(0,0,0,0);
+    cursor: pointer;
+    color: #5E5F61;
+    font-size: 18px;
+    height: 52px;
+}
+.search-p-tab.active{
+    height: 52px;
+    color: #1446A7;
+    border-right: 1px solid #95B9E7;
+    background: url("../imgs/index/click.png") no-repeat;
+}
+.search-p-tab-inner{
+    overflow: hidden;
+    margin-top: 15px;
+}
+.search-p-tab i{
+    float: left;
+    margin-right: 6px;
+}
+.search-p-tab span{
+    float: left;
+    margin-top: 2px;
+}
+.jdjs-res i{
+    margin-left: 32px;
+    width: 27px;
+    height: 28px;
+    background: url("../imgs/search/res.png") no-repeat;
+}
+/*检索框*/
+#main_bot_in{
+    width: 1140px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+#main_bot_in1{
+    overflow: hidden;
+    padding-bottom: 30px;
+    border-bottom: 1px dashed #E6E6E6;
+}
+.search-p-con-top-top>input{
+    width: 600px;
+    height: 40px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    border: none;
+    border: 1px solid #95B9E7;
+    background: rgba(0,0,0,0);
+    border-radius: 2px;
+}
+.search-btn{
+    height: 40px;
+    width: 55px;
+    background: #1446A7;
+    color: #ffffff;
+    margin-left: 12px;
+    font-size: 16px;
+    line-height: 40px;
+}
+.second-search{
+    box-sizing: border-box;
+    float: right;
+    width: 120px;
+    height: 40px;
+    border: 1px solid #1446A7;
+    border-radius: 2px;
+}
+.search-p-con-top-bot{
+    font-size: 16px;
+    color: #868686;
+    margin-top: 6px;
+    max-height: 60px;
+    overflow: hidden;
+    background: rgba(0,0,0,0);
+}
+.search-p-con-top-bot b{
+    float: left;
+    width: 80px;
+    font-size: 14px;
+}
+.search-p-con-top-bot>div{
+    float: left;
+    width: 604px;
+    max-height: 42px;
+    overflow: auto;
+}
+.search-p-con-top-bot span{
+    margin-right: 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.search-p-con-top{
+    width: 885px;
+    margin: 40px auto 0;
+}
+.search-p-con-top-top>span{
+    font-size: 18px;
+}
+/*复写复选框样式*/
+.second-search input[type='checkbox']{
+    display: none;
+}
+.second-search input[type='checkbox']+label{
+    display: block;
+    height: 22px;
+    margin: 9px 0 0 15px;
+}
+.second-search input[type='checkbox']+label:before{
+    content: '';
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+    display: inline-block;
+    background: url("../imgs/search/unchecked.png") no-repeat;
+    background-size: 17px 17px;
+}
+.second-search input[type='checkbox']:checked+label:before{
+    background: url("../imgs/search/checked.png") no-repeat;
+    background-size: 17px 17px;
+}
+#main_bot_in2{
+    overflow: hidden;
+    font-size: 14px;
+    margin-top: 12px;
+    color: #868686;
+}
+.main-bot-in2-left{
+    float: left;
+}
+.main-bot-in2-left>span{
+    color:#F18C00;
+}
+.main-bot-in2-right{
+    float: right;
+}
+.main-bot-in2-right>span{
+    color: #1446A7;
+    font-weight: bold;
+}
+#main_bot_in3{
+    margin: 15px 0 25px 0;
+}

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>企业服务</title>
+     <link rel="stylesheet" href="css/userAttention.css">
+    <style>
+    	body{
+    		margin:0;
+    		padding:0;
+    		background-color: #004BE2;
+    	}
+        .Home{
+            width: 100%;          
+        }
+        .homeTop{
+            width:100%;
+            height:4.2rem; 
+            line-height:.47rem;          
+            background-image: url("img/logo4.png");  
+            background-size:4.2rem;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-position-y: .1rem;
+            font-size:.3rem;
+            color:#fff;
+        }  
+        .homeTop p{
+            text-indent:2em;
+        	margin-top:.6rem;
+        	margin-left:.18rem;
+        	margin-right:.18rem;        	        	
+        }  
+        .homeTop ul{
+        	list-style-type: square;
+        	margin-left:.2rem;
+        	margin-right:.2rem;        	
+        }   
+        .homeTop ul li{               	
+        	margin-left:-.5rem;
+        }
+        .consult{           
+            background: #fff;
+            margin-left: .25rem;
+            margin-right: .25rem;       
+        }
+        .consult h2{
+			color:#333;		
+			height:1rem;	
+			line-height: 1.2rem;
+            font-size: .46rem;
+            text-align:center;            
+        }
+        .consult p{
+            font-size: .25rem;
+            margin-top: -.3rem;
+            color: #999;
+            text-align:center;
+        }
+        .froms{
+            border-bottom: 1px solid #ccc;
+            font-size: .3rem;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            margin-left: .25rem;
+            margin-right: .25rem;
+            height: .88rem;
+        }       
+        .as{
+        	display: block;
+            width: 1.8rem;
+            text-align: left;            
+        }
+        #redStar{        	
+        	color:red;
+        }
+        .froms input{
+            flex: 1;
+            border-width:0;
+            outline: none; 
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        input::placeholder{
+        	color:red;
+        	font-size:.25rem;
+        }
+        .unforms{
+        	display:none
+        }
+        .unforms span{ 
+         	display: block;
+            width: 1.8rem;
+       	    padding-left: .15rem;
+        	color:#333;
+        }
+        .submitDiv{
+            display: -webkit-flex;
+            display: flex;
+            justify-content: space-around;
+            height:1.5rem;
+            align-items: center;
+            margin-bottom: .05rem;
+        }
+        .submitDiv button{
+            width: 2.2rem;
+            height: .8rem;
+            border-radius:6px;
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            justify-content:center;           
+            outline:none;
+        }
+        .sbtn1{
+            background: #f6f9ff;
+            color: #282828;
+            margin-left:.5rem;            
+            border: 1px solid #E1EBFE;
+        }
+        .sbtn1 img{
+            transform: scale(0.5);
+            filter: drop-shadow(#000 2px 0);
+        }
+        .sbtn2{            
+            background:linear-gradient(0deg,rgba(0,75,226,1),rgba(0,218,254,1));
+            margin-right:.5rem;
+            color: #fefefe;
+            border: none;
+        }       
+        .sbtn1:active{
+        	background: #e9f0ff;
+        }
+        .sbtn2:active{
+        	background: linear-gradient(0deg,rgba(0,218,254,1),rgba(0,75,226,1));
+        }
+    </style>
+</head>
+<body>
+    <div class="Home">
+    	<div class="attention attentionHide" id="follow">  <!-- 未关注的用户显示 -->
+    		<img src="img/gz_logo.png"/>
+    		<button>关注</button>
+    	</div>
+    	<div class="homeTop">
+    		<p>
+    			标准查致力于为企事业单位搭建最专业的标准查询体系建设,
+    			通过大数据分析,
+    			我们与客户一起对标准管理问题的不断改进,
+    			帮助客户实现持续、稳定、健康的发展.
+    			我们能为您提供以下服务:
+    		</p>
+    		<ul>
+    			<li><span>软件平台</span>含PC端、微信公众号、小程序、APP</li>
+    			<li><span>数据加工</span>(OCR识别)</li>
+    			<li><span>其它</span>(例如：数据录入、云服务器、运维等)</li>
+    			<li><span>其它</span>根据客户需求定制开发</li>
+    		</ul>
+    	</div>
+        
+        <div class="consult">
+          <h2>服务咨询</h2>
+          <p>为了更好的给您提供专业的服务,请详细的填写以下信息</p>
+          <div>
+            <div class='froms'>              	
+              <span class="as"><span id="redStar">*</span>单位</span>
+              <input type="text" id="index_company">
+            </div>
+            <div class='froms'>              
+              <span class="as"><span id="redStar">*</span>部门</span>
+              <input type="text" id="index_department">
+            </div>
+            <div class='froms'>            
+              <span class="as"><span id="redStar">*</span>姓名</span>
+              <input type="text" id="index_username">
+            </div>
+            <div class='froms'>            
+              <span class="as"><span id="redStar">*</span>电话</span>
+              <input type="tel" id="index_tel">
+            </div>
+          </div>
+          <div class='unforms'>
+            <div class='froms'>
+              <span>职位</span>
+              <input type="text" id="index_position">
+            </div>
+            <div class='froms'>
+              <span>微信</span>
+              <input type="text" id="index_wechat">
+            </div>
+            <div class='froms'>
+              <span>QQ</span>
+              <input type="text" id="index_qq">
+            </div>
+            <div class='froms'>
+              <span>邮箱</span>
+              <input type="email" id="index_email">
+            </div>
+            <div class='froms'>
+              <span>留言</span>
+              <input type="text" id="index_commont">
+            </div>
+          </div>
+          <div class="submitDiv">
+              <button class="sbtn1" onclick="index_clean()">填写更多<img src='img/icon_xiala1.png' alt="暂无图片"></button>
+              <button class='sbtn2' onclick="index_submit()">提交信息</button>
+          </div>
+        </div>
+    </div>
+    <script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js "></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.pagination.min.js"></script>
+     <script src="js/rem.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+   <!--  <script src="js/share.js"></script> -->
+</body>
+</html>

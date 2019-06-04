@@ -1,0 +1,103 @@
+<div class="easyui-layout" data-options="fit:true">
+	<!-- Begin of toolbar -->
+	<div id="backups_toolbar3">
+		<div class="wu-toolbar-button">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="backupsDele()" plain="true">删除</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="backupsSave(3,this)" plain="true">保存</a>
+		</div>
+		<div class="backup-strategy wu-toolbar-search backup-strategy3">
+			<label>备份策略：</label>
+			<label style="margin-right: 30px"><input value="1" style="margin-top: 0px;" type="radio" name="state3" checked/>每天</label>
+			<label style="margin-right: 30px"><input value="2" style="margin-top: 0px;" type="radio" name="state3"/>每周</label>
+			<label style="margin-right: 30px"><input value="3" style="margin-top: 0px;" type="radio" name="state3"/>每隔几天</label>
+			<div class="period-wrap3" style="display: inline-block">
+				<div class="period">
+					<form class="day-form3">
+						<input type="number" name="hour" step="1" value="0" max="23" min="0"/><span>时</span>
+						<input type="number" name="minute" step="1" value="0" max="59" min="0"/><span>分</span>
+						<input type="number" name="second" step="1" value="0" max="59" min="0"/><span>秒</span>
+					</form>
+				</div>
+				<div class="period">
+					<form class="week-form3">
+						<select name="week" panelHeight="auto" style="width: 100px">
+							<option value="2">星期一</option>
+							<option value="3">星期二</option>
+							<option value="4">星期三</option>
+							<option value="5">星期四</option>
+							<option value="6">星期五</option>
+							<option value="7">星期六</option>
+							<option value="0">星期日</option>
+						</select>
+						<input style="margin-left: 5px" type="number" step="1" value="0" max="23" min="0" name="hour"/><span>时</span>
+						<input type="number" step="1" value="0" max="59" min="0" name="minute"/><span>分</span>
+						<input type="number" step="1" value="0" max="59" min="0" name="second"/><span>秒</span>
+					</form>
+				</div>
+				<div class="period">
+					<form class="month-form3">
+						<span style="margin: 0 5px">隔</span><input type="number" step="1" value="1" max="365" min="1"/><span>天</span>
+						<input type="number" step="1" value="0" max="23" min="0" name="hour"/><span>时</span>
+						<input type="number" step="1" value="0" max="59" min="0" name="minute"/><span>分</span>
+						<input type="number" step="1" value="0" max="59" min="0" name="second"/><span>秒</span>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End of toolbar -->
+	<table id="backups_datagrid3" class="easyui-datagrid" toolbar="#backups_toolbar3"></table>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		//加载原文备份策略
+		$.ajax({
+			url : '/BZCX/admin/backup/selectByGroup',
+			data:{"group":3},
+			type : 'POST',
+			cache : false,
+			success : function(data) {
+//				console.log(data);
+				var myIndex = data.cycle;
+				$(".backup-strategy3 :radio").eq(myIndex-1).trigger('click');
+				//填充表单
+				var form = new Object;
+				form.hour = data.hour;
+				form.minute = data.minute;
+				form.second = data.second;
+				form.week = data.week;
+				form.num = data.num;
+				var info=form;
+//				console.log(info);
+				if(myIndex == 1){
+					var myFormClass=".day-form3";
+				}else if(myIndex == 2){
+					var myFormClass='.week-form3';
+				}else if(myIndex == 3){
+					var myFormClass='.month-form3';
+				}
+				Object.keys(info).map(function(key){
+					$(myFormClass).find("input").filter(function(){
+						return key == this.name;
+					}).val(info[key]);
+					$(myFormClass).find("select").filter(function(){
+						return key == this.name;
+					}).val(info[key]);
+				});
+			},
+			error : function(data) {
+				alert("操作失败，请稍后再试。")
+			}
+		});
+
+		initGrid('backups_datagrid3');
+	})
+
+	//点击给分策略事件
+	$(".backup-strategy3").on('click',':radio',function(){
+		var myIndex=$(this).parent().index()-1;
+		$(".period-wrap3 .period").eq(myIndex).removeClass("backup-hide").addClass("backup-show");
+		$(".period-wrap3 .period").eq(myIndex).siblings().removeClass("backup-show").addClass("backup-hide");
+	});
+</script>

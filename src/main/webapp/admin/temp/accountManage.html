@@ -1,0 +1,84 @@
+<div class="easyui-layout" data-options="fit:true">
+    <!-- Begin of toolbar -->
+    <div id="log_toolbar">
+        <div class="wu-toolbar-search">
+			<label>起始时间：</label><input id="operLog_search_startTime_input" editable="false" class="easyui-datebox" style="width:100px">
+			<label>结束时间：</label><input id="operLog_search_endTime_input" editable="false" class="easyui-datebox" style="width:100px">
+			<label>关键词：</label><input id="operLog_search_keyword_input" class="wu-text" style="width:200px">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="operLog_search()">开始检索</a>
+			<a href="#" class="easyui-linkbutton" onclick="index()">重置</a>
+        </div>
+    </div>
+    <!-- End of toolbar -->
+    <table id="accountManage_datagrid" class="easyui-datagrid" toolbar="#log_toolbar"></table>
+</div>
+<script type="text/javascript">
+	/**
+	 * Name 载入数据
+	 */
+	var operLogHtml = {
+		// 初始化表格
+		initTable : function(data) {
+			$('#accountManage_datagrid').datagrid({
+				url : 'table.json',
+				rownumbers : true,
+				singleSelect : false,
+				pageSize : 20,
+				pagination : true,
+				multiSort : true,
+				fitColumns : true,
+				fit : true,
+				queryParams : data,
+				columns : [ [ {
+					field : 'account',
+					title : '账号',
+					width : 150,
+					sortable : true
+				}, {
+					field : 'userName',
+					title : '姓名',
+					width : 150,
+					sortable : true
+				}, {
+					field : 'operType',
+					title : '所属部门',
+					width : 200,
+					sortable : true
+				}, {
+					field : 'operDetail',
+					title : '职务',
+					width : 100,
+					sortable : true
+				}, {
+					field : 'operDate',
+					title : '系统角色',
+					width : 200,
+					sortable : true
+				}, {
+					field : 'operUrl',
+					title : '余额',
+					width : 100,
+					sortable : true
+				},
+				{ field:'action',title:'操作',width:58,align:'center',
+					formatter:function(value,rec){
+						var roleDele = '<a href="javascript:void(0)" style="text-decoration: underline;">充值</a>';
+						var roleEdit = '<a href="javascript:void(0)" style="margin-left:8px;text-decoration: underline;">修改</a>';
+						return roleDele + roleEdit;
+					}
+				}
+				] ]
+			});
+		},
+		// 表格重新加载
+		reloadTable : function(data) {
+			$('#log_datagrid').datagrid('reload', data);
+		},
+	}
+
+	
+	$(function() {
+		// 初始化表格
+		operLogHtml.initTable();
+	})
+</script>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.dm.AStandardNodeMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.dm.StandardNodeVo" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="STANDARD_ID" property="standardId" jdbcType="VARCHAR" />
+    <result column="NODE_ID" property="nodeId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+ 
+
+
+<delete id="delNodeCode" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" >
+         <if test="standardId != null">
+            <if test="architectureId != null">
+            delete from A_STANDARD_NODE where ID in (
+            select s.ID from (
+             select a.ID FROM A_STANDARD_NODE a 
+                 left join A_ARCHITECTURE_NODE b on a.NODE_ID=b.NODE_ID
+                    where
+			     b.ARCHITECTURE_ID = #{architectureId}
+				and a.STANDARD_ID = #{standardId}
+				)s
+				     )
+		     </if>
+		 </if>
+  </delete>
+  <select id="listByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+     select sn.ID, sn.STANDARD_ID, sn.NODE_ID, an.NODE_CODE, an.NODE_CN_NAME
+     from  A_STANDARD_NODE sn
+     left join A_ARCHITECTURE_NODE an on sn.NODE_ID = an.NODE_ID
+     left join A_ARCHITECTURE_MANAGE aam on an.ARCHITECTURE_ID = aam.ARCHITECTURE_ID
+     <where>
+         <if test="nodeId != null">
+             sn.NODE_ID = #{nodeId}
+         </if>
+         <if test="standardId != null">
+			and sn.STANDARD_ID = #{standardId}
+		 </if>
+		 <if test="architectureId != null">
+			and an.ARCHITECTURE_ID = #{architectureId}
+		 </if>
+		 <if test="departmentId != null">
+			and aam.PUBLISH_UNIT = #{departmentId}
+		 </if>
+     </where>
+      order by an.NODE_CODE
+  </select>
+  
+  <!-- 查询体系标准 -->
+   <select id="listArchCount" parameterType="java.util.List" resultType="java.lang.String">
+     select "COUNT"(*)
+     from  A_STANDARD_NODE sn
+     left join A_ARCHITECTURE_NODE an on sn.NODE_ID = an.NODE_ID
+     left join A_ARCHITECTURE_MANAGE aam on an.ARCHITECTURE_ID = aam.ARCHITECTURE_ID
+     where sn.STANDARD_ID in
+     <foreach collection="list" index="index" item="item" open="(" separator="," close=")">  
+            #{item.standardId}  
+        </foreach>
+      GROUP BY sn.STANDARD_ID
+  </select>
+  
+    <select id="listByList" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+     select ID, STANDARD_ID, NODE_ID 
+     from  A_STANDARD_NODE
+     <where>
+         <if test="nodeId != null">
+             NODE_ID = #{nodeId ,jdbcType=VARCHAR}
+         </if>
+         <if test="standardId != null">
+			and STANDARD_ID = #{standardId,jdbcType=VARCHAR}
+		 </if>
+     </where>
+  </select>
+  
+  <delete id="deleteByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query">
+	delete from A_STANDARD_NODE where 1 = 1
+	<if test="nodeId != null">
+	and NODE_ID = #{nodeId,jdbcType=VARCHAR}
+	</if>
+	<if test="standardId != null">
+	and STANDARD_ID = #{standardId,jdbcType=VARCHAR}
+	</if>
+  </delete>
+  
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.dm.A_Standard_NodeDo" >
+    insert into A_STANDARD_NODE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="standardId != null" >
+        STANDARD_ID,
+      </if>
+      <if test="nodeId != null" >
+        NODE_ID,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="standardId != null" >
+        #{standardId,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeId != null" >
+        #{nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.dm.A_Standard_NodeDo" >
+    update A_STANDARD_NODE
+    <set >
+      <if test="standardId != null" >
+        STANDARD_ID = #{standardId,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeId != null" >
+        NODE_ID = #{nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

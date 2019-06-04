@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.backup.BBackupStrategyMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_do.backup.B_Backup_StrategyDo" >
+    <result column="BASKUP_STRATEGY_ID" property="baskupStrategyId" jdbcType="VARCHAR" />
+    <result column="B_CYCLE" property="bCycle" jdbcType="DOUBLE" />
+    <result column="WEEK" property="week" jdbcType="DOUBLE" />
+    <result column="NUM" property="num" jdbcType="DOUBLE" />
+    <result column="FRIST_TIME" property="fristTime" jdbcType="TIMESTAMP" />
+    <result column="B_GROUP" property="bGroup" jdbcType="DOUBLE" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    BASKUP_STRATEGY_ID, B_CYCLE, WEEK, NUM, FRIST_TIME, B_GROUP
+  </sql>
+  
+  <select id="selectByBGroup" resultMap="BaseResultMap" parameterType="Integer">
+  	select 
+    <include refid="Base_Column_List" />
+    from B_BACKUP_STRATEGY
+    where B_GROUP = #{bGroup,jdbcType=DOUBLE}
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from B_BACKUP_STRATEGY
+    where BASKUP_STRATEGY_ID = #{baskupStrategyId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.backup.B_Backup_StrategyDo" >
+    insert into B_BACKUP_STRATEGY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="baskupStrategyId != null" >
+        BASKUP_STRATEGY_ID,
+      </if>
+      <if test="bCycle != null" >
+        B_CYCLE,
+      </if>
+      <if test="week != null" >
+        WEEK,
+      </if>
+      <if test="num != null" >
+        NUM,
+      </if>
+      <if test="fristTime != null" >
+        FRIST_TIME,
+      </if>
+      <if test="bGroup != null" >
+        B_GROUP,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="baskupStrategyId != null" >
+        #{baskupStrategyId,jdbcType=VARCHAR},
+      </if>
+      <if test="bCycle != null" >
+        #{bCycle,jdbcType=DOUBLE},
+      </if>
+      <if test="week != null" >
+        #{week,jdbcType=DOUBLE},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=DOUBLE},
+      </if>
+      <if test="fristTime != null" >
+        #{fristTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bGroup != null" >
+        #{bGroup,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+ 
+  
+ 
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.backup.B_Backup_StrategyDo" >
+    update B_BACKUP_STRATEGY
+    <set >
+      <if test="bCycle != null" >
+        B_CYCLE = #{bCycle,jdbcType=DOUBLE},
+      </if>
+      <if test="week != null" >
+        WEEK = #{week,jdbcType=DOUBLE},
+      </if>
+      <if test="num != null" >
+        NUM = #{num,jdbcType=DOUBLE},
+      </if>
+      <if test="fristTime != null" >
+        FRIST_TIME = #{fristTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bGroup != null" >
+        B_GROUP = #{bGroup,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where BASKUP_STRATEGY_ID = #{baskupStrategyId,jdbcType=VARCHAR}
+  </update>
+</mapper>

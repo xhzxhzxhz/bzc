@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>扫描二维码关注</title>
+    <script src="js/rem.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;   
+        }
+        .code{
+            width: 100%;
+            height: 100%;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background:linear-gradient(135deg,rgba(0,75,226,1),rgba(0,218,254,1));
+        }
+        .imgDiv{
+        	margin-top:1.42rem;
+        	marign-left:.3rem;
+        	marign-right:.3rem;
+        	height:8.08rem;
+        	background:#fff;
+        	border-radius:.2rem;
+        }
+        .imgDiv img{        	
+        	transform: scale(.96);
+        }
+        .imgDiv div{
+        	width:100%;
+        	height:1rem;
+        	background:rgba(236,236,236,1);
+			opacity:0.5;
+			display: -webkit-flex;
+            display: flex;
+            align-items: center;  
+            justify-content: center; 
+            font-size:.32rem;
+            color:rgba(0,188,248,1);           
+        }
+        .imgDiv div img{
+        	transform: scale(.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="code">
+    	<div class="imgDiv">
+    		<img src="img/QRcode.jpg" alt="暂无图片">
+    		<div>
+    			<img src="img/icon_can.png">
+    			长按扫我^v^
+    		</div>
+    	</div>	        
+    </div>
+</body>
+</html>

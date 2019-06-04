@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.collection.RCollectionMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.collection.RCollectionVo" >
+    <id column="COLLECTION_ID" property="collectionId" jdbcType="VARCHAR" />
+    <result column="STANDARD_ID" property="standardId" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="COLLECTION_DATE" property="collectionDate" jdbcType="TIMESTAMP" />
+     <result column="DELETE_STATE" property="deleteState" jdbcType="INTEGER"/>
+     <result column="VIEWTIMES" property="viewTimes" jdbcType="INTEGER"/>
+    <collection  property="stand"  ofType="com.folkestone.bzcx.bean.bean_vo.dm.StandardVo">
+            <result column="STANDARD_ID" property="standardId" jdbcType="VARCHAR" />
+	    <result column="PUBLISH_DATE" property="publishDate" jdbcType="TIMESTAMP" />
+	    <result column="IMPLEMENTATION_DATE" property="implementationDate" jdbcType="TIMESTAMP" />
+	    <result column="CONFIRM_DATE" property="confirmDate" jdbcType="TIMESTAMP" />
+	    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP" />
+	    <result column="INVALID_DATE" property="invalidDate" jdbcType="TIMESTAMP" />
+	    <result column="STANDARD_TYPE" property="standardType" jdbcType="VARCHAR" />
+	    <result column="STANDARD_LEVEL2" property="standardLevel2" jdbcType="VARCHAR" />
+	    <result column="LANGUAGE" property="language" jdbcType="INTEGER" />
+	    <result column="COUNTRY" property="country" jdbcType="VARCHAR" />
+	    <result column="STANDARD_LEVEL" property="standardLevel" jdbcType="INTEGER" />
+	    <result column="PROJECT_START_DATE" property="projectStartDate" jdbcType="TIMESTAMP" />
+	    <result column="UDC" property="udc" jdbcType="VARCHAR" />
+	    <result column="PAGE_NUMBER" property="pageNumber" jdbcType="INTEGER" />
+	    <result column="PUB_DATE" property="pubDate" jdbcType="TIMESTAMP" />
+	    <result column="ISBN" property="isbn" jdbcType="VARCHAR" />
+	    <result column="STANDARD_STATUS" property="standardStatus" jdbcType="INTEGER" />
+	    <result column="LAST_OPER_DATE" property="lastOperDate" jdbcType="TIMESTAMP" />
+	    <result column="LAST_OPER_TYPE" property="lastOperType" jdbcType="INTEGER" />
+	    <result column="LAST_OPER_USER" property="lastOperUser" jdbcType="VARCHAR" />
+	    <result column="UPLOAD_UNIT" property="uploadUnit" jdbcType="VARCHAR" />
+	    <result column="STANDARD_NO_TRIM" property="standardNoTrim" jdbcType="VARCHAR" />
+	     <result column="STANDARD_NO" property="standardNo" jdbcType="VARCHAR" />
+	    <result column="STANDARD_CN_NAME" property="standardCnName" jdbcType="VARCHAR" />
+	    <result column="STANDARD_EN_NAME" property="standardEnName" jdbcType="VARCHAR" />
+	    <result column="STANDARD_FILE_NAME" property="standardFileName" jdbcType="VARCHAR" />
+	    <result column="PUB_ORG" property="pubOrg" jdbcType="VARCHAR" />
+	    <result column="ADOPT_RELATION" property="adoptRelation" jdbcType="VARCHAR" />
+	    <result column="REPLACE_STANDARD" property="replaceStandard" jdbcType="LONGVARCHAR" />
+	    <result column="REPLACED_STANDARD" property="replacedStandard" jdbcType="LONGVARCHAR" />
+	    <result column="QUOTE_STANDARD" property="quoteStandard" jdbcType="LONGVARCHAR" />
+	    <result column="MODIFY_OBJECT" property="modifyObject" jdbcType="VARCHAR" />
+	    <result column="SUPPLEMENTARY_OBJECT" property="supplementaryObject" jdbcType="VARCHAR" />
+	    <result column="BELONG_TO_UNIT" property="belongToUnit" jdbcType="VARCHAR" />
+	    <result column="DRAFT_UNIT" property="draftUnit" jdbcType="VARCHAR" />
+	    <result column="THEME_CN_NAME" property="themeCnName" jdbcType="VARCHAR" />
+	    <result column="THEME_EN_NAME" property="themeEnName" jdbcType="VARCHAR" />
+	    <result column="FREE_CN_NAME" property="freeCnName" jdbcType="VARCHAR" />
+	    <result column="INTERNATION_CLASS" property="internationClass" jdbcType="VARCHAR" />
+	    <result column="CHINESE_CLASS" property="chineseClass" jdbcType="VARCHAR" />
+	    <result column="TECHNICAL_FIELD" property="technicalField" jdbcType="VARCHAR" />
+	    <result column="DRAFT_STAFF" property="draftStaff" jdbcType="VARCHAR" />
+	    <result column="CONTACT_WAY" property="contactWay" jdbcType="VARCHAR" />
+	    <result column="JURISDICTION" property="jurisdiction" jdbcType="VARCHAR" />
+	    <result column="TRANSLATION" property="translation" jdbcType="VARCHAR" />
+	    <result column="PUBLISHER" property="publisher" jdbcType="VARCHAR" />
+	    <result column="DIGEST" property="digest" jdbcType="VARCHAR" />
+    	<result column="HTML_URL" property="htmlUrl" jdbcType="VARCHAR"/>
+    </collection>
+  </resultMap>
+  
+  <select id="listByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+      SELECT * FROM (
+      select s.*,r.COLLECTION_ID,r.COLLECTION_DATE,r.USER_ID,r.DELETE_STATE,r.VIEWTIMES from r_collection r LEFT JOIN s_standard s ON r.STANDARD_ID=s.STANDARD_ID
+      <where>
+         	 DELETE_STATE = 0
+          <if test="userId != null">
+             and r.USER_ID = #{userId}
+          </if>
+          <if test="standardId != null">
+              and r.STANDARD_ID = #{standardId}
+          </if>
+      </where>
+      ) d
+      <where>
+      <if test="standardCnName != null">
+              d.STANDARD_CN_NAME like CONCAT('%',#{standardCnName,jdbcType=VARCHAR},'%')
+          </if>
+          <if test="standardNo != null">
+              or d.STANDARD_NO like CONCAT('%',#{standardNo,jdbcType=VARCHAR},'%')
+          </if>
+         </where>
+      order by d.COLLECTION_DATE
+  </select>
+  
+  
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from r_collection
+    where COLLECTION_ID = #{collectionId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.collection.RCollectionDo" >
+    insert into r_collection
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="collectionId != null" >
+        COLLECTION_ID,
+      </if>
+      <if test="standardId != null" >
+        STANDARD_ID,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="collectionDate != null" >
+        COLLECTION_DATE,
+      </if>
+      <if test="deleteState != null">
+          DELETE_STATE,
+      </if>
+       <if test="viewTimes != null">
+          VIEWTIMES,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="collectionId != null" >
+        #{collectionId,jdbcType=VARCHAR},
+      </if>
+      <if test="standardId != null" >
+        #{standardId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="collectionDate != null" >
+        #{collectionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteState != null" >
+        #{deleteState,jdbcType=INTEGER},
+      </if>
+      <if test="viewTimes != null" >
+        #{viewTimes,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.collection.RCollectionDo" >
+    update r_collection
+    <set >
+      <if test="standardId != null" >
+        STANDARD_ID = #{standardId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="collectionDate != null" >
+        COLLECTION_DATE = #{collectionDate,jdbcType=TIMESTAMP},
+      </if>
+       <if test="deleteState != null" >
+        DELETE_STATE = #{deleteState,jdbcType=INTEGER},
+      </if>
+       <if test="viewTimes != null" >
+        VIEWTIMES = #{viewTimes,jdbcType=INTEGER},
+      </if>
+    </set>
+    where COLLECTION_ID = #{collectionId,jdbcType=VARCHAR}
+  </update>
+  <select id="show" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultType="map">
+  	select STANDARD_ID,COLLECTION_ID from r_collection where USER_ID =#{userId}
+  </select>
+</mapper>

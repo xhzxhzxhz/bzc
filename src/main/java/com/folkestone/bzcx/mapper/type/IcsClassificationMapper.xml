@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.type.IcsClassificationMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.type.IcsClassificationVo" >
+    <result column="ICS_ID" property="icsId" jdbcType="VARCHAR" />
+    <result column="ICS_NAME" property="icsName" jdbcType="VARCHAR" />
+    <result column="ICS_PARENDID" property="icsParendid" jdbcType="VARCHAR" />
+    <result column="ICS_CODE" property="icsCode" jdbcType="VARCHAR" />
+  	 <result column="type" property="type" jdbcType="VARCHAR" />
+ <collection property="threeIcs" ofType="com.folkestone.bzcx.bean.bean_vo.type.IcsClassification2Vo">
+        <result column="ICS_ID1" property="icsId" jdbcType="VARCHAR" />
+	    <result column="ICS_NAME1" property="icsName" jdbcType="VARCHAR" />
+	    <result column="ICS_PARENDID1" property="icsParendid" jdbcType="VARCHAR" />
+	    <result column="ICS_CODE1" property="icsCode" jdbcType="VARCHAR" />
+	    <result column="sum" property="icsSum" jdbcType="VARCHAR" />
+    </collection> 
+    <!-- <association property="threeIcs" javaType="com.folkestone.bzcx.bean.bean_vo.type.IcsClassification2Vo">   
+		<result column="ICS_ID1" property="icsId" jdbcType="VARCHAR" />
+	    <result column="ICS_NAME1" property="icsName" jdbcType="VARCHAR" />
+	    <result column="ICS_PARENDID1" property="icsParendid" jdbcType="VARCHAR" />
+	    <result column="ICS_CODE1" property="icsCode" jdbcType="VARCHAR" />
+	</association> -->
+  </resultMap>
+  
+  <select id="listAll" resultMap="BaseResultMap">
+      SELECT * FROM ics_classification
+  </select>
+  
+  <select id="listByQuery" resultMap="BaseResultMap" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query">
+     SELECT * FROM (
+		SELECT * FROM ics_classification  
+		<where>
+		    <if test="icsName != null">
+		        ICS_NAME like CONCAT('%',#{icsName},'%')
+		    </if>
+		    <if test="icsCode != null &amp;&amp; likeS != null">
+		       or ICS_CODE like CONCAT('%',#{icsCode},'%')
+		    </if>
+		</where>
+		) a
+      <where>
+          <if test="icsCode != null &amp;&amp; likeS == null">
+              a.ICS_CODE = #{icsCode}
+          </if>
+          <if test="icsParendid != null">
+              and a.ICS_PARENDID = #{icsParendid}
+          </if>
+      </where>
+      ORDER BY a.ics_code
+  </select>
+  
+  
+  <select id="listTree" resultMap="BaseResultMap" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query">
+       SELECT b.ICS_ID ,b.ICS_CODE ,b.ICS_NAME ,b.ICS_PARENDID,c.ICS_CODE as ICS_CODE1,c.ICS_ID as ICS_ID1,c.ICS_NAME as ICS_NAME1,
+       c.ICS_PARENDID as ICS_PARENDID1,s.sum from
+		(SELECT * FROM ics_classification 
+		<where>
+		    <if test="icsId != null">
+		        ICS_ID = #{icsId}
+		    </if>
+		    <if test="icsCode != null">
+		        or ICS_CODE = #{icsCode}
+		    </if>
+		</where>) a 
+		LEFT OUTER JOIN ics_classification b ON a.ICS_ID = b.ICS_PARENDID
+		LEFT JOIN  ics_classification c ON b.ICS_ID = c.ICS_PARENDID
+		LEFT JOIN (SELECT COUNT(*) as sum,ICS_CODE FROM s_standard GROUP BY ICS_CODE) s ON c.ICS_CODE=s.ICS_CODE
+		ORDER BY b.ics_code,c.ics_code
+      <!-- SELECT * FROM ics_classification
+      <where>
+          <if test="icsCode != null">
+              icsCode = #{ICS_CODE}
+          </if>
+          <if test="icsName != null">
+              and ICS_NAME like CONCAT('%',#{icsName},'%')
+          </if>
+          <if test="icsParendid != null">
+              and ICS_PARENDID = #{icsParendid}
+          </if>
+      </where>
+      ORDER BY ics_code -->
+  </select>
+  
+  
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.type.IcsClassificationDo" >
+    insert into ics_classification
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="icsId != null" >
+        ICS_ID,
+      </if>
+      <if test="icsName != null" >
+        ICS_NAME,
+      </if>
+      <if test="icsParendid != null" >
+        ICS_PARENDID,
+      </if>
+      <if test="icsCode != null" >
+        ICS_CODE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="icsId != null" >
+        #{icsId,jdbcType=VARCHAR},
+      </if>
+      <if test="icsName != null" >
+        #{icsName,jdbcType=VARCHAR},
+      </if>
+      <if test="icsParendid != null" >
+        #{icsParendid,jdbcType=VARCHAR},
+      </if>
+      <if test="icsCode != null" >
+        #{icsCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

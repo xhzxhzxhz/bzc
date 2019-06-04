@@ -1,0 +1,27 @@
+[{
+	"id":"1",
+    "text":"首页",
+  "checked":false,
+    "children":[{
+    	"id":"2",
+        "text":"系统管理",
+	  "checked":false,
+        "children":[{
+        	"id":"3",
+        	"text":"用户管理",
+		  "checked":false
+        },{
+        	"id":"4",
+		  "checked":false,
+        	"text":"角色管理"
+        },{
+        	"id":"5",
+		  "checked":false,
+        	"text":"菜单管理"
+        },{
+        	"id":"6",
+		  "checked":false,
+        	"text":"权限管理"
+        }]
+    }]
+}]

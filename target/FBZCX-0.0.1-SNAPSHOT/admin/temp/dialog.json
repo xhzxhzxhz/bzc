@@ -1,0 +1,10 @@
+{
+  "rows":[
+    {"userName":"admin1","content":"这是管理员说的一段话","feedbackDate":"2017-11-03","side":"left"},
+    {"userName":"admin2","content":"这是管理员说的一段话","feedbackDate":"2017-11-03","side":"left"},
+    {"userName":"user1","content":"这是用户1说的一段话","feedbackDate":"2017-11-03","side":"right"},
+    {"userName":"admin3","content":"这是管理员说的一段话","feedbackDate":"2017-11-03","side":"left"},
+    {"userName":"user2","content":"这是用户2说的一段话","feedbackDate":"2017-11-03","side":"right"},
+    {"userName":"admin4","content":"这是管理员说的一段话","feedbackDate":"2017-11-03","side":"left"}
+  ]
+}

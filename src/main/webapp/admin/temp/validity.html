@@ -1,0 +1,365 @@
+<div class="easyui-layout" data-options="fit:true">
+    <!-- Begin of toolbar -->
+    <div id="validity_toolbar">
+    	<div class="wu-toolbar-button">
+			<a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" onclick="deleteValidity()" plain="true">删除</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-accept" onclick="headShow()" plain="true">前台显示</a>
+		</div>
+        <div class="wu-toolbar-search">
+			<label>关键词：</label><input id="validity_search_keyword_input" class="wu-text" style="width:300px" placeholder="标准有效性确认ID">
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" onclick="validity_search()">检索</a>
+        </div>
+    </div>
+    <!-- End of toolbar -->
+    <table id="validity_datagrid" class="easyui-datagrid" toolbar="#validity_toolbar"></table>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="validity_dialog" class="easyui-dialog" data-options="closed:true" style="position:relative;width:600px;height: 600px;overflow: auto;padding:10px;">
+	<ul id="validity_dialog_ul" class="dialog-ul">
+		<!-- 审核人意见 -->
+		
+	</ul>
+	<div style="position: absolute;bottom: 10px;">
+		<textarea id="validi_audit_comment" name="content" rows="6" class="wu-textarea" style="width:566px;box-sizing: border-box;"></textarea>
+	</div>
+</div>
+<!-- End of easyui-dialog -->
+<script src="../js/message.js"></script>
+<script type="text/javascript">
+	
+/**
+ *有效性uuid
+ *在加载和双击的时候得到
+ */
+ var validcomment;
+	
+/**
+ *点击界面的开始检索按钮
+ */
+function validity_search(){
+	//获取开始检索输入框中的值
+	var keyword = $('#validity_search_keyword_input').val();
+    //封装参数
+	var queryParam = {
+        validConfirmId : keyword,
+	}
+	validityHtml.reloadTable(queryParam)
+}
+
+
+var validityHtml = {
+		// 初始化表格
+		intiTable : function(data){
+			$('#validity_datagrid').datagrid({
+				url:'/BZCX/admin/validat/list',
+				rownumbers:true,
+				singleSelect:false,
+				pageSize:20,           
+				pagination:true,
+				multiSort:true,
+				fitColumns:true,
+				fit:true,
+				columns:[[
+					{checkbox:true},
+					{ field:'standardNo',title:'标准号',width:300,sortable:true,align : 'center',
+		                //加一个方法(用来设置颜色的)
+		                styler:rowColor},
+					{ field:'standardName',title:'标准名称',width:300,sortable:true,align : 'center',
+			                //加一个方法(用来设置颜色的)
+			                styler:rowColor},
+					{ field:'suggestStatus',title:'提交类型',width:100,sortable:true,
+						formatter:function(val,rec) {
+							  if(rec.suggestStatus == 1){
+								  return "作废";
+							  }else if(rec.suggestStatus == 2){
+								  return "替代";
+							  }else{
+								  return "缺失";
+							  }
+						}
+					},
+					{ field:'replaystandNo',title:'替代标准号',width:400,sortable:true,
+						formatter:function(val,rec) {
+							if(rec.replaystandNo == null){
+								return "无"
+							}else{
+								return rec.replaystandNo;
+							}
+						}},
+					{ field:'replaystandName',title:'替代标准名称',width:100,sortable:true,
+						formatter:function(val,rec) {
+							if(rec.replaystandNo == null){
+								return "无"
+							}else{
+								return rec.replaystandNo;
+							}
+						}},
+					{ field:'realname',title:'提交人',width:100,sortable:true,
+						formatter:function(val,rec) {
+							if(rec.realname == null){
+								return rec.nickname
+							}else{
+								return rec.realname;
+							}
+						}},
+					{ field:'applyDate',title:'请求时间',width:100,sortable:true},
+					{ field:'status',title:'状态',width:100,sortable:true,
+						formatter:function(val,rec) {
+							  if(rec.status == 1){
+								  return "未读";
+							  }else if(rec.status == 2){
+								  return "已读";
+							  }
+						}
+					},
+					{ field:'action',title:'操作',width:58,align:'center',
+						formatter:function(value,rec){
+							var deleteValidity = '<a onclick="deleteValidity(\''+rec.validConfirmId+'\')" href="javascript:void(0)" style="text-decoration: underline;">删除</a>';
+							return deleteValidity;
+						}
+					}
+				]],
+				 onDblClickRow:function(rowIndex,rowData){
+					console.info(rowData);
+					validcomment = rowData.validConfirmId;
+					$("#validi_audit_comment").val("");
+					//双击显示描述信息，并填写意见
+					 $.ajax({
+						url:'/BZCX/admin/validat/list',
+						data: {
+							type : 3,
+							page : 1,
+							rows:10000,
+							validConfirmId:rowData.validConfirmId
+						},
+						type : "post",
+						async : false,
+						cache : false,
+						dataType : "json",
+						success : function(data){
+							var mydata=data.rows;
+							var liStr;
+							$("#validity_dialog_ul").empty();
+									liStr = '<li>'
+										+ '<div class="dialog-left mydialog"><span style="font-weight:bold;">'+ mydata[0].applyUser +'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+ mydata[0].applyDate +':</div>'
+										+ '<div style="clear: both"></div>'
+										+ '<p>'+ mydata[0].comment +'</p>'
+										+ '</li>';
+							 if(mydata[0].auditUser != null && mydata[0].auditComment != null){
+									liStr += '<li class="li-right">'
+										+ '<div class="dialog-right mydialog"><span style="font-weight:bold;">'+ mydata[0].auditUser +'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+ mydata[0].auditDate +':</div>'
+										+ '<div style="clear: both"></div>'
+										+ '<p>'+ mydata[0].auditComment +'</p>'
+										+ '</li>';
+								}
+								var myLi=$(liStr);
+								$("#validity_dialog_ul").append(myLi);
+						},
+						error:function(){
+							alert("操作失败，请稍后再试！");
+						} 
+					}); 
+					$('#validity_dialog').dialog({
+						closed: false,
+						modal:true,
+						title: "有效性确认单",
+						buttons: [{
+							text: '确认',
+							iconCls: 'icon-ok',
+							handler: validityOk//触发一个方法
+						},
+						{
+							text: '驳回',
+							iconCls: 'icon-ok',
+							handler: validityNo//触发一个方法
+						},
+						{
+							text: '取消',
+							iconCls: 'icon-cancel',
+							handler: function () {
+								$('#validity_dialog').dialog('close');
+							}
+						}]
+					});
+				} 
+			}
+			);
+		},onLoadSuccess:function(data){
+			  $('.datagrid-body td').mouseover(function(){alert('td in')}).mouseout(function(){alert('td out')});
+			  },
+		// 表格重新加载
+		reloadTable : function(data){
+			$('#validity_datagrid').datagrid('reload',data);
+		},
+}
+$(function(){
+	// 先初始化表格 
+	validityHtml.intiTable();
+})
+	
+	//颜色设置
+function rowColor(value, row, index) {
+    if(row.serviceCategory=='GSM'){
+        return 'background-color:red;color:white';
+    }
+
+    if(row.serviceCategory=='WCDMA'){
+        return 'background-color:cyan;color:white';
+    }
+    return 'background-color:blue;color:white';
+    //alert(row.serviceCategory);
+ }
+	
+/*
+ *审核通过，修改status为2
+ */
+function validityOk(){
+	//得到选中的行
+	var row = $('#validi_audit_comment').val();
+	//'validConfirmId:'+row.itemid
+	//修改状态
+	$.ajax({
+		url:'/BZCX/admin/validat/check',
+		type:"POST",
+		data: {
+			validConfirmId:validcomment,
+			status:2,
+			auditComment:row
+		},
+		async : false,
+		cache : false,
+		traditional: true,
+		success:function(data){
+			if(data.code == 200){
+				$.messager.alert('信息提示',data.msg,'info');
+				$('#validity_dialog').dialog('close');
+				$("#validity_datagrid").datagrid('reload');
+				if ('WebSocket' in window) {
+					messages();//更新消息
+					send("ok");
+				}
+			}
+			else
+			{
+				$.messager.alert('信息提示',data.msg,'info');
+			}
+		}
+	});
+	
+}
+
+/*
+ *审核驳回，修改status为3
+ */
+function validityNo(){
+	//得到选中的行
+	var row = $('#validi_audit_comment').val();
+	//'validConfirmId:'+row.itemid
+	//修改状态前先填写意见
+	//修改状态
+	$.ajax({
+		url:'/BZCX/admin/validat/check',
+		type:"POST",
+		data: {
+			validConfirmId:validcomment,
+			status:3,
+			auditComment:row
+		},
+		async : false,
+		cache : false,
+		traditional: true,
+		success:function(data){
+			if(data.code == 200){
+				$.messager.alert('信息提示',data.msg,'info');
+				$('#validity_dialog').dialog('close');
+				$("#validity_datagrid").datagrid('reload');
+				if ('WebSocket' in window) {
+					messages();//更新消息
+					send("no");
+				}
+			}
+			else
+			{
+				$.messager.alert('信息提示',data.msg,'info');
+			}
+		}
+	});
+	
+}
+	
+	/**
+	*删除信息
+	*
+	*/
+	function deleteValidity(){
+		$.messager.confirm('信息提示','确定要删除吗？', function(result){
+			if(result){
+				//获取选中行
+				var items = $('#validity_datagrid').datagrid('getSelections');
+				var ids = [];
+				$(items).each(function(){
+					ids.push(this.validConfirmId);	
+				});
+				console.info(ids);
+				$.ajax({
+					url:'/BZCX/admin/validat/delete',
+					type:"POST",
+					data: {
+						validConfirmIds : ids 
+					},
+					async : false,
+		            cache : false,
+		            traditional: true,
+					success:function(data){
+						if(data.code == 200){
+							$.messager.alert('信息提示','删除成功。','info');
+							$("#validity_datagrid").datagrid('reload');
+							if ('WebSocket' in window) {
+								messages();//更新消息
+								send("delete");
+							}
+						}
+						else
+						{
+							$.messager.alert('信息提示','删除失败。','info');
+						}
+					}	
+				});
+			}	
+		});
+	}
+	
+	/**
+	*前台显示
+	*
+	*/
+	function headShow(){
+				//获取选中行
+				var items = $('#validity_datagrid').datagrid('getSelections');
+				var ids = [];
+				$(items).each(function(){
+					ids.push(this.validConfirmId);	
+				});
+				console.info(ids);
+				$.ajax({
+					url:'/BZCX/admin/validat/show',
+					type:"POST",
+					data: {
+						validConfirmIds : ids 
+					},
+					async : false,
+		            cache : false,
+		            traditional: true,
+					success:function(data){
+						if(data.code == 200){
+							$.messager.alert('信息提示','显示成功。','info');
+							$("#validity_datagrid").datagrid('reload');
+						}
+						else
+						{
+							$.messager.alert('信息提示','显示失败。','info');
+						}
+					}	
+				});
+	}
+</script>

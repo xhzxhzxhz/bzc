@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.interact.RReqCollectMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.interact.ReqCollectVo" >
+    <result column="REQ_ID" property="reqId" jdbcType="VARCHAR" />
+    <result column="SUGGEST_USER" property="suggestUser" jdbcType="VARCHAR" />
+    <result column="AUDIT_USER" property="auditUser" jdbcType="VARCHAR" />
+    <result column="SUGGEST_TIME" property="suggestTime" jdbcType="TIMESTAMP" />
+    <result column="AUDIT_DATE" property="auditDate" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="PLAN_DATE" property="planDate" jdbcType="TIMESTAMP" />
+    <result column="BELONG_ARCHITECTURE" property="belongArchitecture" jdbcType="VARCHAR" />
+    <result column="REQ_LEVEL" property="reqLevel" jdbcType="INTEGER" />
+    <result column="REQ_SHOW" property="show" jdbcType="INTEGER" />
+     <result column="CONTENT" property="content" jdbcType="LONGVARCHAR" />
+    <result column="REQ_TITLE" property="reqTitle" jdbcType="LONGVARCHAR" />
+    <result column="SUBJECT_NAME" property="subjectName" jdbcType="LONGVARCHAR" />
+    <result column="AUDIT_COMMENT" property="auditComment" jdbcType="LONGVARCHAR" />
+  </resultMap>
+ <!-- 查询需求征集列表 -->
+ <select id="listCollectByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+		select * from  R_REQ_COLLECT 
+		<where>
+			<if test="reqId != null">
+		    	REQ_ID = #{reqId}
+		    </if>
+			<if test="content != null">
+			 ${relation} CONTENT like  CONCAT('%',#{content},'%')
+			</if>
+			<if test="status == 1">
+			 ${relation} STATUS like  CONCAT('%',#{status},'%')
+			</if>
+			<if test="status == 2">
+		     ${relation} STATUS like  CONCAT('%',#{status},'%')
+		    </if> 
+			<if test="status == 3">
+		     ${relation} STATUS like  CONCAT('%',#{status},'%')
+		    </if>
+		    <if test="show != null">
+		     ${relation} REQ_SHOW = #{show}
+		    </if>
+	 </where>
+	 ORDER BY SUGGEST_TIME DESC
+ </select> 
+ 
+ <!-- 是否前台显示 -->
+ <update id="changeShow" parameterType="String">
+ 	UPDATE R_REQ_COLLECT SET REQ_SHOW = '1' WHERE REQ_ID = #{0}
+ </update>
+ 
+  <!-- 需求征集的删除 -->
+   <delete id="delete" parameterType="String">
+       delete from R_REQ_COLLECT where REQ_ID = #{0}
+  </delete>
+  
+  <!-- 需求征集的保存 -->
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.interact.R_Req_CollectDo" >
+    insert into R_REQ_COLLECT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reqId != null" >
+        REQ_ID,
+      </if>
+      <if test="reqTitle != null" >
+        REQ_TITLE,
+      </if>
+      <if test="subjectName != null" >
+        SUBJECT_NAME,
+      </if>
+      <if test="reqLevel != null" >
+        REQ_LEVEL,
+      </if>
+      <if test="planDate != null" >
+        PLAN_DATE,
+      </if>
+      <if test="belongArchitecture != null" >
+        BELONG_ARCHITECTURE,
+      </if>
+      <if test="suggestUser != null" >
+        SUGGEST_USER,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="auditUser != null" >
+        AUDIT_USER,
+      </if>
+      <if test="suggestTime != null" >
+        SUGGEST_TIME,
+      </if>
+      <if test="auditDate != null" >
+        AUDIT_DATE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reqId != null" >
+        #{reqId,jdbcType=VARCHAR},
+      </if>
+      <if test="reqTitle != null" >
+        #{reqTitle,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="subjectName != null" >
+        #{subjectName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="reqLevel != null" >
+        #{reqLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="planDate != null" >
+        #{planDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="belongArchitecture != null" >
+        #{belongArchitecture,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestUser != null" >
+        #{suggestUser,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="auditUser != null" >
+        #{auditUser,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestTime != null" >
+        #{suggestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditDate != null" >
+        #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  
+  
+ 
+  <update id="updateByReqId" parameterType="com.folkestone.bzcx.bean.bean_do.interact.R_Req_CollectDo" >
+    update R_REQ_COLLECT
+    <set >
+      <if test="reqTitle != null" >
+        REQ_TITLE = #{reqTitle,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="subjectName != null" >
+        SUBJECT_NAME = #{subjectName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="reqLevel != null" >
+        REQ_LEVEL = #{reqLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="planDate != null" >
+        PLAN_DATE = #{planDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="belongArchitecture != null" >
+        BELONG_ARCHITECTURE = #{belongArchitecture,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestUser != null" >
+        SUGGEST_USER = #{suggestUser,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="auditUser != null" >
+        AUDIT_USER = #{auditUser,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestTime != null" >
+        SUGGEST_TIME = #{suggestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditDate != null" >
+        AUDIT_DATE = #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="auditComment != null">
+      	AUDIT_COMMENT = #{auditComment,jdbcType=LONGVARCHAR}
+      </if>
+    </set>
+    where REQ_ID = #{reqId,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

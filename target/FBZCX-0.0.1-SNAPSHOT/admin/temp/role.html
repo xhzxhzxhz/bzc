@@ -1,0 +1,220 @@
+<div class="easyui-layout" data-options="fit:true">
+	<!-- Begin of toolbar -->
+	<div id="role_toolbar">
+		<div class="wu-toolbar-button">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="roleAdd()">新增</a>
+		</div>
+	</div>
+	<!-- End of toolbar -->
+	<table id="role_datagrid" class="easyui-datagrid" toolbar="#role_toolbar"></table>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="role_add_dialog" class="easyui-dialog" data-options="closed:true,iconCls:'icon-save'" style="width:400px; padding:10px;">
+	<form id="role_add_form" method="post">
+		<table>
+			<tr>
+				<td width="80" align="right">角色名称:</td>
+				<td><input type="text" name="name" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">描述:</td>
+				<td><input type="text" name="roleDescribe" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td valign="top" align="right">备注:</td>
+				<td><textarea name="note" rows="6" class="wu-textarea" style="width:260px"></textarea></td>
+			</tr>
+			<tr>
+				<td align="right">权限资源:</td>
+				<td>
+					<div style="height: 100px;border: 1px #95b8e7 solid;overflow: auto;width: 266px">
+						<ul id="role_resource_tree" class="easyui-tree"></ul>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<!-- End of easyui-dialog -->
+<script type="text/javascript">
+	/**
+	 * 删除角色
+	 */
+	function roleDele(roleId){
+		$.messager.confirm('信息提示','确定要删除该角色？', function(result){
+			if(result){
+				$.ajax({
+					url:'/BZCX/admin/role/delete',
+					type:'POST',
+					data:{
+						roleId : roleId
+					},
+					success:function(data){
+						if(data.code == 200){
+							$.messager.alert('信息提示','删除角色成功。','info');
+							roleHtml.reloadTable();
+						}else if(data.code == 10007){
+							$.messager.alert('信息提示', data.msg,'info');
+						}else{
+							$.messager.alert('信息提示', '未知错误，角色删除失败。','info');
+						}
+					}
+				});
+			}
+		});
+	}
+	/**
+	 * 增加角色
+	 */
+	function roleAdd(){
+		$('#role_add_form').form('reset');
+		roleHtml.initTree();
+		$('#role_add_dialog').dialog({
+			closed: false,
+			modal:true,
+			title: "新增",
+			buttons: [{
+				text: '确定',
+				iconCls: 'icon-ok',
+				handler: function(){
+					var nodeIds = commonUtil.getTreeCheckedIds("role_resource_tree");
+					$('#role_add_form').form('submit', {
+						url:'/BZCX/admin/role/insert',
+						type:'POST',
+						onSubmit: function(param){
+							param.resourceIds = nodeIds;
+					    },
+						success:function(data){
+							data = JSON.parse(data);
+							if(data.code == 200){
+								$.messager.alert('信息提示','新增成功。','info');
+								$('#role_add_dialog').dialog('close');
+								roleHtml.reloadTable();
+							}else {
+								$.messager.alert('信息提示','提交失败！','info');
+							}
+						}
+					});
+				}
+			}, {
+				text: '取消',
+				iconCls: 'icon-cancel',
+				handler: function () {
+					$('#role_add_dialog').dialog('close');
+				}
+			}]
+		});
+	}
+	/**
+	 * 修改角色
+	 */
+	function roleEdit(roleId){
+		$('#role_add_form').form('reset');
+		// 同时刷新资源树
+		var data = {
+			roleId : roleId
+		}
+		roleHtml.initTree(data);
+		$.ajax({
+			url:'/BZCX/admin/role/detail',
+			type:'POST',
+			data:{
+				roleId : roleId
+			},
+			success:function(data){
+				if(data.code == 200){
+					// 绑定值
+					$('#role_add_form').form('load', data.data);
+				}
+			}
+		});
+		$('#role_add_dialog').dialog({
+			closed: false,
+			modal:true,
+			title: "修改",
+			buttons: [{
+				text: '确定',
+				iconCls: 'icon-ok',
+				handler: function(){
+					var nodeIds = commonUtil.getTreeCheckedIds("role_resource_tree");
+					$('#role_add_form').form('submit', {
+						url:'/BZCX/admin/role/update',
+						onSubmit: function(param){
+							param.id = roleId;
+							param.resourceIds = nodeIds;
+					    },
+						success:function(data){
+							if(data){
+								$.messager.alert('信息提示','修改成功。','info');
+								$('#role_add_dialog').dialog('close');
+								roleHtml.reloadTable();
+							}else{
+								$.messager.alert('信息提示','提交失败！','info');
+							}
+						}
+					});
+				}
+			}, {
+				text: '取消',
+				iconCls: 'icon-cancel',
+				handler: function () {
+					$('#role_add_dialog').dialog('close');
+				}
+			}]
+		});
+	}
+
+	var roleHtml = {
+		initTable : function(){
+			$('#role_datagrid').datagrid({
+				url:'/BZCX/admin/role/list',
+				rownumbers:true,
+				singleSelect:false,
+				pageSize:20,
+				pagination:true,
+				multiSort:true,
+				fitColumns:true,
+				fit:true,
+				columns:[[
+					{ field:'name',title:'角色名称',width:100,sortable:true},
+					{ field:'roleDescribe',title:'描述',width:180,sortable:true},
+					{ field:'note',title:'备注',width:100,sortable:true},
+					{ field:'action',title:'操作',width:58,align:'center',
+						formatter:function(value,rec){
+							var roleDele = '<a onclick="roleDele(\'' + rec.id + '\')" href="javascript:void(0)" style="text-decoration: underline;">删除</a>';
+							var roleEdit = '<a onclick="roleEdit(\'' + rec.id + '\')" href="javascript:void(0)" style="margin-left:8px;text-decoration: underline;">修改</a>';
+							return roleDele + roleEdit;
+						}
+					}
+				]]
+			});
+		},
+		reloadTable : function(data){
+			$('#role_datagrid').datagrid("reload");
+		},
+		initTree:function(data){
+			$('#role_resource_tree').tree({
+				checkbox:true,
+				url:'/BZCX/admin/resource/tree',
+				//onBeforeLoad,在请求载入数据之前触发，返回false将取消载入。
+				onBeforeLoad: function (node, param) {
+					if(data){
+						for(key in data){
+							param[key] = data[key];	
+						}
+					}
+				},
+				onSelect:function(node){
+					
+				}
+			});
+		}
+	}
+	$(function(){
+		// 先初始化表格
+		roleHtml.initTable();
+		// 初始化资源树
+		roleHtml.initTree();
+	})
+	
+</script>

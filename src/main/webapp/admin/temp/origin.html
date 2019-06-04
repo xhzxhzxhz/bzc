@@ -1,0 +1,346 @@
+<div class="easyui-layout" data-options="fit:true">
+    <!-- Begin of toolbar -->
+    <div id="origin_toolbar">
+        <div class="wu-toolbar-button">
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-upload" onclick="originUpload()" plain="true" id="origin_upload_btn">上传</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" onclick="originDele()" plain="true">删除</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" onclick="originEdit()" plain="true">修改</a>
+        </div>
+        <div class="wu-toolbar-search">
+			<label>状态：</label>
+			<label>
+			<select class="my-select" id="cascade_select" onchange="searchStdFile()" panelHeight="auto" style="width:100px">
+					<option value="0">全部</option>
+					<option value="1">关联成功</option>
+					<option value="2">关联失败</option>
+					</select>
+			</label>
+			<label style="margin-left: 40px">关键词：</label><input id="stdFile_keyword_input" class="wu-text" style="width:200px">
+			<a href="javascript:void(0)" onclick="searchStdFile()"class="easyui-linkbutton" iconCls="icon-search">开始检索</a>
+        </div>
+    </div>
+    <!-- End of toolbar -->
+    <table id="origin_datagrid" class="easyui-datagrid" toolbar="#origin_toolbar"></table>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="origin_edit_dialog" class="easyui-dialog" data-options="closed:true" style="width:400px; padding:10px;">
+	<form id="origin_edit_form" method="post">
+        <table>
+            <tr>
+                <td width="80" align="right">原文名称:</td>
+                <td><input type="text" name="stdFileName" readonly="readonly" class="wu-text" /></td>
+            </tr>
+            <tr>
+                <td align="right">对应题录:</td>
+                <td><input type="text" name="standardNo" class="wu-text" /></td>
+            </tr>
+            <tr>
+                <td align="right">批号:</td>
+                <td><input type="text" name="batchNo" class="wu-text" /></td>
+            </tr>
+            <tr>
+                <td align="right">文件大小:</td>
+                <td><input type="text" name="stdFileSize" disabled readonly="readonly" class="wu-text" /></td>
+            </tr>
+			<tr>
+				<td align="right">语言种类:</td>
+				<td>
+					<select name="language" class="my-select" panelHeight="auto" style="width:268px">
+					<option value="0">中文</option>
+					<option value="1">英文</option>
+					<option value="2">其他</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">存放位置:</td>
+				<td><input type="text" name="storePlace" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">上传单位:</td>
+				<td><input id="stdFile_uploadUnit_show"  type="text" name="departmentName" class="wu-text" disabled />
+					<input id="stdFile_uploadUnit_hidden"  type="hidden" name="uploadUnit" class="wu-text" /></td>
+				</td>
+			</tr>
+			<tr>
+				<td align="right"></td>
+				<td>
+					<div style="height: 100px;border: 1px #95b8e7 solid;overflow: auto;width: 266px">
+						<ul id="origin_edit_tree" class="easyui-tree"></ul>
+					</div>
+				</td>
+			</tr>
+        </table>
+    </form>
+</div>
+<!-- End of easyui-dialog -->
+<!-- Begin of easyui-dialog -->
+<div id="origin_progress_dialog" style="padding: 10px">
+	<div id="origin_upload_progress" class="easyui-progressbar" data-options="value:0" style="width:280px;"></div>
+</div>
+<!-- End of easyui-dialog -->
+<script type="text/javascript">
+	function searchStdFile(){
+		var keyword = $("#stdFile_keyword_input").val();
+		var cas = $("#cascade_select").val();
+		var param = {
+				
+		};
+		if(!commonUtil.isEmpty(keyword)){
+			param.stdFileName = keyword;
+		}
+		if(cas != "0"){
+			param.standardCas = cas;
+		}
+		originHtml.reloadTable(param);
+	}
+   /**
+	* 删除标准原文 
+	*/
+	function originDele(){
+		$.messager.confirm('信息提示','确定要删除该记录？', function(result){
+			if(result){
+				var stdFileIds = commonUtil.getCheckedIds("origin_datagrid", "stdFileId");
+				$.ajax({
+					url:'/BZCX/admin/stdfile/delete',
+					type:'POST',
+					traditional:true,
+					data:{
+						stdFileIds : stdFileIds
+					},
+					success:function(data){
+						if(data.code == 200){
+							$.messager.alert('信息提示','删除成功！','info');
+							originHtml.reloadTable();
+						}else if(data.code == 900){
+							$.messager.alert('信息提示',data.msg,'info');
+						}
+						else
+						{
+							$.messager.alert('信息提示','操作失败！','info');
+						}
+					}	
+				});
+			}	
+		});
+	}
+	/**
+	* Name 打开修改窗口
+	*/
+	function originEdit(){
+		var item = $('#origin_datagrid').datagrid('getSelected');
+		if(item == null){
+			return;
+		}
+		$('#origin_edit_form').form('reset');
+		$.ajax({
+			url:'/BZCX/admin/stdfile/detail',
+			data:{
+				stdFileId : item.stdFileId
+			},
+			success:function(data){
+				console.info(data);
+				if(data.code == 200){
+					//绑定值
+					$('#origin_edit_form').form('load', data.data);
+					 var language = $('[name="language"]');
+					 var languageTxt = data.data.language;
+					 language.val(commonUtil.map.get(languageTxt));
+				}
+			}	
+		});
+		$('#origin_edit_dialog').dialog({
+			closed: false,
+			modal:true,
+            title: "修改原文",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: function(){
+                	$('#origin_edit_form').form('submit', {
+            			url:'/BZCX/admin/stdfile/update?stdFileId=' + item.stdFileId,
+            			success:function(data){
+            				data = JSON.parse(data);
+            				if(data.code == 200){
+            					$.messager.alert('信息提示','修改成功！','info');
+            					$('#origin_edit_dialog').dialog('close');
+            					originHtml.reloadTable();
+            				}else if(data.code == 900){
+            					$.messager.alert('信息提示',data.msg,'info');
+            					$('#origin_edit_dialog').dialog('close');
+            				}else
+            				{
+            					$.messager.alert('信息提示','修改失败！','info');
+            					$('#origin_edit_dialog').dialog('close');
+            				}
+            			}
+            		});
+                }
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#origin_edit_dialog').dialog('close');
+                }
+            }]
+        });
+	}
+	//点击上传按钮
+	function originUpload(){
+			$('#origin_upload_btn').after('<input type="file" id="origin_file_input" name="file" style="display:none" multiple="multiple">');
+			document.getElementById("origin_file_input").onchange = function(){
+				 var fileList = $("#origin_file_input").get(0).files;
+				 var param = {
+					 "standardNo" : fileList[0].name
+				 }
+				 $.ajax({
+						url:'/BZCX/admin/stdfile/checkupload',
+						type:'POST',
+						traditional:true,
+						data:{
+							standardNo : fileList[0].name
+						},
+						success:function(data){
+							if(data.code == 200){
+								originHtml.uploadFile(fileList);
+							}else if(data.code == 900){
+								$.messager.alert('信息提示',data.msg,'info');
+							}
+						}	
+					});
+			}
+			document.getElementById("origin_file_input").click();
+	}
+	var originHtml = {
+			initTable : function(data){
+				$('#origin_datagrid').datagrid({
+					url:'/BZCX/admin/stdfile/list',
+					queryParams: data,
+					rownumbers:true,
+					singleSelect:false,
+					pageSize:20, 
+					pagination:true,
+					multiSort:true,
+					fitColumns:true,
+					fit:true,
+					columns:[[
+						{ checkbox:true},
+						{ field:'stdFileName',title:'原文名称',width:250,sortable:true},
+						{ field:'standardNo',title:'对应题录',width:200,sortable:true},
+						{ field:'associated',title:'关联题录',width:70,sortable:true},
+						{ field:'batchNo',title:'批号',width:50,sortable:true},
+						{ field:'stdFileSize',title:'文件大小',width:80,sortable:true},
+						{ field:'fileType',title:'文件类型',width:80,sortable:true},
+						{ field:'pageNumber',title:'文件页数',width:80,sortable:true},
+						{ field:'language',title:'语言种类',width:80,sortable:true},
+						{ field:'uploadDate',title:'上传日期',width:100,sortable:true},
+						{ field:'departmentName',title:'上传单位',width:200,sortable:true},
+						{ field:'storePlace',title:'存放位置',width:100,sortable:true},
+						{ field:'preview',title:'预览',width:40,
+							formatter:function(value,rec){
+								var aLink;
+								if(rec.pdfFile ==null){
+									aLink = '<a href="javascript:void(0)" >无PDF</a>';
+								}else{
+									aLink = '<a href="' + rec.pdfFile + '" target="_blank">预览</a>';
+								}
+								return aLink;
+							}
+						}
+					]]
+				});
+
+			},
+			// 重新加载表格
+			reloadTable : function(data){
+				$('#origin_datagrid').datagrid("reload", data);
+			},
+			// 初始化树
+			initTree : function(){
+				$('#origin_edit_tree').tree({
+					url:'/BZCX/admin/department/tree',
+					onSelect:function(node){
+						$("#stdFile_uploadUnit_show").val(node.text);
+						$("#stdFile_uploadUnit_hidden").val(node.id);
+					}
+				});
+			},
+			// 上传文件
+			uploadFile : function(fileList){
+				// 将上传的多个文件放入formData中
+				var myform = new FormData();
+				for(var i = 0; i < fileList.length; i++){
+					var file = fileList[i];
+					var fileName = file.name.toLowerCase();
+					//&& !fileName.endWith("txt")&& !fileName.endWith("doc") && !fileName.endWith("docx")
+					if(!fileName.endWith("pdf") && !fileName.endWith("doc") && !fileName.endWith("docx") ){
+						$.messager.alert('信息提示','只能上传pdf和word原文。','info');
+						return;
+					}
+					myform.append('stdFile',file);
+				}
+				$('#origin_progress_dialog').window({
+					modal:true,
+					title: "上传进度",
+					collapsible:false,
+					minimizable:false,
+					maximizable:false,
+					closable:false
+				});
+				$.ajax({
+					url: "/BZCX/admin/stdfile/upload",
+					type: "POST",
+					data: myform,
+					contentType: false,
+					processData: false,
+					success: function (data) {
+						if(data.code == 200){
+							clearInterval(timerId);
+							$('#origin_progress_dialog').window('close');
+							$('#origin_upload_progress').progressbar('setValue', 0);
+							// 同时刷新表格
+							originHtml.reloadTable();
+						}else if(date.code == 900){
+							$.messager.alert('信息提示','只能上传pdf原文。','info');
+						}
+					},
+					error:function(data){
+
+					}
+				});
+				// 更新进度条
+				timerId = setInterval(function(){
+				 	originHtml.getProgress();
+				 },1000);
+			},
+			getProgress : function(){
+					// 发送ajax 得到当前上传进度
+					$.ajax({
+						url: "/BZCX/admin/stdfile/progress",
+						type : "post",
+						async : true,
+						data: {},
+						cache : false,
+						dataType : "json",
+						success: function (data) {
+							var value = $('#origin_upload_progress').progressbar('getValue');
+							if (value < 100){
+							    var percent = data.data.percent;
+							    var valueStr =percent.substring(0, percent.indexOf("."));
+								value=parseFloat(valueStr);
+							    $('#origin_upload_progress').progressbar('setValue', value);
+							}
+						},
+						error:function(data){
+
+						}
+					});
+			}
+		}
+	$(function(){
+		// 初始化表格
+		originHtml.initTable();
+		// 初始化树
+		originHtml.initTree();
+	});
+</script>

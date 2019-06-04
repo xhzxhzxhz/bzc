@@ -1,0 +1,212 @@
+#main{
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+#main_top{
+    margin-top: 30px;
+    position: relative;
+}
+#main_top ul{
+    overflow: hidden;
+    border-bottom: 1px solid #E6E6E6;
+    padding-bottom: 6px;
+}
+#main_top ul li{
+    float: left;
+    overflow: hidden;
+    font-size: 14px;
+}
+#main_top ul li:nth-of-type(1) i{
+    float: left;
+    width: 19px;
+    height: 19px;
+    background: url("../imgs/search/home.png") no-repeat;
+}
+#main_top ul li a{
+    float: left;
+    margin: 0 10px;
+    color: #1446A7;
+}
+#main_top ul li:last-of-type a{
+    color: #868686;
+}
+#main_top ul li span{
+    float: left;
+    color: #7F7F7F;
+}
+#main_bot_wrap{
+    margin-top: 22px;
+    border: 1px solid #95B9E7;
+    overflow: hidden;
+    padding: 18px;
+}
+/*主体部分左侧*/
+.classify-search-left{
+    float: left;
+    width: 355px;
+    /*height: 560px;*/
+    margin-right: 20px;
+    border: 1px solid #CCCCCC;
+}
+.classify-search-left_title{
+    overflow: hidden;
+    /*height: 44px;*/
+    background: url("../imgs/system/bg.png") no-repeat;
+    border-bottom: 1px solid #CCCCCC;
+    padding: 15px 0;
+}
+.classify-search-left_title input {
+    width: 235px;
+    height: 40px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    border: none;
+    border: 1px solid #E3E3E3;
+    background: rgba(0,0,0,0);
+    margin-left: 31px;
+}
+.search-btn {
+    height: 40px;
+    width: 55px;
+    background: #1446A7;
+    color: #ffffff;
+    margin-left: -4px;
+}
+.classify-search-left_con{
+    height: 697px;
+    overflow: auto;
+}
+/*复写下拉框样式*/
+.classify-search-left_con select{
+    width: 100%;
+    margin: 10px 0 0;
+    height: 36px;
+    /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+    border: 1px solid #E3E3E3;
+
+    /*很关键：将默认的select选择框样式清除*/
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+
+    /*在选择框的最右侧中间显示小箭头图片*/
+    background: url("../imgs/search/select.png") no-repeat scroll right center transparent;
+
+
+    /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+    padding:0 36px 0 10px;
+}
+/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+select::-ms-expand { display: none; }
+/*主体右侧*/
+#main_bot{
+    position: relative;
+    float: right;
+    width: 782px;
+}
+.search-p-title{
+    background: #E8F2FF;
+    box-sizing: border-box;
+    width: 100%;
+    height: 52px;
+    border: 1px solid #95B9E7;
+}
+.search-p-tab{
+    float: left;
+    width: 158px;
+    overflow: hidden;
+    border-right: 1px solid rgba(0,0,0,0);
+    cursor: pointer;
+    color: #5E5F61;
+    font-size: 18px;
+    height: 52px;
+}
+.search-p-tab.active{
+    height: 52px;
+    color: #1446A7;
+    background: url("../imgs/index/click.png") no-repeat;
+}
+.search-p-tab:nth-of-type(1){
+    border-right: 1px solid #95B9E7;
+}
+.search-p-tab-inner{
+    overflow: hidden;
+    margin-top: 15px;
+}
+.search-p-tab i{
+    float: left;
+    margin-right: 6px;
+}
+.search-p-tab span{
+    float: left;
+}
+.bzll-a i{
+    margin-top: 2px;
+    margin-left: 32px;
+    width: 19px;
+    height: 20px;
+    background: url("../imgs/system/bzll.png") no-repeat;
+}
+.bztj-a i{
+    margin-top: 5px;
+    margin-left: 32px;
+    width: 16px;
+    height: 14px;
+    background: url("../imgs/system/bztj.png") no-repeat;
+}
+/*复写下拉框样式*/
+.form-item select{
+    width: 160px;
+    height: 36px;
+    /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+    border: 1px solid #E3E3E3;
+
+    /*很关键：将默认的select选择框样式清除*/
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+
+    /*在选择框的最右侧中间显示小箭头图片*/
+    background: url("../imgs/search/select.png") no-repeat scroll right center transparent;
+
+
+    /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+    padding:0 36px 0 10px;
+}
+/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+select::-ms-expand { display: none; }
+.form-item{
+    float: left;
+    overflow: hidden;
+}
+.form-item>span{
+    float: left;
+    height: 36px;
+    line-height: 36px;
+}
+.form-item>div{
+    float: left;
+}
+.form-item input[type='text'] {
+    width: 260px;
+    height: 36px;
+    border: 1px solid #E3E3E3;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+.bzll-search-btn{
+    height: 36px;
+    color: #1446A7;
+    background: #ffffff;
+    border: 1px solid #1446A7;
+    width: 60px;
+    text-align: center;
+    margin-left: 26px;
+}
+.bzll-top{
+    margin: 30px 0;
+}
+.bztj-top{
+    margin: 20px 0;
+}

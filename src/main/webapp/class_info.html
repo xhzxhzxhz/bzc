@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<title>分类查询</title>
+	<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		.classify{
+            width: 100%;
+            background: #ececec;
+        }
+        .top{
+        	width: 100%;
+        	height: .88rem;
+        	display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .top_inputDiv{
+        	margin:.16rem;
+        	width:100%;
+        	height:.56rem;
+        	border-radius:.1rem;
+        	background:#fff;
+        	position: relative;
+        	display: -webkit-flex;
+            display: flex;
+        }
+        .top_inputDiv from{
+        	width:100%;
+        	height:100%;
+        	position: relative;
+        	display: -webkit-flex;
+            display: flex;
+        }
+        .top_inputDiv input{
+        	padding-left:5px;
+        	width:100%;
+        	height:100%;
+        	border:none;
+        	outline:none;
+        }
+        .top_help{
+        	position: absolute;
+        	width:100%;
+        	height:100%;
+        	font-size:.26rem;
+        	color:#A2A2A2;
+        	display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .top_help img{
+        	width:.26rem;
+        	height:.26rem;
+        	margin-right:5px;
+        }
+        .content{
+			padding-left:.28rem;
+			padding-right:.28rem;
+        	display: -webkit-flex;
+            display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between
+        }
+        .imgDiv{
+        	width:2.1rem;
+			height:2.6rem;
+			margin-top:.32rem;
+			border-radius:6px;
+        	font-size:.24rem;
+			position: relative;	
+			background-image: url('img/pic97.png');
+			background-size: 100%;
+			display:flex;
+            display: -webkit-flex;
+            justify-content: center;
+        }
+        .imgDiv div{
+        	width:.48rem;
+        	height:.48rem;
+        	line-height:.48rem;
+        	text-align:center;
+        	background:#004BE2;	
+        	color:#fff;
+        	border-radius:6px 0 0 0;
+        	position: absolute;
+        	top:0;
+        	left:0;
+        }
+        .imgDiv p{
+        	position: absolute;
+        	bottom:.14rem;
+        	color:#fff;
+            padding:0 .12rem;
+            
+        }
+	</style>
+</head>
+<body>
+	<div class='classify'>
+		<div class='top'>
+			<div class='top_inputDiv'>
+				<!-- <form action="javascript:return true">
+				  <input type="search">
+				</form> -->
+				<from>
+					<input type='search' id="ics_keyword">
+				</from>
+				<div class='top_help'>
+					<img src='img/icon_search.png'>
+					请输入关键词
+				</div> 
+			</div>			
+		</div>
+		<div class='content'>
+			
+		</div>	
+	</div>
+</body>
+<script src="js/rem.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.lazyload.min.js"></script>
+<script src="js/class_info.js"></script>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>收藏</title>
+    <link rel="stylesheet" href="css/userAttention.css">
+    <style>
+    	body{
+    		margin:0;
+    		padding:0;
+    	}
+        .unCon{
+	        display: -webkit-flex;
+	        display: flex;
+	        margin: auto;
+	        align-content: center;
+	        background: #ececec;
+	        width: 100%;
+	        height: 100%;
+	    }
+	    .unCon img{
+	        transform: scale(0.5)
+	    }
+	    .collection{
+	        background: #ccc;
+	        border: 1px solid #ccc;
+	    }
+	    .searchDiv{
+	        display: -webkit-flex;
+	        display: flex;
+	        align-items: center;
+	        margin-left: .2rem;
+	        margin-right: .2rem;
+	        margin-top: .15rem;
+	        margin-bottom:.1rem;
+	        width: 94%;
+	        height:.6rem;
+	        background: #fff;
+	        border: 1px solid #fff;
+	        color: #000;
+	        border-radius: 5px;
+	    }
+	    .searchDiv input{
+	        flex:8;
+	        height:96%;	        
+	        border:none;
+	        outline: none;
+	        border-radius:6px;
+	    }
+	    .searchDiv img{
+	    	width:.26rem;
+	    	height:.26rem;
+	    	margin-right:.2rem;
+	    }
+	    .searchDiv input::placeholder{
+	        text-align: center;
+	    }
+	    #collection_load{
+	    	margin-top:.04rem;
+	    }
+	    .collCon{
+	        display: -webkit-flex;
+	        display: flex;
+	        background: #fff;
+	        margin-top: .12rem;
+	        height:1.3rem;
+	    }
+	    .imgDiv{
+	        display: -webkit-flex;
+	        display: flex;
+	        width: 20%;
+	    }
+	    .imgDiv img{
+	        margin: auto;
+	        align-content: center;
+	        transform: scale(.7);
+	    }
+	    .contentDiv{
+	        width: 78%;
+	        display: -webkit-flex;
+	        display: flex;
+	        flex-direction: column;
+	    }
+	    .conTitle{
+	    	color:#333;
+	        font-size: .3rem;
+	        text-align: left;
+	        height:.6rem;	
+	        line-height:.95rem;
+	    }
+	    .conCent{
+	    	color:#666;
+	        text-align: left;
+	        font-size: .24rem;    
+	        margin-top:.2rem;          
+	    }
+	    .btnDiv{
+	        position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 94%;
+            height: 1.2rem;
+            background: #fff;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding-left:.2rem;
+            padding-right:.2rem;
+	    }
+	    .btnDiv button{
+	        flex: 1;
+            height: .8rem;
+            line-height: .8rem;
+            border: none;
+            outline: none;
+	    }
+	    .btnDiv button:nth-child(1){
+        	border-radius:6px 0 0 6px;
+        }
+        .btnDiv button:nth-child(2){
+        	border-radius:0 6px 6px 0;
+        }
+        .btn1{
+            background: #f1f6f9;
+        }
+        .btn1:active{
+        	background: #d1f2f7;
+        }
+        .btn2{
+        	background: linear-gradient(90deg,rgba(0,218,254,1),rgba(77,130,226,1));			
+        }
+        .btn2:active{
+        	color:#fff;
+            background: linear-gradient(90deg,rgba(0,218,254,1),rgba(0,75,226,1));
+        }
+    </style>
+</head>
+<body>
+    <div class="collection">
+    	<div class="attention attentionHide" id="follow">  <!-- 未关注的用户显示 -->
+    		<img src="img/gz_logo.png"/>
+    		<button>关注</button>
+    	</div>
+        <div>
+            <!-- 头部搜索框 -->
+            <div class="searchDiv">
+                <input type="text" placeholder="页内搜索" id="collection_input">
+                <img src="img/button_nor_search.png" alt="点击搜索" onclick="collectionSeach()">
+            </div>
+            <div id="collection_load">
+	            <!-- 内容展示区 -->
+	            <div class="collCon">
+	            	<div class="imgDiv"><img src="img/button_nor_xuankuang.png"/></div>
+	            	<div class="contentDiv">
+	            		<div class="conTitle">123</div>
+	            		<div class="conCent">456</div>
+	            	</div>	
+	            </div>
+	            <div class="collCon">
+	            	<div class="imgDiv"><img src="img/button_nor_xuankuang.png"/></div>
+	            	<div class="contentDiv">
+	            		<div class="conTitle">123</div>
+	            		<div class="conCent">456</div>
+	            	</div>	
+	            </div>            
+            </div>
+            <!-- 底部按钮 -->
+            <div class="btnDiv">
+                <button class="btn1" onclick="checkall()">全选</button>
+                <button class="btn2" onclick="delet()">删除</button>
+            </div>                     
+        </div>
+        <!-- <div class="unCon">
+            <img class="unConimg" src="img/pic_weikong.png" alt="暂无图片">
+        </div> -->
+    </div>
+     <script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js "></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.pagination.min.js"></script>
+     <script src="js/rem.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/map.js"></script>
+     <script src="js/collection.js"></script>
+</body>
+</html>

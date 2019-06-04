@@ -1,0 +1,462 @@
+<div class="easyui-layout" data-options="fit:true">
+    <!-- Begin of toolbar -->
+    <div id="news_toolbar">
+        <div class="wu-toolbar-button">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="newsAdd()" plain="true">添加</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="newsEdit()" plain="true">修改</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="newsDele()" plain="true">删除</a>
+        </div>
+        <div class="wu-toolbar-search">
+			<label>类别：</label>
+			<select class="my-select" name="newsCate1" id="newsCate_select" panelHeight="auto" style="width:200px">
+				<option value="0">全部</option>
+				<option value="1">通知公告</option>
+				<option value="2">昆仑能源标准动态</option>
+				<option value="3">中国石油标准动态</option>
+				<option value="4">国家标准动态</option>
+				<option value="5">行业标准动态</option>
+				<option value="6">其他信息</option>
+			</select>
+			<label style="margin-left: 40px">轮播：</label>
+			<select class="my-select" name="hasImg" id="news_hasImg_select" panelHeight="auto" style="width:200px">
+				<option value="0">全部</option>
+				<option value="1">轮播</option>
+				<option value="2">不轮播</option>
+			</select>
+			<label style="margin-left: 40px">关键词：</label><input id="news_keyword_input" class="wu-text"  style="width:200px" placeholder="标题">
+			<a href="javascript:void(0)" onclick = "searchNews()" class="easyui-linkbutton" iconCls="icon-search">开始检索</a>
+        </div>
+    </div>
+    <!-- End of toolbar -->
+    <table id="news_datagrid" class="easyui-datagrid" toolbar="#news_toolbar"></table>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="news_add_dialog" class="easyui-dialog" data-options="closed:true" style="width:600px; padding:10px;">
+	<form id="news_add_form" method="post" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td width="80" align="right">标题:</td>
+                <td><input type="text" name="title" class="wu-text" /></td>
+            </tr>
+            <tr>
+                <td align="right">作者:</td>
+                <td><input type="text" name="author" class="wu-text" /></td>
+            </tr>
+			<tr>
+				<td align="right">来源:</td>
+				<td><input type="text" name="newsSource" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">排序码:</td>
+				<td><input type="text" name="sortCode" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">是否热门:</td>
+				<td>
+					<label><input style="margin-top: 0px;" type="radio" name="hot" value="0"/>否</label>
+					<label style="margin-left: 200px;"><input style="margin-top: 0px;" type="radio" name="hot" value="1"/>是</label>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">是否轮播:</td>
+				<td>
+					<label><input class="news_img_radio" style="margin-top: 0px;" type="radio" name="news_img_radio" value="0" checked="checked"/>否</label>
+					<label style="margin-left: 200px;"><input class="news_img_radio" style="margin-top: 0px;" type="radio" name="news_img_radio" value="1"/>是</label>
+				</td>
+			</tr>
+			<tr id="news_img_file_tr" style="display:none">
+				<td align="right">选择文件:</td>
+				<td>
+					<label><input class="news_img_file_input" style="margin-top: 0px;" type="file" name="newsImgFile"/></label>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">类别:</td>
+				<td>
+					<select name="newsCate" class="my-select" panelHeight="auto" style="width:468px">
+						<option value="1">通知公告</option>
+						<option value="2">昆仑能源标准动态</option>
+						<option value="3">中国石油标准动态</option>
+						<option value="4">国家标准动态</option>
+						<option value="5">行业标准动态</option>
+						<option value="6">其他信息</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">状态:</td>
+				<td>
+					<select name="status" class="my-select" panelHeight="auto" style="width:468px">
+						<option value="0">正常</option>
+						<option value="1">下架</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">内容:</td>
+				<td style="width: 460px">
+					<textarea id="add_news_textarea" name="content" rows="6"></textarea>
+				</td>
+			</tr>
+        </table>
+    </form>
+</div>
+<!-- End of easyui-dialog -->
+<!-- Begin of easyui-dialog -->
+<div id="news_edit_dialog" class="easyui-dialog" data-options="closed:true" style="width:600px; padding:10px;">
+	<form id="news_edit_form" method="post" enctype="multipart/form-data">
+		<table>
+			<tr>
+				<td width="80" align="right">标题:</td>
+				<td><input type="text" name="title" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">作者:</td>
+				<td><input type="text" name="author" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">来源:</td>
+				<td><input type="text" name="newsSource" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">排序码:</td>
+				<td><input type="text" name="sortCode" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">是否热门:</td>
+				<td>
+					<label><input style="margin-top: 0px;" type="radio" name="hot" value="0" checked="checked"/>否</label>
+					<label style="margin-left: 200px;"><input style="margin-top: 0px;" type="radio" name="hot" value="1"/>是</label>
+				</td>
+			</tr>
+			<tr id="news_img_show_tr" style="display:none">
+				<td align="right">轮播图片:</td>
+				<td>
+					<img id="news_img" width="100px" height="100px" src=""/>
+					<input type="button" id="change_news_img_button" value="更换"/>
+					<input type="file" id="change_news_img_input" name="newsImgFile" style="display:none"/>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">类别:</td>
+				<td>
+					<select name="newsCate" class="my-select" panelHeight="auto" style="width:468px">
+						<option value="1">通知公告</option>
+						<option value="2">昆仑能源标准动态</option>
+						<option value="3">中国石油标准动态</option>
+						<option value="4">国家标准动态</option>
+						<option value="5">行业标准动态</option>
+						<option value="6">其他信息</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">状态:</td>
+				<td>
+					<select name="status" class="my-select" panelHeight="auto" style="width:468px">
+						<option value="0">正常</option>
+						<option value="1">下架</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">内容:</td>
+				<td style="width: 460px">
+					<textarea id="edit_news_textarea" name="content" rows="6"></textarea>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<!-- End of easyui-dialog -->
+<div id="news_detail_dialog" class="easyui-dialog" data-options="closed:true" style="width:600px;height: 500px;overflow: auto;padding:10px;">
+	<div id="news_detail_content"></div>
+</div>
+<!-- End of easyui-dialog -->
+<script type="text/javascript">
+	var addEditor;
+	var editEditor;
+	/**
+	 * Name 打开添加动态
+	 */
+	function newsAdd(){
+		$('#news_add_form').form('reset');
+		addEditor = KindEditor.create('#add_news_textarea',
+				{width:"100%", 
+				 afterBlur: function(){this.sync();}
+				});
+		// 重置富文本编辑器内容
+		KindEditor.html("#add_news_textarea","")
+		$('#news_add_dialog').dialog({
+			closed: false,
+			modal:true,
+			title: "添加动态",
+			buttons: [{
+				text: '确定',
+				iconCls: 'icon-ok',
+				handler: function(){
+					$('#news_add_form').form('submit', {
+						url:'/BZCX/admin/news/insert',
+						success:function(data){
+								data = JSON.parse(data);
+								if(data.code == 200){
+									$.messager.alert('信息提示','新增成功！','info');
+									$('#news_add_dialog').dialog('close');
+									newsHtml.reloadTable();
+								}else {
+									$.messager.alert('信息提示','新增咨询失败。请联系管理员。','info');
+								}
+							}
+						});
+				}
+			}, {
+				text: '取消',
+				iconCls: 'icon-cancel',
+				handler: function () {
+					$('#news_add_dialog').dialog('close');
+				}
+			}]
+		});
+	}
+
+	/**
+	 * Name 打开修改窗口
+	 */
+	function newsEdit(){
+		$('#news_edit_form').form('reset');
+		editEditor = KindEditor.create('#edit_news_textarea',
+				{width:"100%", 
+				 afterBlur: function(){this.sync();}
+				});
+		var item = $('#news_datagrid').datagrid('getSelected');
+		// 查询当前要修改的资讯详情
+		$.ajax({
+			url:'/BZCX/admin/news/detail',
+			type : 'POST',
+			data:{
+				newsId : item.newsId
+			},
+			success:function(data){
+				console.log(data);
+					// 填充修改表单
+					if(data.code == 200){
+						 $('#news_edit_form').form('load', data.data);
+						 var newsCateTxt = data.data.newsCate;
+						 var newsStatusTxt = data.data.status;
+						 var newsHotTxt = data.data.hot;
+						 var newsCate = $('[name="newsCate"]');
+						 var status = $('[name="status"]');
+						 newsCate.val(commonUtil.map.get("newsCate_" + newsCateTxt));
+						 status.val(commonUtil.map.get("newsStatus_" + newsStatusTxt));
+						 $("input[name='hot'][value='" + commonUtil.map.get("newsHot_" + newsHotTxt) + "']").attr("checked",true);
+						 editEditor.html(data.data.content);
+						 if(!commonUtil.isEmpty(data.data.imgPath)){
+							 console.info(data.data.imgPath);
+							 var src = "/newsImg/" + data.data.imgPath.split("&")[1];
+							 $('#news_img_show_tr').show();
+							 $('#news_img').attr("src", src);
+						 	
+						 }
+						 
+					}else{
+						$.messager.alert('信息提示','请求资讯详情失败。','info');
+					}
+			}
+		});
+		$('#news_edit_dialog').dialog({
+			closed: false,
+			modal:true,
+			title: "修改动态",
+			buttons: [{
+				text: '确定',
+				iconCls: 'icon-ok',
+				handler: function(){
+					$('#news_edit_form').form('submit', {
+						url:'/BZCX/admin/news/update?newsId=' + item.newsId,
+						success:function(data){
+								data = JSON.parse(data);
+								if(data.code == 200){
+									$.messager.alert('信息提示','修改成功！','info');
+									$('#news_edit_dialog').dialog('close');
+									newsHtml.reloadTable();
+								}else {
+									$.messager.alert('信息提示','修改咨询失败。请联系管理员。','info');
+								}
+							}
+						});
+				}
+			}, {
+				text: '取消',
+				iconCls: 'icon-cancel',
+				handler: function () {
+					$('#news_edit_dialog').dialog('close');
+				}
+			}]
+		});
+	}
+
+	/**
+	* Name 删除动态
+	*/
+	function newsDele(){
+		$.messager.confirm('信息提示','确定要删除所选咨询吗？', function(result){
+			if(result){
+				var newsIds = commonUtil.getCheckedIds("news_datagrid", "newsId");
+				console.info(newsIds);
+				$.ajax({
+					url:'/BZCX/admin/news/delete',
+					type:'POST',
+					traditional:true,
+					data:{
+						newsIds : newsIds
+					},
+					success:function(data){
+						if(data.code == 200){
+							$.messager.alert('信息提示','删除成功！','info');
+						}else
+						{
+							$.messager.alert('信息提示','操作失败！','info');
+						}
+						newsHtml.reloadTable();
+					}	
+				});
+			}	
+		});
+	}
+	// 检索资讯
+	function searchNews(){
+		// 得到检索条件
+		var newsCate = $("#newsCate_select").val();
+		var title = $("#news_keyword_input").val();
+		var hasImg = $("#news_hasImg_select").val();
+		var param = {
+				relation : "and"
+			}
+		if(newsCate != "0"){
+			param.newsCate = newsCate;
+		}
+		if(!commonUtil.isEmpty(title)){
+			param.title = title;
+		}
+		if(hasImg != "0"){
+			param.hasImg = hasImg;
+		}
+		newsHtml.reloadTable(param);
+	}
+	var newsHtml = {
+			// 初始化表格
+			initTable : function(data){
+				$('#news_datagrid').datagrid({
+					url:'/BZCX/news/list',
+					rownumbers:true,
+					singleSelect:false,
+					pageSize:20,           
+					pagination:true,
+					multiSort:true,
+					fitColumns:true,
+					fit:true,
+					columns:[[
+						{ checkbox:true},
+						{ field:'title',title:'标题',width:100,sortable:true},
+						{ field:'author',title:'作者',width:100,sortable:true},
+						{ field:'imgPath',title:'轮播图片',width:100,sortable:true,
+							formatter:function(value,rec){
+								if(!commonUtil.isEmpty(rec.imgPath)){
+									var src = "/newsImg/" + rec.imgPath.split("&")[1];
+									var mycontent = '<img src="' + src + '" style="height: 100px;width: 200px;overflow: auto"/>';
+									return mycontent;
+								}
+								return "无";
+							}
+						},
+						{ field:'newsSource',title:'来源',width:100,sortable:true},
+						{ field:'hits',title:'浏览次数',width:100,sortable:true},
+						{ field:'sortCode',title:'排序码',width:100,sortable:true},
+						{ field:'newsCate',title:'资讯分类',width:100,sortable:true},
+						{ field:'hot',title:'是否热门',width:100,sortable:true},
+						{ field:'content',title:'内容',align:'center',
+							formatter:function(value,rec){
+								var mycontent = '<div style="height: 100px;width: 200px;overflow: auto">'+ rec.content +'</div>';
+								return mycontent;
+							}
+						},
+						{ field:'publishDate',title:'发布时间',width:100,sortable:true},
+						{ field:'status',title:'状态',width:30,sortable:true}
+					]],
+					onDblClickRow:function(rowIndex, rowData){
+						console.info(rowData);
+						//发送请求详情
+						$.ajax({
+							type : "post",
+							async : false,
+							url :"/BZCX/admin/news/detail",
+							data: {
+								newsId : rowData.newsId
+							},
+							cache : false,
+							dataType : "json",
+							success : function(data){
+								$("#news_detail_content").html(data.data.content);
+							},
+							error:function(){
+								$.messager.alert('提示','操作失败，请稍后再试！');
+							}
+						});
+						//对话框显示
+						$('#news_detail_dialog').dialog({
+							closed: false,
+							modal:true,
+							title: "资讯详情",
+							buttons: [{
+								text: '确定',
+								iconCls: 'icon-ok',
+								handler: function () {
+									$('#news_detail_dialog').dialog('close');
+								}
+							}]
+						});
+					}
+				});
+			},
+			// 重新加载表格
+			reloadTable : function(data){
+				$('#news_datagrid').datagrid('reload',data);
+			}
+	}
+	$(function(){
+		// 第一步初始化表格
+		newsHtml.initTable();
+		// 为新闻状态下拉框 添加搜索事件
+		$("#newsCate_select,#news_hasImg_select").change(function(){
+			searchNews();			  
+		});
+		// 点击设置轮播图的radio
+		$(".news_img_radio").change(function() {
+			var flag = this.value;
+			if(flag == 1){
+				$('#news_img_file_tr').show();
+			}else{
+				$('#news_img_file_tr').hide();
+			}
+		});
+		// 点击更换图片按钮
+		$('#change_news_img_button').click(function() {
+			$('#change_news_img_input').click();
+			document.getElementById("change_news_img_input").onchange = function(){
+				var imgFile = document.getElementById('change_news_img_input').files[0];
+				var fileName = imgFile.name.toLowerCase();
+				if(!fileName.endWith("jpg") && !fileName.endWith("png")
+						&& !fileName.endWith("gif")){
+					$.messager.alert('信息提示','只支持jpg，png，gif类型图片','info');
+					return;
+				}
+				var read = new FileReader();
+				read.readAsDataURL(imgFile);
+				read.onload = function (e) {
+					console.info(this);
+					$('#news_img').attr("src", this.result);
+				}
+			};
+		});
+	});
+</script>

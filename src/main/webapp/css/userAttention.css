@@ -1,0 +1,30 @@
+.attention{  
+	width:100%;
+	height:1.6rem;
+	background:#ececec;
+	display:-webkit-flex;
+	display:flex;
+	align-items:center;
+	justify-content: space-between ;
+}
+.attention img{       
+	margin-left:-.82rem;       	
+	transform: scale(0.5);
+}
+.attention button{
+	border:1px solid #004BE2;
+	height:.56rem;
+	width:1.66rem;
+	color:#004BE2;
+	background:#ececec;
+	outline:none;  
+	border-radius:2px;
+	margin-right:.44rem;      	
+}
+.attention button:active{
+	color:#fff;
+	background:#004BE2;
+}
+.attentionHide{
+	display:none;
+}

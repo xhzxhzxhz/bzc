@@ -1,0 +1,171 @@
+<div class="easyui-layout" data-options="fit:true">
+	<div data-options="region:'west',border:true,split:true," title="资源" style="width:250px; padding:5px;">
+		 <ul id="resource_tree" class="easyui-tree"></ul> 
+	 </div>
+	<div data-options="region:'center',border:false">
+	<!-- Begin of toolbar -->
+	<div id="resource_toolbar">
+		<div class="wu-toolbar-search">
+			<label>关键词：</label><input id="resource_keyword_input" class="wu-text" style="width:200px">
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" onclick="resourceResource()">开始检索</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" onclick="addResource()">新增</a>
+		</div>
+	</div>
+	<!-- End of toolbar -->
+	<table id="resource_datagrid" class="easyui-datagrid" toolbar="#resource_toolbar"></table>
+	</div>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="resource_add_dialog" class="easyui-dialog" data-options="closed:true" style="width:400px;padding:10px">
+	<form id="resource_add_form" method="post">
+        <table>
+            <tr>
+                <td width="80" align="right">资源名称:</td>
+                <td><input type="text" name="name" class="wu-text easyui-validatebox" data-options="required:true"/></td>
+            </tr>
+			<tr>
+				<td align="right">资源类型:</td>
+				<td><input type="text" name="type" class="wu-text"/></td>
+			</tr>
+			<tr>
+				<td align="right">URL:</td>
+				<td><input type="text" name="url" class="wu-text"/></td>
+			</tr>
+			<tr>
+				<td valign="top" align="right">备注:</td>
+				<td><textarea name="note" rows="6" class="wu-textarea" style="width:260px"></textarea></td>
+			</tr>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+
+	/**
+	 * 检索资源
+	 */
+	function resourceResource(){
+		var keyword = $('#resource_keyword_input').val();
+		var data = {
+			keyword : keyword	
+		}
+		resourceHtml.reloadTable(data);
+	}
+	/**
+	 * 改变资源状态
+	 */
+	function resourceChangeStatus(resourceId, status){
+		$.ajax({
+			url:'/BZCX/admin/resource/update',
+			type:'POST',
+			data:{
+				id:resourceId,
+				status : status
+			}
+		});
+	}
+	/**
+	 *新增资源
+	 */
+	function addResource(){
+		$('#resource_add_form').form('reset');
+		var node = $('#resource_tree').tree('getSelected');
+		var parentId;
+		if(node){
+			parentId = node.id;
+		}else{
+			parentId = "0";
+		}
+		$('#resource_add_dialog').dialog({
+			closed: false,
+			modal:true,
+            title: "新增资源",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: function(){
+                	$('#resource_add_form').form('submit', {
+            			url:'/BZCX/admin/resource/insert?parentId=' + parentId,
+            			success:function(data){
+            				data = JSON.parse(data);
+            				if(data.code == 200){
+            					$.messager.alert('信息提示','新增成功！','info');
+            					$('#resource_add_dialog').dialog('close');
+            					resourceHtml.reloadTable();
+            					resourceHtml.reloadTree();
+            				}else{
+            					$.messager.alert('信息提示','提交失败！','info');
+            				}
+            			}
+            		});	
+                }
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#resource_add_dialog').dialog('close');
+                }
+            }]
+        });
+	}
+	var resourceHtml = {
+			initTable : function(){
+				$('#resource_datagrid').datagrid({
+					url:'/BZCX/admin/resource/list',
+					rownumbers:true,
+					singleSelect:false,
+					pageSize:20,
+					pagination:true,
+					multiSort:true,
+					fitColumns:true,
+					fit:true,
+					columns:[[
+						{ field:'name',title:'资源名称',width:100,sortable:true},
+						{ field:'type',title:'资源类型',width:180,sortable:true},
+						{ field:'note',title:'备注',width:100,sortable:true},
+						{ field:'action',title:'状态',width:58,align:'center',
+							formatter:function(value,rec){
+								var enableStatus = "";
+								var disableStatus = "";
+								if(rec.status == 0){
+									disableStatus = "checked";
+								}else if(rec.status == 1){
+									enableStatus = "checked";
+								}else if(rec.status == 3){
+									return;
+								}
+								var enable = '<label><input onclick="resourceChangeStatus(\'' + rec.id + '\',\'1\')" ' + enableStatus + ' style="margin-top: 0px;" type="radio" name="resourceStatus'+ rec.id + '"/>启用</label>';
+								var disable = '<label><input onclick="resourceChangeStatus(\'' + rec.id + '\',\'0\')" ' + disableStatus + ' style="margin-top: 0px;" type="radio" name="resourceStatus'+ rec.id + '"/>禁用</label>';
+								return enable+disable;
+							}
+						}
+					]]
+				});
+			},
+			reloadTable : function(data){
+				$('#resource_datagrid').datagrid("reload", data);
+			},
+			initTree : function(){
+				$('#resource_tree').tree({
+					url:'/BZCX/admin/resource/tree',
+					onSelect:function(node){
+						var resourceId = node.id + ",";
+						var data = {
+							path : resourceId	
+						}
+						resourceHtml.reloadTable(data);
+					}
+				});
+			},
+			reloadTree : function(data){
+				$('#resource_tree').tree("reload", data);
+
+			}
+	}
+	$(function(){
+		// 初始化表格
+		resourceHtml.initTable();	
+		// 初始化树
+		resourceHtml.initTree();	
+	})
+</script>
+

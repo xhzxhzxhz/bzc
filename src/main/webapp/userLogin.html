@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    .login-container{
+        width: 400px;
+        height: 600px;
+        background: blue;
+        margin:0 auto;
+    }
+    nav{
+        width: 100%;
+        height: 30px;
+        display: flex;
+    }
+    nav button{
+        flex: 1;
+    }
+    .login-item{
+        margin-top: 30px;
+        width: 100%;
+        height: 40px;
+        padding: 3px 10%; 
+    }
+    .login-item input{
+        width: 80%;
+        height: 34px;
+    }
+    .login-item button{
+    width: 80%;
+    height: 34px;
+    }
+    .login-item .validate{
+        display: inline-block;
+        width: 30%;
+        height: 40px;
+        
+    }
+    .login-item .person-pwd{
+        width: 50%;
+        height: 34px;
+        float: left;
+    }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <nav>
+            <button class='enterprise'>企业用户</button>
+            <button class='person'>个人用户</button>
+        </nav>
+        <div class='person-content'>
+            <div class='login-item'><input type="text" class='person-name'></div>
+            <div class='login-item'>
+                <input type="password" class='person-pwd'>
+                <button class='validate'>发送验证码</button>
+            </div>
+            <div class='login-item'>
+                <button class='person-login'>登录</button>
+            </div>
+        </div>
+        <div class='enterprise-content'>
+            <div class='login-item'><input type="text" class='enterprise-name'></div>
+            <div class='login-item'><input type="password" class='enterprise-pwd'>
+            </div>
+            <div class='login-item'>
+                <button class='enterprise-login'>登录</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(function(){
+    $('.person-content').hide();
+    $('.person').click(function(){
+        $('.person-content').show()
+        $('.enterprise-content').hide()
+    })
+    $('.enterprise').click(function () {
+        $('.person-content').hide()
+        $('.enterprise-content').show()
+    })
+    $('.enterprise-login').click(function(){
+        console.log($('.enterprise-name').val());
+        console.log($('.enterprise-pwd').val());
+       $.ajax({
+            type: 'GET',
+            url: '/BZCX/userlogin/login',
+            data:{
+            	"account":$('.enterprise-name').val(),
+            	"password":$('.enterprise-pwd').val(),
+            	"type":"企业用户"
+            },
+            success: function(data){
+                console.log(data);
+                if(data.code == 203){
+                	location.href = data.data
+                }
+            },
+           dataType: "json"
+        });
+    })
+    $('.person-login').click(function () {
+        console.log($('.person-name').val());
+        console.log($('.person-pwd').val());
+         $.ajax({
+         type: 'GET',
+         url:  '/BZCX/userlogin/login',
+         data:{
+              phone: $('.person-name').val(),
+              vCode: $('.person-pwd').val(),
+              type:'个人用户'
+            },
+            success: function(data){
+                console.log(data);
+                if(data.code == 203){
+                	location.href = data.data
+                }
+            },
+            dataType: "json"
+         });
+    })
+    $('.validate').click(function(){
+        console.log($('.person-pwd').val());
+        $.ajax({
+            type: 'GET',
+            url: '/BZCX/userlogin/sendMsg',
+            data: {
+              phone: $('.person-name').val(),
+              type:'个人用户'
+             
+             
+            },
+            success: function(data){
+                console.log(data);
+            },
+            dataType: "json"
+        });
+    })
+})
+</script>
+</html>

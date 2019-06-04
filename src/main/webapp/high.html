@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>高级查询</title>
+    <link rel="stylesheet" href="css/userAttention.css">
+    <style>
+    	body{
+			margin:0;
+			padding:0;
+            background: #ececec;			    	
+    	}
+        .high{
+            width: 100%;
+        }
+        .high select{
+        	border:none;
+        	background-color:#fff;
+        	appearance: none;
+            -webkit-appearance:none;
+        }
+        .high img{
+            transform: scale(0.6);
+        }
+        .highDiv{
+            width: 97%;
+            height: .8rem;
+            background: #fff;
+            color: #333;
+            font-size: .3rem;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: left;
+            padding-left: .2rem;
+            border-bottom: 1px solid #ececec;
+        }        
+        .mTop{
+            margin-top: .2rem;
+        }
+        .standardTitle{
+            flex: 1;
+        }
+        .center{
+        	display: -webkit-flex;
+            display: flex;
+        	justify-content: center;
+        }
+        .standardCon{
+            flex: 3;
+        }
+        .standState{
+        	display: -webkit-flex;
+            display: flex;            
+        }
+        .standardCon input{
+        	width:100%;
+        	height:100%;
+        	border:none;
+        	outline:none;
+        }
+        .standardCon select{
+        	width:95%;
+        	outline:none;
+        	appearance: none;
+            -webkit-appearance:none;
+        }
+        .trade{
+            flex: 2;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            border:1px solid red;
+        }
+        .trade input{
+        	width:100%;
+        	height:100%;
+        	outline:none;
+        	border:none;
+        }
+        .standardConTime{
+            display: -webkit-flex;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .standardConImg{
+            flex:1;
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+        }
+        .time select{
+            width: 1.4rem;
+            border: none;
+            outline: none;            
+        }
+        .conRight{
+            flex:1;            
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: .2rem;
+        }
+        .flexTwo{
+            flex:2;
+        }
+        .standDiv{
+        	display: -webkit-flex;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size:.3rem;
+        }
+        .standDiv img,.standState img{
+        	margin-right:.2rem;
+        }
+        .standardConTwo{
+            flex: 2;
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+        }
+        .btnDiv{
+            width: 100%;
+            height: 1rem;
+            background: #fff;
+            position: fixed;
+            left: 0;
+            bottom:2px;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btnDiv button{
+            height: 80%;
+            line-height:80%;
+            width: 45%;
+            border: none;
+            outline: none;
+        }
+        .btn1{
+            color: #63CDDF;
+            background: #eee;
+            border-radius: 6px 0px 0px 6px;
+        }
+        .btn2{
+            color: #fff;
+            background:linear-gradient(90deg,rgba(0,218,254,1),rgba(77,130,226,1));
+            border-radius:0px 6px 6px 0px;
+        }
+        .btn1:active{
+       	    color: #63CDDF;
+        	background: #d1f2f7;
+        }
+        .btn2:active{
+            background: linear-gradient(90deg,rgba(0,218,254,1),rgba(0,75,226,1));
+        }
+        .tradeDiv{
+            width: 100%;
+            height:100%;            
+            position: fixed;
+            top:0;
+            left:100%;              
+            color:#333;                          
+        }
+        .scrollDiv{
+        	width:100%;
+        	height:100%;  
+            overflow:auto;
+        }             
+        .tradeList{
+        	width:100%;
+        	display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+        }
+        #shadow{
+            flex: 1;            
+            background: #000;
+            opacity: 0.5;
+        }
+        .tradeDivShow{
+        	flex: 3.05;           
+            background: #fff;
+            padding-left: .2rem;
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            justify-content:space-between;
+            height: .8rem;
+            font-size: .3rem;
+            border-bottom:1px solid #ececec; 
+        }    
+        .tradeText{
+        	flex:8;
+        	overflow: hidden;
+        }  
+        .tradeDivShow img{
+        	flex:1;        	
+        	transform: scale(0.65)              	
+        }        
+        .abc{
+        	display: -webkit-flex;
+            display: flex;
+            justify-content: space-around;         	      
+        }
+        .color_check{
+        	color:#FFBE00;
+        }    
+        #code{
+        	display: -webkit-flex;
+            display: flex;
+            align-aitems:center;
+        }   
+        #code .standardTitle{
+        	flex:1;       	
+        }    
+        .code_standardCon{
+        	flex:1;   
+        	
+        	display: -webkit-flex;
+            display: flex;
+            align-aitems:center;
+        }
+        .code_standardConTwo{
+        	flex:2;
+        	
+        	display: -webkit-flex;
+            display: flex;
+            align-aitems:center;
+        }
+    </style>
+</head>
+<body>
+    <div class="high">
+    	<div class="attention attentionHide" id="follow">  <!-- 未关注的用户显示 -->
+    		<img src="img/gz_logo.png"/>
+    		<button>关注</button>
+    	</div>
+        <div class="highDiv">
+            <div class="standardTitle">标准号</div>
+            <div class="standardCon"><input id='standardNo' type='text' placeholder="请输入文字"></div>
+        </div>
+        <div class="highDiv">
+            <div class="standardTitle">标准名称</div>
+            <div class="standardCon"><input id='standardName' type='text' placeholder="请输入文字"></div>
+        </div>
+        <div class="highDiv mTop">
+            <div class="standardTitle">起草单位</div>
+            <div class="standardCon"><input id='draftUnit' type='text' placeholder="请输入文字"></div>
+        </div>
+        <div class="highDiv">
+            <div class="standardTitle">发布单位</div>
+            <div class="standardCon"><input id='pubOrg' type='text' placeholder="请输入文字"></div>
+        </div>
+        <div class="highDiv time">
+            <div class="standardTitle">发布日期</div>
+            <div class="standardTitle  abc">
+            	<select name="" id="publishDatebegin">
+                    <!-- <option select="select" value="1">1998</option>
+                    <option value="">1999</option>
+                    <option value="">2000</option>
+                    <option value="">2001</option>
+                    <option value="">2002</option>
+                    <option value="">2003</option>
+                    <option value="">2004</option>
+                    <option value="">2005</option>
+                    <option value="">2006</option>
+                    <option value="">2007</option>
+                    <option value="">2008</option>
+                    <option value="">2009</option>
+                    <option value="">2010</option>
+                    <option value="">2011</option>
+                    <option value="">2012</option>
+                    <option value="">2013</option>
+                    <option value="">2014</option>
+                    <option value="">2015</option>
+                    <option value="">2016</option>
+                    <option value="">2017</option>
+                    <option value="">2018</option> -->
+                </select>
+                <img src="img/icon_sanjiao.png"/>
+            </div>
+            <div class="standardTitle center">到</div>
+            <div class="standardTitle abc">
+            	<select name="" id="publishDateend">
+                   <!--  <option select="select" value="1">2018</option>
+                    <option value="">2017</option>
+                    <option value="">2016</option>
+                    <option value="">2015</option>
+                    <option value="">2014</option>
+                    <option value="">2013</option>
+                    <option value="">2012</option>
+                    <option value="">2011</option>
+                    <option value="">2010</option>
+                    <option value="">2009</option>
+                    <option value="">2008</option>
+                    <option value="">2007</option>
+                    <option value="">2006</option>
+                    <option value="">2005</option>
+                    <option value="">2004</option>
+                    <option value="">2003</option>
+                    <option value="">2002</option>
+                    <option value="">2001</option>
+                    <option value="">2000</option>
+                    <option value="">1999</option>
+                    <option value="">1998</option> -->
+                </select>
+                <img src="img/icon_sanjiao.png"/>
+            </div>
+        </div>
+        <div class="highDiv time">
+            <div class="standardTitle">实施日期</div>
+            <div class="standardTitle abc">
+            	<select name="" id="implementationDatebegin">
+                   <!--  <option select="select" value="1">1998</option>
+                    <option value="">1999</option>
+                    <option value="">2000</option>
+                    <option value="">2001</option>
+                    <option value="">2002</option>
+                    <option value="">2003</option>
+                    <option value="">2004</option>
+                    <option value="">2005</option>
+                    <option value="">2006</option>
+                    <option value="">2007</option>
+                    <option value="">2008</option>
+                    <option value="">2009</option>
+                    <option value="">2010</option>
+                    <option value="">2011</option>
+                    <option value="">2012</option>
+                    <option value="">2013</option>
+                    <option value="">2014</option>
+                    <option value="">2015</option>
+                    <option value="">2016</option>
+                    <option value="">2017</option>
+                    <option value="">2018</option> -->
+                </select> 
+                <img src="img/icon_sanjiao.png"/>
+            </div>
+            <div class="standardTitle center">到</div>
+            <div class="standardTitle abc">
+            	<select name="" id="implementationDateend">
+                  <!--  <option select="select" value="1">2018</option>
+                    <option value="">2017</option>
+                    <option value="">2016</option>
+                    <option value="">2015</option>
+                    <option value="">2014</option>
+                    <option value="">2013</option>
+                    <option value="">2012</option>
+                    <option value="">2011</option>
+                    <option value="">2010</option>
+                    <option value="">2009</option>
+                    <option value="">2008</option>
+                    <option value="">2007</option>
+                    <option value="">2006</option>
+                    <option value="">2005</option>
+                    <option value="">2004</option>
+                    <option value="">2003</option>
+                    <option value="">2002</option>
+                    <option value="">2001</option>
+                    <option value="">2000</option>
+                    <option value="">1999</option>
+                    <option value="">1998</option> -->
+                </select>
+                <img src="img/icon_sanjiao.png"/>
+            </div>
+        </div>
+        <div class="highDiv mTop">
+            <div class="standardTitle">行业</div>
+            <div class="standardCon standDiv">
+            	<div id="stand_sel">全部</div>	
+            	<img src="img/icon_in.png" alt="正在加载">
+            </div>	
+        </div>
+        <div class="highDiv">
+            <div class="standardTitle">标准状态</div>
+            <div class="standardCon">
+				<div class="standState" id="standardStatus">
+					<select>
+						<option>全部</option>	
+						<option>现行</option>	
+						<option>暂行</option>	
+						<option>废止</option>	
+					</select>
+					<img alt="" src="img/icon_in.png">
+				</div>					
+			</div>
+        </div>
+        <div class="highDiv">
+            <div class="standardTitle">效果排序</div>        
+            <div class="standardCon standardConImg"><img src="img/button_sel_xuankuang.png" alt="暂无图片" id="highstand_reset">标准名称</div>
+            <div class="standardCon standardConImg"><img src="img/button_nor_xuankuang.png" alt="暂无图片">发布时间</div>
+            <div class="standardCon standardConImg"><img src="img/button_nor_xuankuang.png" alt="暂无图片">标准状态</div>
+        </div>
+        <div class="highDiv icsCode" id="code">
+            <div class="standardTitle">字段间关系</div>            
+            <div class="code_standardCon"><img src="img/button_sel_xuankuang.png" alt="暂无图片" id="highicscode_reset">并且</div>
+            <div class="code_standardConTwo"><img src="img/button_nor_xuankuang.png" alt="暂无图片">或者</div>           
+        </div>
+        <div class="btnDiv">
+            <button class="btn1">重置</button>
+            <button class="btn2">查询</button>
+        </div>
+         <div class="tradeDiv" >	 
+        	<div class="scrollDiv">       		
+           		<div class="tradeList" id="high_icscode">
+           			<div id="shadow"></div>
+	               	<!-- <div class="tradeDivShow">
+						<div class="tradeText">123413222222222222222434</div>
+						<img src="" alt="">
+					</div> -->
+	           	</div>	 	           	        	
+        	</div> 	                 
+        </div>                  
+    </div>
+     <script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js "></script>
+    <script src="js/jquery.min.js"></script>
+     <script src="js/rem.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/senior.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,142 @@
+body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{margin:0;padding:0}
+/*body{font:16px"幼圆","Arial Narrow",HELVETICA;background:#fff;}*/
+body{font-family:'微软雅黑','宋体';background:#fff;font-size: 16px}
+input,label,select,option,textarea,button,fieldset,legend { font-family:'微软雅黑','宋体'; }
+a{text-decoration:none}
+a:hover{text-decoration:none}
+em{font-style:normal}
+li{list-style:none}
+i{display: block}
+b{font-weight: normal}
+img{display: block}
+p{word-wrap:break-word}
+.clear{
+    clear: both;
+}
+/*自定义*/
+.mybtn{
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+}
+/*头部*/
+#header_inner{
+    margin: 0 auto;
+    width: 1200px;
+    height: 110px;
+    position: relative;
+}
+#header_bg{
+    width: 1270px;
+    height: 110px;
+    background: url("../imgs/common/header.png") repeat;
+    position: absolute;
+    left: 0px;
+    top: 0;
+}
+#header img{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-top: -30px;
+}
+/*nav*/
+#nav{
+    background: #1446A7;
+    position: relative;
+}
+#nav_inner{
+    height: 40px;
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+#nav_inner>ul{
+    margin-top: 3px;
+    margin-left: 5px;
+    overflow: hidden;
+}
+#nav_inner>ul>li{
+    float: left;
+}
+#nav_inner>ul>li>a{
+    display: block;
+    width: 129px;
+    height: 37px;
+    line-height: 37px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background: #1446A7;
+}
+#nav_inner>ul>li:hover a{
+    color: #1446A7;
+    background: #ffffff;
+}
+#nav_inner>ul>li:hover .subnav{
+    display: block;
+}
+#nav_inner>ul>li>a.current{
+    color: #1446A7;
+    background: #ffffff;
+}
+#nav_inner .subnav{
+    display: none;
+    height: 100px;
+    width: 100%;
+    background: #ffffff;
+    position: absolute;
+    z-index: 5;
+    left: 0px;
+    top: 40px;
+    box-sizing: border-box;
+    border-bottom: 2px solid #8AA3D3;
+}
+#nav_inner .subnav ul{
+    width: 1200px;
+    margin: 39px auto;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+#nav_inner .subnav ul li{
+    float: left;
+    margin-right: 141px;
+}
+#nav_inner .subnav ul li:last-of-type{
+    margin-right: 0px;
+}
+#nav_inner .subnav ul li a{
+    display: block;
+    overflow: hidden;
+    color: #1446A7;
+}
+#nav_inner .subnav ul li a i{
+    float: left;
+    width: 8px;
+    height: 17px;
+    margin: 3px 10px 0 0;
+    background: url("../imgs/common/subnav.png") no-repeat;
+}
+#nav_inner .subnav ul li a span{
+    float: left;
+}
+/*footer*/
+#footer{
+    height: 156px;
+    background: #323232;
+    margin-top: 25px;
+    overflow: hidden;
+}
+#footer_inner{
+    margin-top: 32px;
+}
+#footer_inner p{
+    text-align: center;
+    color: #ffffff;
+    font-size: 14px;
+    height: 45px;
+    line-height: 45px;
+}

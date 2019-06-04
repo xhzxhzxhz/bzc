@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.dm.LawsMapper">
+	<resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.dm.LawsVo">
+		<result column="LAWS_ID" property="lawsId" jdbcType="VARCHAR" />
+		<result column="LAWS_NO" property="lawsNo" jdbcType="VARCHAR" />
+		<result column="LAWS_CN_NAME" property="lawsCnName" jdbcType="VARCHAR" />
+		<result column="LAWS_EN_NAME" property="lawsEnName" jdbcType="VARCHAR" />
+		<result column="PUB_ORG" property="pubOrg" jdbcType="VARCHAR" />
+		<result column="PUBLISH_DATE" property="publishDate" jdbcType="TIMESTAMP" />
+		<result column="IMPLEMENTATION_DATE" property="implementationDate"
+			jdbcType="TIMESTAMP" />
+		<result column="LAWS_TYPE" property="lawsType" jdbcType="VARCHAR" />
+		<!-- <result column="THEME_CN_NAME" property="themeCnName" jdbcType="VARCHAR" 
+			/> <result column="THEME_EN_NAME" property="themeEnName" jdbcType="VARCHAR" 
+			/> -->
+		<result column="LANGUAGE" property="language" jdbcType="INTEGER" />
+		<result column="HTMLURL" property="htmlUrl" jdbcType="VARCHAR" />
+		<result column="EFFECTIVENESS_LEVEL" property="effectivenessLevel"
+			jdbcType="VARCHAR" />
+		<result column="TITLE" property="title" jdbcType="VARCHAR" />
+		<result column="LAWS_LEVEL" property="lawsLevel" jdbcType="INTEGER" />
+		<result column="TRANSLATION" property="translation" jdbcType="VARCHAR" />
+		<result column="PAGE_NUMBER" property="pageNumber" jdbcType="INTEGER" />
+		<result column="DIGEST" property="digest" jdbcType="VARCHAR" />
+		<result column="ICS_CODE" property="icsCode" jdbcType="VARCHAR" />
+		<result column="PINGYING" property="pingYing" jdbcType="VARCHAR" />
+		<result column="CONTENT" property="content" jdbcType="VARCHAR" />
+		<result column="LAWS_NO_TRIM" property="lawsNoTrim" jdbcType="VARCHAR" />
+		<result column="UPLOAD_UNIT" property="uploadUnit" jdbcType="VARCHAR" />
+		<result column="LAWS_FILE_NAME" property="lawsFileName"
+			jdbcType="VARCHAR" />
+		<result column="LAWS_STATUS" property="lawsStatus" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="findAllLaaws" resultMap="BaseResultMap">
+		select * from l_laws
+	</select>
+	<select id="listLawsByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query"
+		resultMap="BaseResultMap">
+		select * from
+		(
+		SELECT * FROM l_laws
+		<where>
+			<if test="icsCode != null"><!-- 行业分类 -->
+				ICS_CODE = #{icsCode}
+			</if>
+		</where>
+		) s
+
+		<where>
+			<if test="lawsNo != null">
+				s.LAWS_NO like CONCAT('%',#{lawsNo},'%')
+			</if>
+			<if test="lawsCnName != null">
+				${relation} s.laws_CN_NAME like
+				CONCAT('%',#{lawsCnName},'%')
+			</if>
+			<if test="pubOrg != null"><!-- 发布机关 -->
+				${relation} s.PUB_ORG = #{pubOrg}
+			</if>
+			<if test="effectivenessLevel != null"><!-- 效力级别 -->
+				${relation} s.EFFECTIVENESS_LEVEL = #{effectivenessLevel}
+			</if>
+			<if test="lawsLevel != null"><!-- 法律级别 -->
+				${relation} s.LAWS_LEVEL = #{lawsLevel}
+			</if>
+			<if test="lawsTypel != null"><!-- 法律类型 -->
+				${relation} s.LAWS_TYPE = #{lawsType}
+			</if>
+			<if test="icsCode != null">
+				and s.ICS_CODE =#{icsCode}
+			</if>
+			<if test="title != null"><!--标题 -->
+				${relation} s.TITLE like CONCAT('%',#{title},'%')
+			</if>
+			<if test="publishDatebegin != null &amp;&amp; publishDateend != null">
+				${relation} DATE_FORMAT(s.PUBLISH_DATE,'%Y') BETWEEN
+				#{publishDatebegin} and
+				#{publishDateend}
+			</if>
+			<if
+				test="implementationDatebegin != null &amp;&amp; implementationDateend != null">
+				${relation} DATE_FORMAT(s.IMPLEMENTATION_DATE,'%Y') BETWEEN
+				#{implementationDatebegin} and #{implementationDateend}
+			</if>
+		</where>
+
+		<if test="order != null &amp;&amp; sort "> <!-- 根据发布日期去排序 -->
+			order by s.${order} ${sort}
+		</if>
+
+	</select>
+	<select id="secondSearch" parameterType="map" resultMap="BaseResultMap">
+		select * from (
+		SELECT * FROM l_laws
+		<where>
+			<if test="icsCode != null"><!-- 行业分类 -->
+				ICS_CODE = #{icsCode}
+			</if>
+		</where>
+		) s
+
+		<where>
+			<if test="lawsNo == null and  lawsNo02 !=null">
+				s.LAWS_NO like CONCAT('%',#{lawsNo02},'%')
+			</if>
+			<if test="lawsNo != null and  lawsNo02 ==null">
+				s.LAWS_NO like CONCAT('%',#{lawsNo},'%')
+			</if>
+			<if test="lawsNo != null and  lawsNo02 !=null">
+				s.LAWS_NO like CONCAT('%',#{lawsNo},'%') and s.LAWS_NO
+				like
+				CONCAT('%',#{lawsNo02},'%')
+			</if>
+
+
+			<if test="lawsCnName02 !=null and lawsCnName == null">
+				${relation} s.laws_CN_NAME like
+				CONCAT('%',#{lawsCnName02},'%')
+
+			</if>
+			<if test="lawsCnName != null and  lawsCnName02 ==null">
+				${relation} s.laws_CN_NAME like
+				CONCAT('%',#{lawsCnName},'%')
+			</if>
+			<if test="lawsCnName != null and  lawsCnName02 !=null">
+				${relation} s.laws_CN_NAME like
+				CONCAT('%',#{lawsCnName},'%') and
+				s.laws_CN_NAME like
+				CONCAT('%',#{lawsCnName02},'%')
+			</if>
+
+
+			<if test="pubOrg != null and pubOrg02==null"> <!-- 发布机关,当第二次查询的时候第一次没有选择这个的时候 我们选择这个 才能缩小范围否则还是原来的哪个 -->
+				${relation} s.PUB_ORG = #{pubOrg}
+			</if>
+			<if test="pubOrg == null and  pubOrg02 !=null"> <!-- 发布机关,当第二次查询的时候第一次没有选择这个的时候 我们选择这个 才能缩小范围否则还是原来的哪个 -->
+				${relation} s.PUB_ORG = #{pubOrg02}
+			</if>
+
+			<if test="effectivenessLevel == null and  effectivenessLevel02 !=null"><!-- 第二次筛选效力级别 -->
+				${relation} s.EFFECTIVENESS_LEVEL = #{effectivenessLevel02}
+			</if>
+			<if test="effectivenessLevel != null and  effectivenessLevel02 ==null"><!-- 第二次筛选效力级别 -->
+				${relation} s.EFFECTIVENESS_LEVEL = #{effectivenessLevel}
+			</if>
+			<if test="publishDatebegin != null and  publishDateend != null  ">
+
+				${relation} DATE_FORMAT(s.PUBLISH_DATE,'%Y') BETWEEN
+				#{publishDatebegin} and
+				#{publishDateend}
+			</if>
+			<if
+				test="implementationDatebegin != null and  implementationDateend != null">
+				${relation} DATE_FORMAT(s.IMPLEMENTATION_DATE,'%Y') BETWEEN
+				#{implementationDatebegin} and #{implementationDateend}
+			</if>
+
+		</where>
+		<if test="order!= null and  sort!=null"> <!-- 根据发布日期去排序 -->
+			order by s.#{order} ${sort}
+		</if>
+	</select>
+	<select id="getContentName" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query"
+		resultType="map">
+		select s.LAWS_NO,s.LAWS_CN_NAME,s.LAWS_ID from (
+		SELECT * FROM l_laws
+		<where>
+			<if test="icsCode != null"><!-- 行业分类 -->
+				ICS_CODE = #{icsCode}
+			</if>
+		</where>
+		) s
+		<where>
+			<if test="lawsNo != null ">
+				s.LAWS_NO like CONCAT('%',#{lawsNo},'%')
+			</if>
+			<if test="lawsCnName != null ">
+				and s.LAWS_CN_NAME like CONCAT('%',#{lawsCnName},'%')
+			</if>
+
+
+		</where>
+	</select>
+	<select id="findByLawsNoTrim" parameterType="string" resultMap="BaseResultMap">
+		select * from l_laws where LAWS_NO_TRIM =#{noTrim}
+	</select>
+	<select id="findLawsById" parameterType="string" resultMap="BaseResultMap">
+		select * from l_laws where LAWS_ID=#{lawsId}
+	</select>
+	<select id="findLawsListByQuery" parameterType="map" resultType="map">
+		select LAWS_CN_NAME paramCnName,LAWS_NO paramNo,LAWS_ID paramId from
+		l_laws
+		<where>
+			<if test="lawsCnName!=null">
+				LAWS_CN_NAME like CONCAT('%',#{lawsCnName},'%')
+			</if>
+			<if test="lawsNo != null ">
+				or LAWS_NO like CONCAT('%',#{lawsNo},'%')
+			</if>
+
+		</where>
+	</select>
+	<delete id="deleteById" parameterType="string">
+		delete from L_LAWS where
+		LAWS_ID=#{lawsId}
+	</delete>
+	<select id="findLawsByNoTrim" parameterType="string" resultMap="BaseResultMap">
+		select * from L_LAWS where LAWS_NO_TRIM =#{lawsNoTrim}
+	</select>
+
+	<insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.dm.L_LawsDo">
+		insert into L_Laws
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="lawsId != null">
+				LAWS_ID,
+			</if>
+			<if test="lawsNo != null">
+				LAWS_NO,
+			</if>
+			<if test="lawsNoTrim != null">
+				LAWS_NO_TRIM,
+			</if>
+			<if test="lawsCnName != null">
+				LAWS_CN_NAME,
+			</if>
+			<if test="lawsEnName != null">
+				LAWS_EN_NAME,
+			</if>
+			<if test="lawsFileName != null">
+				LAWS_FILE_NAME,
+			</if>
+			<if test="pubOrg != null">
+				PUB_ORG,
+			</if>
+
+			<if test="publishDate != null">
+				PUBLISH_DATE,
+			</if>
+			<if test="implementationDate != null">
+				IMPLEMENTATION_DATE,
+			</if>
+
+			<if test="lawsType != null">
+				LAWS_TYPE,
+			</if>
+
+			<if test="language != null">
+				LANGUAGE,
+			</if>
+
+			<if test="translation != null">
+				TRANSLATION,
+			</if>
+
+			<if test="pageNumber != null">
+				PAGE_NUMBER,
+			</if>
+
+
+
+			<if test="lawsStatus != null">
+				LAWS_STATUS,
+			</if>
+
+			<if test="uploadUnit != null">
+				UPLOAD_UNIT,
+			</if>
+			<if test="htmlUrl != null">
+				HTMLURL,
+			</if>
+			<if test="icsCode != null">
+				ICS_CODE,
+			</if>
+			<if test="pingYing != null">
+				PINGYING,
+			</if>
+			<if test="content != null">
+				CONTENT,
+			</if>
+			<if test="digest != null">
+				DIGEST,
+			</if>
+			<if test="title != null">
+				TITLE,
+			</if>
+			<if test="effectivenessLevel != null">
+				EFFECTIVENESS_LEVEL,
+			</if>
+			<if test="lawsLevel != null">
+				LAWS_LEVEL,
+			</if>
+
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="lawsId != null">
+				#{lawsId,jdbcType=VARCHAR},
+			</if>
+			<if test="lawsNo != null">
+				#{lawsNo,jdbcType=VARCHAR},
+			</if>
+			<if test="lawsNoTrim != null">
+				#{lawsNoTrim,jdbcType=VARCHAR},
+			</if>
+			<if test="lawsCnName != null">
+				#{lawsCnName,jdbcType=VARCHAR},
+			</if>
+			<if test="lawsEnName != null">
+				#{lawsEnName,jdbcType=VARCHAR},
+			</if>
+			<if test="lawsFileName != null">
+				#{lawsFileName,jdbcType=VARCHAR},
+			</if>
+			<if test="pubOrg != null">
+				#{pubOrg,jdbcType=VARCHAR},
+			</if>
+
+			<if test="publishDate != null">
+				#{publishDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="implementationDate != null">
+				#{implementationDate,jdbcType=TIMESTAMP},
+			</if>
+
+			<if test="lawsType != null">
+				#{lawsType,jdbcType=VARCHAR},
+			</if>
+
+			<if test="language != null">
+				#{language,jdbcType=INTEGER},
+			</if>
+
+			<if test="translation != null">
+				#{translation,jdbcType=VARCHAR},
+			</if>
+
+			<if test="pageNumber != null">
+				#{pageNumber,jdbcType=INTEGER},
+			</if>
+
+
+			<if test="lawsStatus != null">
+				#{lawsStatus,jdbcType=CHAR},
+			</if>
+
+			<if test="uploadUnit != null">
+				#{uploadUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="htmlUrl != null">
+				#{htmlUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="icsCode != null">
+				#{icsCode,jdbcType=VARCHAR},
+			</if>
+			<if test="pingYing != null">
+				#{pingYing,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="digest != null">
+				#{digest,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+
+			</if>
+			<if test="effectivenessLevel != null">
+				#{effectivenessLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="lawsLevel != null">
+				#{lawsLevel,jdbcType=INTEGER},
+			</if>
+
+		</trim>
+	</insert>
+
+	<update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.dm.L_LawsDo">
+		update L_LAWS
+		<set>
+			<if test="lawsNo != null">
+				LAWS_NO= #{lawsNo,jdbcType=VARCHAR},
+			</if>
+			<if test="lawsNoTrim != null">
+				LAWS_NO_TRIM = #{lawsNoTrim,jdbcType=VARCHAR},
+			</if>
+			<if test="lawsCnName != null">
+				LAWS_CN_NAME = #{lawsCnName,jdbcType=VARCHAR},
+			</if>
+			<if test="lawsEnName != null">
+				LAWS_EN_NAME = #{lawsEnName,jdbcType=VARCHAR},
+			</if>
+			<if test="lawsFileName != null">
+				LAWS_FILE_NAME = #{lawsFileName,jdbcType=VARCHAR},
+			</if>
+			<if test="pubOrg != null">
+				PUB_ORG = #{pubOrg,jdbcType=VARCHAR},
+			</if>
+			<if test="publishDate != null">
+				PUBLISH_DATE = #{publishDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="implementationDate != null">
+				IMPLEMENTATION_DATE = #{implementationDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lawsType != null">
+				LAWS_TYPE = #{lawsType,jdbcType=VARCHAR},
+			</if>
+
+			<if test="language != null">
+				LANGUAGE = #{language,jdbcType=INTEGER},
+			</if>
+			<if test="lawsLevel != null">
+				LAWS_LEVEL = #{lawsLevel,jdbcType=INTEGER},
+			</if>
+			<if test="translation != null">
+				TRANSLATION = #{translation,jdbcType=VARCHAR},
+			</if>
+			<if test="pageNumber != null">
+				PAGE_NUMBER = #{pageNumber,jdbcType=INTEGER},
+			</if>
+			<if test="digest != null">
+				DIGEST = #{digest,jdbcType=VARCHAR},
+			</if>
+			<if test="lawsStatus != null">
+				LAWS_STATUS = #{lawsStatus,jdbcType=CHAR},
+			</if>
+			<if test="uploadUnit != null">
+				UPLOAD_UNIT = #{uploadUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="htmlUrl != null">
+				HTMLURL = #{htmlUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="icsCode != null">
+				ICS_CODE = #{icsCode,jdbcType=VARCHAR},
+			</if>
+			<if test="pingYing != null">
+				PINGYING = #{pingYing,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				CONTENT= #{content,jdbcType=VARCHAR}
+			</if>
+			<if test="title !=null">
+				TITLE =#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="effectivenessLevel !=null">
+				EFFECTIVENESS_LEVEL =#{effectivenessLevel,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where LAWS_ID = #{lawsId,jdbcType=VARCHAR}
+	</update>
+	<select id="findLawsByStdFileId" parameterType="string"
+		resultMap="BaseResultMap">
+		select * from (select * from FILE_LAWS WHERE STD_FILE_ID=#{stdFileId} ) fl
+		left join L_LAWS ll on ( fl.LAWS_ID =ll.LAWS_ID)
+	</select>
+
+	<select id="listLawsByIcsCode" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query"
+		resultMap="BaseResultMap">
+		select * from (
+			select * from l_laws l, (
+				select * from ics_std_laws
+		<where>
+			<if test="icsCode != null"><!-- 行业分类 -->
+				ICS_CODE = #{icsCode}
+			</if>
+		</where>
+		) s
+		where (l.LAWS_ID=s.STANDARD_ID) 
+			
+	) t
+		<where>
+			<if test="lawsNo != null">
+				t.LAWS_NO like CONCAT('%',#{lawsNo},'%')
+			</if>
+			<if test="lawsCnName != null">
+				${relation} t.laws_CN_NAME like CONCAT('%',#{lawsCnName},'%')
+			</if>
+			<if test="pubOrg != null"><!-- 发布机关 -->
+				${relation} t.PUB_ORG = #{pubOrg}
+			</if>
+			<if test="effectivenessLevel != null"><!-- 效力级别 -->
+				${relation} t.EFFECTIVENESS_LEVEL = #{effectivenessLevel}
+			</if>
+
+		</where>
+		<if test="order != null &amp;&amp; sort "> <!-- 根据发布日期去排序 -->
+			order by s.${order} ${sort}
+		</if>
+	
+<!-- 		select * from
+		(
+		SELECT * FROM l_laws
+		<where>
+			<if test="icsCode != null">行业分类
+				ICS_CODE = #{icsCode}
+			</if>
+		</where>
+		) s
+
+		<where>
+			<if test="lawsNo != null">
+				s.LAWS_NO like CONCAT('%',#{lawsNo},'%')
+			</if>
+			<if test="lawsCnName != null">
+				${relation} s.laws_CN_NAME like
+				CONCAT('%',#{lawsCnName},'%')
+			</if>
+			<if test="pubOrg != null">发布机关
+				${relation} s.PUB_ORG = #{pubOrg}
+			</if>
+			<if test="effectivenessLevel != null">效力级别
+				${relation} s.EFFECTIVENESS_LEVEL = #{effectivenessLevel}
+			</if>
+
+			<if test="icsCode != null">
+				and s.ICS_CODE =#{icsCode}
+			</if>
+
+		</where> -->
+
+		
+
+	</select>
+</mapper>

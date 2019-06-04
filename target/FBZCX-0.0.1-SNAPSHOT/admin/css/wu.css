@@ -1,0 +1,85 @@
+/*-------------------------------------------------------
+ All Rights Reserved, Copyright (C) 2013, Wuyeguo, Ltd.
+-------------------------------------------------------*/
+
+body { font:12px/1.2em Microsoft YaHei;}
+
+a,
+a:link { color:#000; text-decoration:none; outline:none;}
+a:hover,
+a:focus { text-decoration:none; color:#39f;}
+
+.pd3 { padding:3px;}
+.pd5 { padding:5px;}
+.pd10 { padding:10px;}
+
+label,
+button,
+input,
+select,
+textarea { font-size:12px; vertical-align: middle;}
+
+input,
+button,
+select,
+textarea { font:12px/1.2em Microsoft YaHei;}
+
+select,
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+input[type="radio"],
+input[type="checkbox"] { cursor: pointer;}
+
+.tabs-tool { border-top:0;}
+.wu-text,
+.wu-textarea { padding:3px; border:1px #95b8e7 solid; width:260px;}
+.wu-text { height:14px; line-height:14px; }
+
+.wu-header { height:55px; position:relative; z-index:0; overflow:hidden; border-bottom:1px #95b8e7 solid; background:url(../images/bg_header.jpg) bottom repeat-x;}
+.wu-header-left { position:absolute; z-index:1; left:15px; top:14px;}
+.wu-header-left img {float: left;margin: -6px 10px 0 0}
+.wu-header-left h1 {float: left; font:20px/20px Verdana; color:#fff;}
+.wu-header-right { position:absolute; z-index:1; right:5px; top:21px; color:#fff; text-align:right;}
+.wu-header-right div { height:15px;}
+.wu-header-right div a {float:left; color:#fff; margin:0 5px;}
+.wu-header-right div span {float:left; color:#fff; margin:0 5px;}
+
+.wu-sidebar { width:160px;}
+.wu-side-tree .tree-node { padding:3px 0px; }
+.wu-side-tree a { display:block;}
+.wu-side-tree .tree-node-selected { padding:2px 0; border:1px #fade23 solid;}
+
+.wu-toolbar-button,
+.wu-toolbar-search { padding:3px 5px;}
+
+.wu-footer { height:20px; padding:5px; text-align:center; overflow:hidden; background:#e0ecff;}
+/*------------------------my css---------------------------*/
+.datagrid-cell a{ color:#39f; text-decoration:none; outline:none;}
+.datagrid-cell a:hover{ text-decoration:underline;}
+li{list-style: none;}
+.my-select{border: 1px #95b8e7 solid;}
+.dialog-ul{padding-left: 0px;height: 400px;overflow: auto;margin: 0px;}
+.dialog-ul p{margin: 0px;line-height: 20px;}
+.dialog-ul li{padding: 5px 10px;border-bottom: 1px solid #cccccc;}
+.mydialog b{margin-left: 20px;}
+.dialog-left{float: left;}
+.dialog-right{float: right;}
+.li-left>p{text-align: left;}
+.li-right>p{text-align: right;}
+#bibliography_add_form tr td:nth-of-type(2){padding-right: 60px;}
+#bibliography_add_form tr .wu-text{width: 200px;}
+#user_add_form tr .wu-text{width: 360px;}
+#news_add_form tr .wu-text,#news_edit_form tr .wu-text{width: 460px;}
+.period span{display: inline-block;margin: 0px 5px;}
+.backup-strategy1 .period,.backup-strategy2 .period,.backup-strategy3 .period,.backup-strategy4 .period{display: none;}
+.backup-strategy .backup-show{display: inline-block;}
+.backup-strategy .backup-hide{display: none;}
+.wu-header-right div span.pending{cursor:pointer; display:block; margin:0 10px 0 0; width:14px; height:15px;background:url("../images/head/pending.png") no-repeat;position: relative}
+.pending i{display:block;width:6px;height:6px;position: absolute; top:-2px; right:-6px;background:red;border-radius: 50%;}
+.pending-box{ width:260px;height:100%;margin:0 auto;overflow:auto; padding:10px 0; box-sizing: border-box;}
+.pending-box li{padding:0 10px; box-sizing:border-box; cursor:pointer; overflow:hidden; height:20px; line-height:20px; border-bottom: 1px solid #cccccc;}
+.pending-box li:hover{background-color:#E0ECFF}
+.pending-box li b{float:left; font-weight:normal}
+.pending-box li em{float:right; font-style: normal;}

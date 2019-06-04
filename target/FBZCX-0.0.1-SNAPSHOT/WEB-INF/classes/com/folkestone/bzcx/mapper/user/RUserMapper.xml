@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.user.RUserMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.user.UserVo" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ACCOUNT" property="account" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="ICON" property="icon" jdbcType="VARCHAR" />
+    <result column="REALNAME" property="realname" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="BIGINT" />
+    <result column="BRITHDAY" property="brithday" jdbcType="TIMESTAMP" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="TEL" property="tel" jdbcType="VARCHAR" />
+    <result column="OFFICE_TEL" property="officeTel" jdbcType="VARCHAR" />
+    <result column="QQ" property="qq" jdbcType="VARCHAR" />
+    <result column="NOTE" jdbcType="VARCHAR" property="note" />
+    <result column="DEPARTMENT_ID" property="departmentId" jdbcType="VARCHAR" />
+    <result column="DUTY" property="duty" jdbcType="VARCHAR" />
+    <result column="OFFICE_LOCATION" property="officeLocation" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="BIGINT" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="LASTOPERATE_TIME" property="lastoperateTime" jdbcType="TIMESTAMP" />
+    <result column="LASTOPERATE_USER" property="lastoperateUser" jdbcType="VARCHAR" />
+    <result column="LASTOPERATE_TYPE" property="lastoperateType" jdbcType="VARCHAR" />
+    <result column="OPENID" property="openid" jdbcType="VARCHAR" />
+    <result column="NICKNAME" property="nickname" jdbcType="VARCHAR" />
+     <result column="COUNTRY" property="country" jdbcType="VARCHAR" />
+    <result column="PROVINCE" property="province" jdbcType="VARCHAR" />
+    <result column="CITY" property="city" jdbcType="VARCHAR" />
+    <result column="lastoperateUserName" jdbcType="VARCHAR" property="lastoperateUserName" />
+  	<result column="roleName" jdbcType="VARCHAR" property="roleName" />
+    <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+    <result column="DEPARTMENT" property="department" jdbcType="VARCHAR"/>
+    <result column="COMPANY" property="company" jdbcType="VARCHAR"/>
+    <result column="WECHAT" property="WeChat" jdbcType="VARCHAR"/>
+  </resultMap>
+  <select id="listUserAll" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+	select * from r_user u
+	where u.id != #{adminId}	
+  </select>
+  <select id="getUserById" parameterType="string" resultMap="BaseResultMap">
+      select u.*, d.DEPARTMENT_NAME as departmentName
+   	  from r_user u 
+   	  LEFT JOIN r_department d on u.DEPARTMENT_ID = d.ID  
+   	  where u.OPENID = #{0}
+  </select>
+  <select id="listUserByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+		 select u.*, d.DEPARTMENT_NAME as departmentName, rr.NAME as roleName
+    	 from r_user u 
+    	 LEFT JOIN r_user_role rur on u.id = rur.ALLOW_ID
+    	 LEFT JOIN r_role rr on rur.ROLE_ID = rr.id
+    	 LEFT JOIN r_department d on u.DEPARTMENT_ID = d.ID 
+		 <where>
+	    	 <if test="departmentId != null">
+	    	 d.PATH like CONCAT('%',#{departmentId},'%')
+	    	 </if> 
+	    	 <if test="status != null">
+	    	 and u.STATUS = #{status}
+	    	 </if> 
+	    	 <if test="roleId != null">
+	    	 and ur.ROLE_ID = #{roleId}
+	    	 </if>
+	    	 <if test="keyword != null">
+	    	 and u.REALNAME like CONCAT('%',#{keyword},'%')
+	    	 </if> 
+	    	 and u.STATUS != 4
+    	 </where>
+  </select>
+  <select id="getUserByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+    	 select u.*, d.DEPARTMENT_NAME as departmentName,rd.PARENT_ID as departmentParent,ro.NAME as roleName
+    	 from r_user u 
+    	 LEFT JOIN r_department d on u.DEPARTMENT_ID = d.ID
+    	 LEFT JOIN R_DEPARTMENT rd ON rd.ID = u.DEPARTMENT_ID
+    	 LEFT JOIN r_user_role ur ON ur.ALLOW_ID = u.ID
+		 LEFT JOIN R_ROLE ro ON ro.ID=ur.ROLE_ID
+    	 where 1 = 1
+    	 <if test="userId != null">
+    	 and u.ID = #{userId} 
+    	 </if>
+    	 <if test="openid != null">
+    	   and u.OPENID = #{openid} 
+    	 </if>
+    	 <if test="account != null">
+    	 and u.ACCOUNT = #{account}
+    	 </if>
+  </select>
+  <delete id="deleteById" parameterType="string">
+  		 update r_user set USER_STATUS = 0 where ID = #{0} 
+  </delete>
+  <delete id="deleteByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query">
+  </delete>
+  
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.user.R_UserDo" >
+    insert into r_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="account != null">
+        ACCOUNT,
+      </if>
+      <if test="password != null">
+        PASSWORD,
+      </if>
+      <if test="icon != null">
+        ICON,
+      </if>
+      <if test="realname != null">
+        REALNAME,
+      </if>
+      <if test="sex != null">
+        SEX,
+      </if>
+      <if test="brithday != null">
+        BRITHDAY,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="tel != null">
+        TEL,
+      </if>
+      <if test="officeTel != null">
+        OFFICE_TEL,
+      </if>
+      <if test="qq != null">
+        QQ,
+      </if>
+      <if test="note != null">
+        NOTE,
+      </if>
+      <if test="departmentId != null">
+        DEPARTMENT_ID,
+      </if>
+      <if test="duty != null">
+        DUTY,
+      </if>
+      <if test="officeLocation != null">
+        OFFICE_LOCATION,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="lastoperateTime != null">
+        LASTOPERATE_TIME,
+      </if>
+      <if test="lastoperateUser != null">
+        LASTOPERATE_USER,
+      </if>
+      <if test="lastoperateType != null">
+        LASTOPERATE_TYPE,
+      </if>
+       <if test="openid != null">
+        OPENID,
+      </if>
+       <if test="nickname != null">
+        NICKNAME,
+      </if>
+       <if test="country != null">
+        COUNTRY,
+      </if>   
+       <if test="province != null">
+        PROVINCE,
+      </if>   
+       <if test="city != null">
+        CITY,
+      </if>      
+       <if test="department != null">
+        DEPARTMENT,
+      </if> 
+      <if test="company != null">
+        COMPANY,
+      </if> 
+       <if test="WeChat != null">
+        WECHAT,
+      </if> 
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=BIGINT},
+      </if>
+      <if test="brithday != null">
+        #{brithday,jdbcType=DATE},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="officeTel != null">
+        #{officeTel,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="duty != null">
+        #{duty,jdbcType=VARCHAR},
+      </if>
+      <if test="officeLocation != null">
+        #{officeLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastoperateTime != null">
+        #{lastoperateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastoperateUser != null">
+        #{lastoperateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastoperateType != null">
+        #{lastoperateType,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+       <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+       <if test="country != null">
+        #{country,jdbcType=VARCHAR},
+      </if>
+       <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+       <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+       <if test="department != null">
+        #{department,jdbcType=VARCHAR},
+      </if>
+          <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+       <if test="WeChat != null">
+        #{WeChat,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.user.R_UserDo">
+     update r_user
+    <set>
+      <if test="account != null">
+        ACCOUNT = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password !='' and  password !=null ">
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        ICON = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        REALNAME = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        SEX = #{sex,jdbcType=BIGINT},
+      </if>
+      <if test="brithday != null">
+        BRITHDAY = #{brithday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="officeTel != null">
+        OFFICE_TEL = #{officeTel,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        QQ = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        NOTE = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        DEPARTMENT_ID = #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="duty != null">
+        DUTY = #{duty,jdbcType=VARCHAR},
+      </if>
+      <if test="officeLocation != null">
+        OFFICE_LOCATION = #{officeLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastoperateTime != null">
+        LASTOPERATE_TIME = #{lastoperateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastoperateUser != null">
+        LASTOPERATE_USER = #{lastoperateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastoperateType != null">
+        LASTOPERATE_TYPE = #{lastoperateType,jdbcType=VARCHAR},
+      </if>
+       <if test="nickname != null">
+        NICKNAME = #{nickname,jdbcType=VARCHAR},
+      </if>
+       <if test="country != null">
+        COUNTRY = #{country,jdbcType=VARCHAR},
+      </if>
+       <if test="province != null">
+        PROVINCE = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        CITY = #{city,jdbcType=VARCHAR},
+      </if>
+       <if test="department != null">
+        DEPARTMENT = #{department,jdbcType=VARCHAR},
+      </if>
+       <if test="company != null">
+        COMPANY = #{company,jdbcType=VARCHAR},
+      </if>
+       <if test="WeChat != null">
+        WECHAT = #{WeChat,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OPENID = #{openid}
+  </update>
+</mapper>

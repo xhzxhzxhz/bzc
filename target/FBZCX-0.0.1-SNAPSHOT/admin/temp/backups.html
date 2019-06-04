@@ -1,0 +1,152 @@
+<div class="easyui-layout" data-options="fit:true">
+	<div id="backupsTabs" class="easyui-tabs" data-options="fit:true">
+		<div title="标准题录" data-options="href:'temp/backupsTab1.html'"></div>
+		<div title="标准原文" data-options="href:'temp/backupsTab2.html'"></div>
+		<div title="标准体系" data-options="href:'temp/backupsTab3.html'"></div>
+		<div title="共享资源" data-options="href:'temp/backupsTab4.html'"></div>
+	</div>
+</div>
+<script type="text/javascript">
+	//序列化对象方法
+	jQuery.prototype.serializeObject = function() {
+		var obj = new Object();
+		$.each(this.serializeArray(), function(index, param) {
+			if (!(param.name in obj)) {
+				obj[param.name] = param.value;
+			}
+		});
+		return obj;
+	};
+
+	//点击保存按钮（当前类别，当前对象）
+	function backupsSave(category, mythis) {
+		//当前是哪个tab
+		//选中每天每周还是每隔几天
+		var myRadio = $(mythis).parent().parent().find(".backup-strategy")
+				.find(":radio:checked").val();
+		//		var myRadio =  $(".backup-strategy :radio:checked").val();
+		//当前选中的周期
+		var myShowForm = $(mythis).parent().next().find(".period.backup-show")
+				.find("form").attr("class");
+		var formData = $("." + myShowForm + "").serializeObject();
+		//将额外的参数添加到formData
+		formData.cycle = myRadio;
+		formData.group = category;
+		formData.firstTime = new Date();
+//		console.log(formData);
+		$.ajax({
+			url : '/BZCX/admin/backup/strategy',
+			type : 'POST',
+			data : formData,
+			dataType : 'JSON',
+			cache : false,
+			success : function(data) {
+				alert("策略保存成功")
+			},
+			error : function(data) {
+				alert("操作失败，请稍后再试。")
+			}
+		});
+	}
+	
+	function strtoDate(str){
+		var date = new Date(str);
+		f = "";
+		f += date.getFullYear() + "-",
+	    f += date.getMonth() + 1 + "-",
+	    f += date.getDate() + "  ",
+	    f += date.getHours() + ":",
+	    f += date.getMinutes() + ":",
+	    f += date.getSeconds();
+	    return f;
+	}
+	/**
+	 * Name 批量删除
+	 */
+	function backupsDele() {
+		$.messager.confirm('信息提示', '确定要删除吗？', function(result) {
+			if (result) {
+				var items = $('#backups_datagrid').datagrid('getSelections');
+				var ids = [];
+				$(items).each(function() {
+					ids.push(this.fileId);
+				});
+				$.ajax({
+					url : '/BZCX/admin/resource/delete',
+					type : "POST",
+					data : {
+						fileId : ids
+					},
+					async : false,
+					cache : false,
+					traditional : true,
+					success : function(data) {
+						if (data) {
+							$.messager.alert('信息提示', '删除成功！', 'info');
+							$("#backups_datagrid").datagrid('reload');
+						} else {
+							$.messager.alert('信息提示', '操作失败！', 'info');
+						}
+					}
+				});
+			}
+		});
+	}
+
+	/**
+	 * Name 删除一行
+	 */
+	function deleOne(myId) {
+		$.messager.confirm('信息提示', '确定要删除吗？', function(result) {
+			if (result) {
+				var id = myId;
+				$.ajax({
+					url : '/BZCX/admin/resource/delete',
+					type : "POST",
+					data : {
+						fileId : id
+					},
+					async : false,
+					cache : false,
+					traditional : true,
+					success : function(data) {
+						if (data) {
+							$.messager.alert('信息提示', '删除成功！', 'info');
+							$("#backups_datagrid").datagrid('reload');
+						} else {
+							$.messager.alert('信息提示', '操作失败！', 'info');
+						}
+					}
+				});
+			}
+		});
+	}
+
+	/**
+	 * Name 恢复
+	 */
+	function recover(myId) {
+		$.messager.confirm('信息提示', '确定要恢复吗？', function(result) {
+			if (result) {
+				var id = myId;
+				$.ajax({
+					url : '/BZCX/admin/resource/updateStatus2',
+					type : "POST",
+					data : {
+						fileId : id
+					},
+					success : function(data) {
+						if (data) {
+							$.messager.alert('信息提示', '操作成功！', 'info');
+							//操作完成后重新加载页面
+							$("#backups_datagrid").datagrid('reload');
+						} else {
+							$.messager.alert('信息提示', '操作失败！', 'info');
+						}
+					}
+				});
+			}
+		});
+	}
+
+</script>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.interact.RInformationMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.interact.RInformationVo" >
+    <result column="INFORMATION_ID" property="informationId" jdbcType="VARCHAR" />
+    <result column="INFORMATION_NAME" property="informationName" jdbcType="VARCHAR" />
+    <result column="INFORMATION_USERID" property="informationUserid" jdbcType="VARCHAR" />
+    <result column="INFORMATION_TEL" property="informationTel" jdbcType="VARCHAR" />
+    <result column="INFORMATION_QQ" property="informationQq" jdbcType="INTEGER" />
+    <result column="INFORMATION_EMAIL" property="informationEmail" jdbcType="VARCHAR" />
+    <result column="INFORMATION_COMPANY" property="informationCompany" jdbcType="VARCHAR" />
+    <result column="INFORMATION_DEPARTMENT" property="informationDepartment" jdbcType="VARCHAR" />
+    <result column="INFORMATION_DUTY" property="informationDuty" jdbcType="VARCHAR" />
+    <result column="INFORMATION_WECHAT" property="informationWechat" jdbcType="VARCHAR" />
+    <result column="INFORMATION_COUNT" property="informationCount" jdbcType="VARCHAR" />
+    <result column="INFORMATION_DATE" property="informationDate" jdbcType="TIMESTAMP" />
+    <result column="INFORMATION_STATE" property="state" jdbcType="INTEGER"/>
+     <result column="SERVICE_TYPE" property="serviceType" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="listAll"  parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+      SELECT i.*,u.NICKNAME as usernickname,u.REALNAME as realname FROM r_information i LEFT JOIN r_user u 
+      ON i.INFORMATION_USERID = u.OPENID
+	      
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from r_information
+    <where>
+       <if test="_parameter != null" >
+      		INFORMATION_ID = #{0}
+    	</if>
+    </where>
+  </delete>
+  
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.interact.RInformationDo" >
+    insert into r_information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="informationId != null" >
+        INFORMATION_ID,
+      </if>
+      <if test="informationName != null" >
+        INFORMATION_NAME,
+      </if>
+      <if test="informationUserid != null" >
+        INFORMATION_USERID,
+      </if>
+      <if test="informationTel != null" >
+        INFORMATION_TEL,
+      </if>
+      <if test="informationQq != null" >
+        INFORMATION_QQ,
+      </if>
+      <if test="informationEmail != null" >
+        INFORMATION_EMAIL,
+      </if>
+      <if test="informationCompany != null" >
+        INFORMATION_COMPANY,
+      </if>
+      <if test="informationDepartment != null" >
+        INFORMATION_DEPARTMENT,
+      </if>
+      <if test="informationDuty != null" >
+        INFORMATION_DUTY,
+      </if>
+      <if test="informationWechat != null" >
+        INFORMATION_WECHAT,
+      </if>
+      <if test="informationCount != null" >
+        INFORMATION_COUNT,
+      </if>
+      <if test="informationDate != null" >
+        INFORMATION_DATE,
+      </if>
+       <if test="state != null" >
+        INFORMATION_STATE,
+      </if>
+       <if test="serviceType != null" >
+        SERVICE_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="informationId != null" >
+        #{informationId,jdbcType=VARCHAR},
+      </if>
+      <if test="informationName != null" >
+        #{informationName,jdbcType=VARCHAR},
+      </if>
+      <if test="informationUserid != null" >
+        #{informationUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="informationTel != null" >
+        #{informationTel,jdbcType=VARCHAR},
+      </if>
+      <if test="informationQq != null" >
+        #{informationQq,jdbcType=INTEGER},
+      </if>
+      <if test="informationEmail != null" >
+        #{informationEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="informationCompany != null" >
+        #{informationCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="informationDepartment != null" >
+        #{informationDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="informationDuty != null" >
+        #{informationDuty,jdbcType=VARCHAR},
+      </if>
+      <if test="informationWechat != null" >
+        #{informationWechat,jdbcType=VARCHAR},
+      </if>
+      <if test="informationCount != null" >
+        #{informationCount,jdbcType=VARCHAR},
+      </if>
+       <if test="informationDate != null" >
+        #{informationDate,jdbcType=TIMESTAMP},
+      </if>
+       <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+       <if test="serviceType != null" >
+        #{serviceType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.interact.RInformationDo" >
+    update r_information
+    <set >
+      <if test="informationName != null" >
+        INFORMATION_NAME = #{informationName,jdbcType=VARCHAR},
+      </if>
+      <if test="informationUserid != null" >
+        INFORMATION_USERID = #{informationUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="informationTel != null" >
+        INFORMATION_TEL = #{informationTel,jdbcType=VARCHAR},
+      </if>
+      <if test="informationQq != null" >
+        INFORMATION_QQ = #{informationQq,jdbcType=INTEGER},
+      </if>
+      <if test="informationEmail != null" >
+        INFORMATION_EMAIL = #{informationEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="informationCompany != null" >
+        INFORMATION_COMPANY = #{informationCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="informationDepartment != null" >
+        INFORMATION_DEPARTMENT = #{informationDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="informationDuty != null" >
+        INFORMATION_DUTY = #{informationDuty,jdbcType=VARCHAR},
+      </if>
+      <if test="informationWechat != null" >
+        INFORMATION_WECHAT = #{informationWechat,jdbcType=VARCHAR},
+      </if>
+      <if test="informationCount != null" >
+        INFORMATION_COUNT = #{informationCount,jdbcType=VARCHAR},
+      </if>
+      <if test="informationDate != null" >
+        INFORMATION_DATE = #{informationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        INFORMATION_STATE = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="serviceType != null" >
+        SERVICE_TYPE = #{serviceType,jdbcType=VARCHAR},
+      </if>
+    </set>
+     where INFORMATION_ID = #{informationId,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

@@ -1,0 +1,10 @@
+[{
+	"id":"1",
+    "text":"首页",
+    "state":"",
+    "attributes":{
+		"url":"",
+		"iframe":""
+	},
+    "children":null
+}]

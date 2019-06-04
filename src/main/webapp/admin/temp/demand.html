@@ -1,0 +1,363 @@
+<div class="easyui-layout" data-options="fit:true">
+    <!-- Begin of toolbar -->
+    <div id="demand_toolbar">
+		<div class="wu-toolbar-button">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="demandDele()" plain="true">删除</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-accept" onclick="headShow()" plain="true">前台显示</a>
+		</div>
+        <div class="wu-toolbar-search">
+			<label>关键词：</label><input id="demand_search_keyword_input" class="wu-text" style="width:200px" placeholder="需求内容">
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" onclick="demand_search()">检索</a>
+			        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label>状态：</label>
+			<select id="status_selected" class="my-select" panelHeight="auto" style="width:100px">
+				<option value="1">提出</option>
+				<option value="0">全部</option>
+				<option value="2">采纳</option>
+				<option value="3">忽略</option>
+			</select>
+        </div>
+    </div>
+    <!-- End of toolbar -->
+    <table id="demand_datagrid" class="easyui-datagrid" toolbar="#demand_toolbar"></table>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="demand_dialog" class="easyui-dialog" data-options="toolbar:'#demand_dial_tb',closed:true" style="position:relative;width:600px;height: 600px;overflow: auto;padding:10px;">
+	<ul id="demand_dialog_ul" class="dialog-ul">
+		<!-- 留言对话 -->
+	</ul>
+	 <div style="position: absolute;bottom: 10px;">
+		<textarea id="collect_messages" name="content" rows="6" class="wu-textarea" style="width:566px;box-sizing: border-box;"></textarea>
+	</div> 
+</div>
+<!--顶部工具栏-->
+<!-- <div id="demand_dial_tb" style="padding: 6px 10px">
+	<label>状态：</label>
+	<label><input style="margin-top: 0px;" type="radio" name="state" value="2"/>忽略</label>
+	<label><input style="margin-top: 0px;" type="radio" name="state" value="3"/>有建设性的意见</label>
+</div> -->
+<!-- End of easyui-dialog -->
+<script src="js/message.js"></script>
+<script type="text/javascript">
+ var collect_message_id;//获得双击时信息收集的REQ_ID
+/**
+ *点击界面的开始检索按钮
+ */
+function demand_search(){
+	//获取开始检索输入框中的值
+	var keyword = $('#demand_search_keyword_input').val();
+	//获取下拉选的值
+	var statusVavlue = $('#status_selected').val();
+	//alert(statusVavlue);
+    //封装参数
+	var queryParam = {
+		content : keyword,
+		status: statusVavlue,
+		relation : "and"
+	}
+	demandHtml.reloadTable(queryParam)
+}
+ 
+
+var demandHtml = {
+		// 初始化表格
+		intiTable : function(data){
+			$('#demand_datagrid').datagrid({
+				url:'/BZCX/admin/collect/list',
+				rownumbers:true,
+				singleSelect:false,
+				pageSize:20,
+				pagination:true,
+				multiSort:true,
+				fitColumns:false,
+				fit:true,
+				queryParams : {
+					status : '1'
+				},
+				columns:[[
+					{ checkbox:true},
+					{ field:'reqTitle',title:'标题',width:300,sortable:true,align : 'center',
+		                //加一个方法(用来设置颜色的)
+		                styler:rowColor},
+					{ field:'subjectName',title:'课题名称',width:100,sortable:true},
+					{ field:'belongArchitecture',title:'所属标准体系',width:100,sortable:true},
+					{ field:'reqLevel',title:'重要性',width:100,sortable:true},
+					{ field:'planDate',title:'预期完成时间',width:100,sortable:true},
+					{ field:'suggestUser',title:'提出人',width:100,sortable:true},
+					{ field:'content',title:'需求内容',width:300,sortable:true},
+					{ field:'auditUser',title:'审核人',width:100,sortable:true},
+					{ field:'auditComment',title:'审核意见',width:100,sortable:true},
+					{ field:'suggestTime',title:'提出时间',width:100,sortable:true},
+					{ field:'auditDate',title:'审核时间',width:100,sortable:true},
+					{ field:'status',title:'状态',width:100,sortable:true,
+						formatter:function(val,rec) {
+							  if(rec.status == 1){
+								  return "提出";
+							  }else if(rec.status == 2){
+								  return "采纳";
+							  }else{
+								  return "忽略";
+							  }
+						}
+					},
+					{ field:'show',title:'前台显示',width:100,sortable:true,
+						formatter:function(val,rec) {
+						  if(rec.show == 0){
+							  return "未显示";
+						  }else if(rec.show == 1){
+							  return "已显示";
+						  }
+						}
+					},
+					{ field:'action',title:'操作',width:100,align:'center',
+						formatter:function(value,rec){
+							var demandDele = '<a onclick="demandDele(\''+rec.reqId+'\')" href="javascript:void(0)" style="text-decoration: underline;">删除</a>';
+							return demandDele;
+						}
+					}
+				]],
+				onDblClickRow:function(rowIndex,rowData){
+					collect_message_id = rowData.reqId
+					console.info(rowData);
+					$("#collect_messages").val("");
+					$.ajax({
+						url:'/BZCX/admin/collect/replyList',
+						data: {
+							type : 3,
+							page : 1,
+							rows:10000,
+							reqId:collect_message_id,
+						},
+						type : "post",
+						async : false,
+						cache : false,
+						dataType : "json",
+						success : function(data){
+							$("#demand_dialog_ul").empty();
+							var mydata=data.rows;
+							var liStr;
+								if(mydata[0].content != null){
+									liStr = '<li class="li-left">'
+											+ '<div class="dialog-left mydialog"><span style="font-weight:bold;">'+ mydata[0].suggestUser +'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+ mydata[0].suggestTime +':</div>'
+											+ '<div style="clear: both"></div>'
+											+ '<p>'+ mydata[0].content +'</p>'
+											+ '</li>';
+								if(mydata[0].auditUser != null && mydata[0].auditComment != null){
+											liStr += '<li class="li-right">'
+												+ '<div class="dialog-right mydialog"><span style="font-weight:bold;">'+ mydata[0].auditUser +'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+ mydata[0].auditDate +':</div>'
+												+ '<div style="clear: both"></div>'
+												+ '<p>'+ mydata[0].auditComment +'</p>'
+												+ '</li>';
+											}
+								var myLi=$(liStr);
+								$("#demand_dialog_ul").append(myLi);
+								usernumid=rowData.feedbackId;
+								}
+						},
+						error:function(){
+							alert("操作失败，请稍后再试！");
+						} 
+					});
+					$('#demand_dialog').dialog({
+						closed: false,
+						modal:true,
+						title: "需求征集",
+						buttons: [{
+							text: '采纳',
+							iconCls: 'icon-ok',
+							handler: addcollect_messagesok
+						}, 
+						{
+							text: '忽略',
+							iconCls: 'icon-ok',
+							handler: addcollect_messagesno
+						},
+						{
+							text: '取消',
+							iconCls: 'icon-cancel',
+							handler: function () {
+								$('#demand_dialog').dialog('close');
+							}
+						}]
+					});
+				}
+			});
+		},
+		// 表格重新加载
+		reloadTable : function(data){
+			$('#demand_datagrid').datagrid('reload',data);
+		},
+}
+$(function(){
+	// 先初始化表格 
+	demandHtml.intiTable();
+})
+
+function rowColor(value, row, index) {
+    if(row.serviceCategory=='GSM'){
+        return 'background-color:red;color:white';
+    }
+
+    if(row.serviceCategory=='WCDMA'){
+        return 'background-color:cyan;color:white';
+    }
+    return 'background-color:blue;color:white';
+    //alert(row.serviceCategory);
+ }
+
+	/**
+	* Name 删除记录
+	*/
+	function demandDele(){
+		$.messager.confirm('信息提示','确定要删除吗？', function(result){
+			if(result){
+				//获取选中行
+				var items = $('#demand_datagrid').datagrid('getSelections');
+				var ids = [];
+				$(items).each(function(){
+					ids.push(this.reqId);	
+				});
+				console.info(ids);
+				$.ajax({
+					url:'/BZCX/admin/collect/delete',
+					type:"POST",
+					data: {
+						reqId : ids 
+					},
+					async : false,
+		            cache : false,
+		            traditional: true,
+					success:function(data){
+						if(data.code == 200){
+							$.messager.alert('信息提示','删除成功。','info');
+							$("#demand_datagrid").datagrid('reload');
+							if ('WebSocket' in window) {
+								messages();//更新消息
+								send("delete");
+							}
+						}
+						else
+						{
+							$.messager.alert('信息提示','删除失败。','info');
+						}
+					}	
+				});
+			}	
+		});
+	}
+	
+	
+/**
+* 前台显示
+*/
+function headShow(){
+			//获取选中行
+			var items = $('#demand_datagrid').datagrid('getSelections');
+			var ids = [];
+			$(items).each(function(){
+				ids.push(this.reqId);	
+			});
+			console.info(ids);
+			$.ajax({
+				url:'/BZCX/admin/collect/show',
+				type:"POST",
+				data: {
+					reqId : ids 
+				},
+				async : false,
+	            cache : false,
+	            traditional: true,
+				success:function(data){
+					if(data.code == 200){
+						$.messager.alert('信息提示','显示成功。','info');
+						$("#demand_datagrid").datagrid('reload');
+					}
+					else
+					{
+						$.messager.alert('信息提示','显示失败。','info');
+					}
+				}	
+			});
+}
+	/**
+	*管理员审核需求，并回复意见
+	*这是采纳
+	*/
+	function addcollect_messagesok(){
+		//获得交流内容
+		var audit_comment = $("#collect_messages").val();
+		//获得状态信息
+				//发送请求，获得反馈信息
+				 $.ajax({
+					url:'/BZCX/admin/collect/check',
+					type:"POST",
+					data: {
+						reqId:collect_message_id,
+						status : 2,
+						auditComment : audit_comment
+					},
+					async : false,
+					cache : false,
+					traditional: true,
+					success:function(data){
+						if(data.code == 200){
+							$.messager.alert('信息提示',data.msg,'info');
+							$('#demand_dialog').dialog('close');
+							$("#demand_datagrid").datagrid('reload');
+							if ('WebSocket' in window) {
+								messages();//更新消息
+								send("ok");
+							}
+						}
+						else
+						{
+							$.messager.alert('信息提示',data.msg,'info');
+						}
+					}
+				}); 
+	} 
+	function addcollect_messagesno(){
+		//获得交流内容
+		var audit_comment = $("#collect_messages").val();
+		//获得状态信息
+				//发送请求，获得反馈信息
+				 $.ajax({
+					url:'/BZCX/admin/collect/check',
+					type:"POST",
+					data: {
+						reqId:collect_message_id,
+						status : 3,
+						auditComment : audit_comment
+					},
+					async : false,
+					cache : false,
+					traditional: true,
+					success:function(data){
+						if(data.code == 200){
+							$.messager.alert('信息提示',data.msg,'info');
+							$('#demand_dialog').dialog('close');
+							$("#demand_datagrid").datagrid('reload');
+							if ('WebSocket' in window) {
+								messages();//更新消息
+								send("no");
+							}
+						}
+						else
+						{
+							$.messager.alert('信息提示',data.msg,'info');
+						}
+					}
+				}); 
+	} 
+	
+	//下拉搜素
+	 $(function(){
+		// 第一步初始化表格
+		demandHtml.intiTable();
+		// 为新闻状态下拉框 添加搜索事件
+		$("#status_selected").change(function(){
+			demand_search();		  
+		});
+	}); 
+	
+</script>

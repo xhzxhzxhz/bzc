@@ -1,0 +1,149 @@
+<div class="easyui-layout" data-options="fit:true">
+    <!-- Begin of toolbar -->
+    <div id="log_toolbar">
+        <div class="wu-toolbar-search">
+			<label>起始时间：</label><input id="operLog_search_startTime_input" editable="false" class="easyui-datebox" style="width:100px">
+			<label>结束时间：</label><input id="operLog_search_endTime_input" editable="false" class="easyui-datebox" style="width:100px">
+			<label>关键词：</label><input id="operLog_search_keyword_input" class="wu-text" style="width:200px">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="operLog_search()">开始检索</a>
+			<label style="margin-left: 20px">批量删除：</label>
+			<select id="deleVal" class="my-select" panelHeight="auto" style="width:100px">
+				<option value="1">半年前</option>
+				<option value="2">一个月前</option>
+				<option value="3">一周前</option>
+			</select>
+			<a href="#" class="easyui-linkbutton" onclick="logDele()">删除</a>
+        </div>
+    </div>
+    <!-- End of toolbar -->
+    <table id="log_datagrid" class="easyui-datagrid" toolbar="#log_toolbar"></table>
+</div>
+<script type="text/javascript">
+	/**
+	 * Name 载入数据
+	 */
+	var operLogHtml = {
+		// 初始化表格
+		initTable : function(data) {
+			$('#log_datagrid').datagrid({
+				url : '/BZCX/admin/operlog/list',
+				rownumbers : true,
+				singleSelect : false,
+				pageSize : 20,
+				pagination : true,
+				multiSort : true,
+				fitColumns : true,
+				fit : true,
+				queryParams : data,
+				columns : [ [ {
+					field : 'operId',
+					title : '操作id',
+					width : 100,
+					sortable : true
+				}, {
+					field : 'userName',
+					title : '操作人员名称',
+					width : 100,
+					sortable : true
+				}, {
+					field : 'operType',
+					title : '操作类型',
+					width : 100,
+					sortable : true
+				}, {
+					field : 'operDetail',
+					title : '操作细节',
+					width : 100,
+					sortable : true
+				}, {
+					field : 'operDate',
+					title : '操作日期',
+					width : 100,
+					sortable : true
+				}, {
+					field : 'operUrl',
+					title : '操作URL',
+					width : 200,
+					sortable : true
+				} ] ]
+			});
+		},
+		// 表格重新加载
+		reloadTable : function(data) {
+			$('#log_datagrid').datagrid('reload', data);
+		},
+	}
+
+	/**
+	 *点击界面的开始检索按钮
+	 */
+	function operLog_search() {
+		var keyword = $('#operLog_search_keyword_input').val();
+		var startTime = $('#operLog_search_startTime_input')
+				.datebox("getValue");
+		var endTime = $('#operLog_search_endTime_input').datebox("getValue");
+		var queryParam = {
+			operDetail : keyword,
+
+			userName : keyword,
+			operType : keyword,
+			operUrl : keyword,
+			startTime : startTime,
+			endTime : endTime,
+			relation : "or"
+		}
+		operLogHtml.reloadTable(queryParam)
+	}
+	/**
+	 *点击界面的删除按钮
+	 */
+	function logDele() {
+		var deleVal = $('#deleVal').val();
+		var startTime = getPastHalfYear(deleVal); 
+		$.ajax({
+			url : '/BZCX/admin/operlog/deleByDate',
+			type : 'POST',
+			data : {'startTime':startTime},
+			dataType : 'JSON', 
+			cache : false,
+			success : function(data) {
+				operLogHtml.reloadTable(null);
+				alert("一共删除"+data+"条数据");
+				
+			},
+			error : function(data) {
+				alert("操作失败，请稍后再试。")
+			}
+		});
+	}
+	//根据传进来的数字返回时间
+	function getPastHalfYear(num) {
+		// 先获取当前时间
+		var curDate = (new Date()).getTime();
+		// 将时间单位换算成毫秒，并减去
+		var time;
+		if(num == 1){
+			time = 365 / 2 * 24 * 3600 * 1000; 
+		}
+		if(num == 2){
+			time = 30 * 24 * 3600 * 1000; 
+		}
+		if(num == 3){
+			time = 7 * 24 * 3600 * 1000; 
+		}
+		var pastResult = curDate - time;
+
+		// 组织返回的日期
+		var pastDate = new Date(pastResult), 
+		pastYear = pastDate.getFullYear(), 
+		pastMonth = pastDate.getMonth() + 1, 
+		pastDay = pastDate.getDate();
+
+		return pastYear + '-' + pastMonth + '-' + pastDay;
+	}
+
+	$(function() {
+		// 初始化表格
+		operLogHtml.initTable();
+	})
+</script>

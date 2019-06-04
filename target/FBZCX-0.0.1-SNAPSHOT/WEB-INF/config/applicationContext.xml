@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd"
+	default-autowire="byName">
+	<!-- 1.开启注解 -->	
+	<context:component-scan base-package="com.folkestone.bzcx.service"/>
+	<context:component-scan base-package="com.folkestone.bzcx.common.listen"/>
+	<!-- 2. 创建DataSource -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+	    <property name="driverClassName" value="com.mysql.jdbc.Driver" />  
+        <property name="url" value="jdbc:mysql://localhost:3306/bzc?serverTimezone=UTC&amp;useSSL=false" />  
+        <property name="username" value="root" />
+        <property name="password" value="folkestone" />  
+ 	</bean>
+ 	   <!--  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+ 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />  
+        <property name="url" value="jdbc:mysql://localhost:3306/mooc?serverTimezone=UTC" />  
+        <property name="username" value="root" />
+        <property name="password" value="root" /> 
+      </bean> -->
+    <!-- 3. 声明SqlSessionFactory实例 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+    	<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+    </bean>
+	
+	 <!-- 4. 事务管理器 -->
+    <bean id="txManage" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" />
+    <!-- 5. 声明式事务 -->
+    <tx:advice id="txAdvice" transaction-manager="txManage">
+    	<tx:attributes>
+    		<tx:method name="find*" read-only="true"/>
+    		<tx:method name="sel*" read-only="true"/>
+    		<tx:method name="*" />
+    	</tx:attributes>
+    </tx:advice>
+    <!-- 6.配置异常打印bean -->
+	<bean name="exceptionLog" class="com.folkestone.bzcx.common.aspect.ExceptionLog">
+    </bean>
+    <!-- 7. 配置AOP切面 -->
+    <aop:config>
+    	<!-- 事务切点 -->
+    	<aop:pointcut expression="execution(* com.folkestone.bzcx.service.*.*.*(..))" id="mypointer"/>
+    	<!-- 异常切点 -->
+    	<aop:pointcut expression="execution(* com.folkestone.bzcx.service.*.*.*(..))" id="expointer"/>
+    	<aop:advisor advice-ref="txAdvice" pointcut-ref="mypointer"/>
+    	<aop:aspect ref="exceptionLog" >	
+			<!-- 将切点和切面关联在一起 并制定何时出发切面方法 -->
+			 <aop:after-throwing method="doThrowing" throwing="ex" pointcut-ref="expointer"/>
+		</aop:aspect>	
+    </aop:config>
+    <!-- 8. mapper扫描器 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.folkestone.bzcx.mapper" />
+	</bean>
+	<!-- 9.避免IE执行AJAX时，返回JSON出现下载文件 -->
+	<bean id="mappingJacksonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 10.装载自动备份需要的类 -->
+	<bean id="standardService" class="com.folkestone.bzcx.service.dm.StandardService">
+	</bean>
+	<bean id="backupSerivce" class="com.folkestone.bzcx.service.backup.BackupSerivce">
+	</bean>
+</beans>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>服务号反馈</title>
+    <link rel="stylesheet" href="css/userAttention.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;           
+        }
+        body{
+            background: #ececec;
+        }
+        .feedContend{
+            margin-top: .4rem;
+            height:3.08rem;
+            background:#fff;
+            font-size:.3rem;
+            display: -webkit-flex;
+            display: flex;              
+            flex-direction: column;                
+        }  
+        .conTitle{        	
+        	width:97%;
+        	height:.77rem;
+        	padding-left:.2rem;
+        	display: -webkit-flex;
+            display: flex;
+            align-items: center;
+        }
+        .gray{
+        	color:#a2a2a2;
+        }
+        .feedTend{        	
+            width:97%;	
+            height:.77rem;
+            padding-left:.13rem;
+        	display: -webkit-flex;
+            display: flex;
+            align-items: center;
+        } 
+        .feedTend div{
+        	flex:1;        	
+        	display: -webkit-flex;
+            display: flex;
+            align-items: center;
+        }        
+        .feedContend img{
+        	transform: scale(0.6);
+        }               
+        .feedContend1{
+            display: -webkit-flex;
+            display: flex;
+            flex-direction:column;
+            width: 97%;
+            height:2.4rem;
+            background: #fff;
+            padding-left: .2rem;
+            padding-top: .2rem;
+            margin-top: .2rem;
+            font-size: .2rem;
+            color: #000;
+        }
+        .deleSpan{
+            display: block;
+            width: 3rem;
+            font-size:.3rem;
+        }
+        .feedContend1 textarea{
+            width: 98%;
+            height:1.5rem;
+            text-align: left;
+            margin-top: .1rem;
+            resize: none;
+            outline: none;
+            color: #333;
+            border:none;
+        }
+        textarea::placeholder{
+            color: #ececec;
+            font-size: .3rem;
+        }
+        .feedContend1 p{
+        	text-align:right;
+        	padding-right:.2rem;
+        	font-size:.25rem;
+        	color:#a2a2a2;
+        }
+        #import{
+        	font-size:.25rem;
+        	margin-left:.4rem
+        }
+        .feedHelp{
+            width: 100%;
+            height: 1.5rem;            
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            font-size: .25rem;
+            text-align: left;            
+        }
+        .feedHelp img{
+            transform: scale(0.4);
+        }
+        .feedHelp p{
+        	margin-right:.1rem;
+        }
+        .feedSub{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 94%;
+            height: 1.2rem;
+            background: #fff;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding-left:.2rem;
+            padding-right:.2rem;
+        }
+        .feedSub button{
+            flex: 1;
+            height: .8rem;
+            line-height: .8rem;
+            border: none;
+            outline: none;
+        }
+        .feedSub button:nth-child(1){
+        	border-radius:6px 0 0 6px;
+        }
+        .feedSub button:nth-child(2){
+        	border-radius:0 6px 6px 0;
+        }
+        .btn1{
+            background: #f1f6f9;
+        }
+        .btn1:active{
+        	background: #d1f2f7;
+        }
+        .btn2{
+        	background: linear-gradient(90deg,rgba(0,218,254,1),rgba(77,130,226,1));			
+        }
+        .btn2:active{
+            background: linear-gradient(90deg,rgba(0,218,254,1),rgba(0,75,226,1));
+        }
+        .conNav{
+            width: 100%;
+            height: 1rem;
+            line-height: 1rem;
+            background-image: url('img/bj_nav2.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 10rem;
+            color:#005EE6;  
+            background-color:grb(0,94,230,1);          
+            display: -webkit-flex;
+            display: flex;            
+        }
+        .navBtn1,.navBtn2{
+            flex: 1;                    
+            font-size: .3rem;
+            text-decoration:none;
+            border: none;
+            outline: none;
+            align-items:center;
+        }
+        .navBtn1{
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: .2rem;
+            color:rgb(179,207,248) 
+        }
+        .navBtn2{
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            padding-left: .2rem;             
+            color:#fff;               
+        }
+        textarea::placeholder{
+            color: #a2a2a2;
+        }
+        #sandB{
+        	display: block;
+        	width:.5rem;
+        	height:2px; 
+        	background:#fff;
+        	margin-top:-2px;  
+        	margin-left:60%;       		
+        }
+        .qqA{
+        	color:rgb(246,186,0);
+        	text-decoration:underline;
+        	text-decoration-color:rgb(246,186,0);
+        }
+        input::placeholder{
+        	color:red;
+        	font-size:.25rem;
+        }   
+    </style>
+</head>
+<body>
+	<div class="attention attentionHide" id="follow">  <!-- 未关注的用户显示 -->
+   		<img src="img/gz_logo.png"/>
+   		<button>关注</button>
+   	</div>
+    <div class="conNav">
+         <span class="navBtn1" onclick="jumpinvalidtitle()">标准有效性</span>
+    	<span class="navBtn2" onclick = "jumpfeedback()">服务号反馈</span>
+    </div>  
+    <span id="sandB"></span>
+    <div class="feedCon">
+        <div class="feedContend">        	
+       		<span class="conTitle">问题分类<span class="gray">(可多选)</span></span>
+       		<div class="feedTend">
+       			<div class="issue">
+	       			<img src="img/button_nor_xuankuang.png"/>
+	   				<span>速度慢</span>
+	       		</div>	
+	       		<div class="issue">
+	       			<img src="img/button_nor_xuankuang.png"/>
+	   				<span>标准不全</span>
+	       		</div>
+       		</div>
+       		<div class="feedTend">
+       			<div class="issue">
+	       			<img src="img/button_nor_xuankuang.png"/>
+	   				<span>界面不好看</span>
+	       		</div>
+	       		<div class="issue">
+	       			<img src="img/button_nor_xuankuang.png"/>
+	   				<span>查询功能不好使</span>
+	       		</div>
+       		</div>       		  
+       		<div class="feedTend issue">
+       			<img src="img/button_nor_xuankuang.png"/>
+   				<span>其它</span>
+       		</div>      		        		
+        </div>
+        <div class="feedContend1">
+            <span class="deleSpan">详情描述</span>
+            <textarea id="feedback_count" oninput="textNumber1()" maxlength="200" placeholder="请尽可能描述您的相关问题和建议，这将能更好地帮助我们改进产品和服务"></textarea>                     
+        	<p><span id="import">0</span>/200</p>
+        </div>
+        <div class="feedHelp">
+            <img src="img/icon_zixun.png" alt="暂无图片">
+            <p>
+                您有什么想法和意见可以直接给小查公众号留言,也可以通过<span class="qqA">QQ315072078</span>反馈我们
+            </p>
+        </div>
+        <div class="feedSub">
+            <button class="btn1" onclick="feedback_clean()">重置</button>
+            <button class="btn2" onclick="feedback_Submission()">提交</button>
+        </div>
+    </div>
+     	<script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js "></script>
+     	<script src="js/jquery.min.js"></script>
+       <script src="js/common.js"></script>
+       <script src="js/rem.js"></script>
+       <script src="js/feedback.js"></script>
+</body>
+</html>

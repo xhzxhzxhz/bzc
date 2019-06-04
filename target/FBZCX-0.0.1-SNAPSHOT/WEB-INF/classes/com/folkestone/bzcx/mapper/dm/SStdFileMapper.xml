@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.dm.SStdFileMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.dm.StdFileVo" >
+    <result column="STD_FILE_ID" property="stdFileId" jdbcType="VARCHAR" />
+    <result column="STANDARD_NO" property="standardNo" jdbcType="VARCHAR" />
+    <result column="STD_FILE_SIZE" property="stdFileSize" jdbcType="BIGINT" />
+    <result column="FILE_TYPE" property="fileType" jdbcType="VARCHAR" />
+    <result column="PAGE_NUMBER" property="pageNumber" jdbcType="INTEGER" />
+    <result column="LANGUAGE" property="language" jdbcType="INTEGER" />
+    <result column="UPLOAD_DATE" property="uploadDate" jdbcType="TIMESTAMP" />
+    <result column="LAST_OPER_DATE" property="lastOperDate" jdbcType="TIMESTAMP" />
+    <result column="LAST_OPER_TYPE" property="lastOperType" jdbcType="INTEGER" />
+    <result column="LAST_OPER_USER" property="lastOperUser" jdbcType="VARCHAR" />
+    <result column="DOC_SOURCE" property="docSource" jdbcType="INTEGER" />
+    <result column="PDF_FILE" property="pdfFile" jdbcType="VARCHAR" />
+    <result column="STD_FILE_NAME" property="stdFileName" jdbcType="LONGVARCHAR" />
+    <result column="BATCH_NO" property="batchNo" jdbcType="LONGVARCHAR" />
+    <result column="COMMENT" property="comment" jdbcType="LONGVARCHAR" />
+    <result column="UPLOAD_UNIT" property="uploadUnit" jdbcType="LONGVARCHAR" />
+    <result column="STORE_PLACE" property="storePlace" jdbcType="LONGVARCHAR" />
+    <result column="STD_FILE_PATH" property="stdFilePath" jdbcType="LONGVARCHAR" />
+  </resultMap>
+ 
+  <select id="getStdFileByFileName" parameterType="string" resultMap="BaseResultMap">
+      select * from S_STD_FILE where STANDARD_NO = #{0}
+  </select>
+  
+  <select id="getStdFileById" parameterType="string" resultMap="BaseResultMap">
+      select ssf.*, ss.STANDARD_ID, rd.DEPARTMENT_NAME  from S_STD_FILE ssf
+      left join S_STANDARD ss on ssf.STANDARD_NO = ss.STANDARD_NO
+      left join R_DEPARTMENT rd on ssf.UPLOAD_UNIT = rd.ID
+      where ssf.STD_FILE_ID = #{0} 
+  </select>
+   <delete id="delteById" parameterType="string">
+	  delete from S_STD_FILE where  STD_FILE_ID = #{0}
+  </delete>
+ 
+  <select id="listStdFileByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+      select ssf.*, ss.STANDARD_ID, rd.DEPARTMENT_NAME  from S_STD_FILE ssf
+      left join S_STANDARD ss on ssf.STANDARD_NO = ss.STANDARD_NO
+      left join R_DEPARTMENT rd on ssf.UPLOAD_UNIT = rd.ID
+      <where>
+         <!--  <if test="isback == null">
+		    <if test="searcQB != null or searcGB != null or searcHB != null or searcSB != null">
+		    (
+		    ss.STANDARD_TYPE != null
+		    <if test="searcQB != null">
+			or ss.STANDARD_TYPE like CONCAT('%',Q,'%')
+		    </if>
+		    <if test="searcGB != null">
+			or ss.STANDARD_TYPE like CONCAT('%',G,'%')
+		    </if>
+		    <if test="searcHB != null">
+			or ss.STANDARD_TYPE like CONCAT('%',H,'%')
+		    </if>
+		    <if test="searcSB != null">
+			or ss.STANDARD_TYPE like CONCAT('%',S,'%')
+		    </if>
+		    )
+		    </if>
+		    <if test="searcQB == null and searcGB == null and searcHB == null and searcSB == null">
+		        and ss.STANDARD_TYPE = null
+		    </if>
+		    </if> -->
+          <if test="stdFileName != null">
+             and ssf.STD_FILE_NAME like CONCAT('%',#{stdFileName},'%')
+          </if>
+          <if test="standardNo != null">
+             and ssf.STANDARD_NO = #{standardNo}
+          </if>
+          <if test="fileType != null">
+             and ssf.FILE_TYPE = #{fileType}
+          </if>
+          <if test="standardId != null">
+             and ss.STANDARD_ID  = #{standardId}
+          </if>
+          <if test="standardType != null">
+             and ss.STANDARD_TYPE  = #{standardType}
+          </if>
+          <if test="standardCas == '1'.toString()">
+             and ss.STANDARD_ID is not null
+          </if>
+          <if test="standardCas == '2'.toString()">
+             and ss.STANDARD_ID is null
+          </if>
+          <if test="uploadUnit != null">
+             and ssf.UPLOAD_UNIT = #{uploadUnit}
+          </if>
+      </where>
+      order by UPLOAD_DATE desc
+  </select>
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.dm.S_Std_FileDo" >
+    insert into S_STD_FILE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stdFileId != null" >
+        STD_FILE_ID,
+      </if>
+      <if test="stdFileName != null" >
+        STD_FILE_NAME,
+      </if>
+      <if test="standardNo != null" >
+        STANDARD_NO,
+      </if>
+      <if test="batchNo != null" >
+        BATCH_NO,
+      </if>
+      <if test="stdFileSize != null" >
+        STD_FILE_SIZE,
+      </if>
+      <if test="fileType != null" >
+        FILE_TYPE,
+      </if>
+      <if test="pageNumber != null" >
+        PAGE_NUMBER,
+      </if>
+      <if test="language != null" >
+        LANGUAGE,
+      </if>
+      <if test="comment != null" >
+        COMMENT,
+      </if>
+      <if test="uploadDate != null" >
+        UPLOAD_DATE,
+      </if>
+      <if test="uploadUnit != null" >
+        UPLOAD_UNIT,
+      </if>
+      <if test="storePlace != null" >
+        STORE_PLACE,
+      </if>
+      <if test="stdFilePath != null" >
+        STD_FILE_PATH,
+      </if>
+      <if test="lastOperDate != null" >
+        LAST_OPER_DATE,
+      </if>
+      <if test="lastOperType != null" >
+        LAST_OPER_TYPE,
+      </if>
+      <if test="lastOperUser != null" >
+        LAST_OPER_USER,
+      </if>
+      <if test="pdfFile != null">
+      PDF_FILE,
+      </if>
+      <if test="docSource != null">
+      	DOC_SOURCE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stdFileId != null" >
+        #{stdFileId,jdbcType=VARCHAR},
+      </if>
+      <if test="stdFileName != null" >
+        #{stdFileName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="standardNo != null" >
+        #{standardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNo != null" >
+        #{batchNo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="stdFileSize != null" >
+        #{stdFileSize,jdbcType=BIGINT},
+      </if>
+      <if test="fileType != null" >
+        #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="pageNumber != null" >
+        #{pageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="language != null" >
+        #{language,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="uploadDate != null" >
+        #{uploadDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uploadUnit != null" >
+        #{uploadUnit,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storePlace != null" >
+        #{storePlace,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="stdFilePath != null" >
+        #{stdFilePath,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="lastOperDate != null" >
+        #{lastOperDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastOperType != null" >
+        #{lastOperType,jdbcType=INTEGER},
+      </if>
+      <if test="lastOperUser != null" >
+        #{lastOperUser,jdbcType=VARCHAR},
+      </if>
+      <if test="pdfFile != null">
+      	 #{pdfFile,jdbcType=VARCHAR},
+      </if>
+      <if test="docSource != null">
+      	 #{docSource,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.dm.S_Std_FileDo" >
+    update S_STD_FILE
+    <set >
+      <if test="stdFileName != null" >
+        STD_FILE_NAME = #{stdFileName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="batchNo != null" >
+        BATCH_NO = #{batchNo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="standardNo != null" >
+        STANDARD_NO = #{standardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="stdFileSize != null" >
+        STD_FILE_SIZE = #{stdFileSize,jdbcType=BIGINT},
+      </if>
+      <if test="fileType != null" >
+        FILE_TYPE = #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="pageNumber != null" >
+        PAGE_NUMBER = #{pageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="language != null" >
+        LANGUAGE = #{language,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null" >
+        COMMENT = #{comment,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="uploadDate != null" >
+        UPLOAD_DATE = #{uploadDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uploadUnit != null" >
+        UPLOAD_UNIT = #{uploadUnit,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storePlace != null" >
+        STORE_PLACE = #{storePlace,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="stdFilePath != null" >
+        STD_FILE_PATH = #{stdFilePath,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="lastOperDate != null" >
+        LAST_OPER_DATE = #{lastOperDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastOperType != null" >
+        LAST_OPER_TYPE = #{lastOperType,jdbcType=INTEGER},
+      </if>
+      <if test="lastOperUser != null" >
+        LAST_OPER_USER = #{lastOperUser,jdbcType=VARCHAR},
+      </if>
+      <if test="pdfFile != null">
+      PDF_FILE = #{pdfFile,jdbcType=VARCHAR},
+      </if>
+      <if test="docSource != null">
+      	DOC_SOURCE = #{docSource,jdbcType=INTEGER},
+      </if>
+    </set>
+    where STD_FILE_ID = #{stdFileId,jdbcType=VARCHAR}
+  </update>
+</mapper>

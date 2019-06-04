@@ -1,0 +1,43 @@
+后台back文件夹下
+temp/bibliography.html ——前台题录维护对应的的html
+temp/news.html ——资讯维护对应的的html
+temp/origin.html ——标准原文维护对应的html
+temp/resource.html ——权限管理资源维护对应的html
+temp/role.html ——权限管理角色维护对应的html
+temp/user.html ——权限管理人员维护对应的html
+temp/system.html ——后台体系维护对应的html
+temp/systemDetail.html ——后台体系详情对应的html
+temp/backups.html -后台自动备份策略对应的html
+temp/log.html -后台操作日志对应的html
+temp/chat.html -后台聊天对应的html
+temp/demand.html -需求征集维护对应的html
+temp/validity.html -有效性确认维护对应的html
+temp/feedback.html -意见反馈维护对应的html
+temp/share.html -资源共享维护对应的html
+index.html ——首页对应的html
+login.html ——登录页对应的html
+
+前台head文件夹下
+index.html ——首页对应的html
+result.html ——检索结果页对应的html
+resultDetail.html ——题录详情页对应的html
+search.html ——检索界面对应的html
+secondUnit.html ——二级单位界面对应的html
+system.html ——标准体系对应的html
+validation.html ——标准有效性确认对应的html
+validationDetail.html ——标准有效性确认详情页
+validationWin.html ——标准有效性表单提交页
+communicate.html ——意见反馈对应的html
+share.html ——资源共享对应的html
+collect.html ——标准需求征集对应的html
+collectDetail.html ——标准需求详情页
+collectWin.html ——标准需求表单页
+newsCenter.html ——新闻对应的html
+newsDetail.html ——新闻详情页
+newsList.html ——新闻列表页
+chat.html -前台聊天对应的html
+
+
+publicjs文件夹下
+bzcxclass.js ——存放bzcx系统js对象的js。
+bzcxutil.js ——工具类以及一些原型方法的拓展。

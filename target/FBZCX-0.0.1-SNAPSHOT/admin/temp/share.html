@@ -1,0 +1,460 @@
+<div class="easyui-layout" data-options="fit:true">
+    <!-- Begin of toolbar -->
+    <div id="share_toolbar">
+        <div class="wu-toolbar-button">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-upload" onclick="shareUpload()" id="origin_upload_btn" plain="true">上传</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="shareDele()" plain="true">删除</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="shareEdit()" plain="true">修改</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="shareOk()" plain="true">通过并正常显示</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-no" onclick="shareNo()" plain="true">驳回</a>
+        </div>
+        <div class="wu-toolbar-search">
+			<label>状态：</label>
+			<select id="file_selected" class="my-select" panelHeight="auto" style="width:100px">
+				<option value="0">全部</option>
+				<option value="1">待审核</option>
+				<option value="2">通过并正常显示</option>
+				<option value="3">驳回</option>
+			</select>
+			<label style="margin-left: 40px">关键词：</label><input id="share_search_keyword_input" class="wu-text" style="width:200px" placeholder="文件名称或文件描述">
+			<a href="javascript:void(0)" onclick="share_search()" class="easyui-linkbutton" iconCls="icon-search">开始检索</a>
+        </div>
+    </div>
+    <!-- End of toolbar -->
+    <table id="share_datagrid" class="easyui-datagrid" toolbar="#share_toolbar"></table>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="share_add_dialog" class="easyui-dialog" data-options="closed:true" style="width:400px; padding:10px;">
+	<form id="share_add_form" method="post" enctype="multipart/form-data">
+		<table>
+			<tr id="file_stye_bo" style="display: table-row;">
+				<td width="80" align="right">文件:</td>
+				<td><input type="file" name="fileField" id="origin_file_input" style="display: block;"/></td>
+			</tr>
+			<tr>
+				<td align="right">文件名称:</td>
+				<td><input type="text" id="fileNameid" name="fileName" value="" class="wu-text" /></td>
+			</tr>
+			 <tr>
+				<td align="right">文件大小:</td>
+				<td><input type="text" id="fileSize" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">文件描述:</td>
+				<td><textarea name="comment" rows="6" id="fileComment" class="wu-textarea" style="width:260px"></textarea></td>
+			</tr> 
+			<!-- <tr>
+				<td align="right">文件状态:</td>
+				<td>
+					<select class="my-select" panelHeight="auto" style="width:268px">
+						<option value="0">待审核</option>
+						<option value="1">正常</option>
+						<option value="2">驳回</option>
+						<option value="3">下架</option>
+					</select>
+				</td>
+			</tr> -->
+		</table>
+	</form>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="origin_progress_dialog" style="padding: 10px">
+	<div id="origin_upload_progress" class="easyui-progressbar" data-options="value:0" style="width:280px;"></div>
+</div>
+<!-- End of easyui-dialog -->
+<script type="text/javascript">
+var timerId;
+
+	/**
+	* Name 修改记录
+	*/
+	function edit(){
+		var items = $('#share_datagrid').datagrid('getSelections');
+		var ids = [];
+		$(items).each(function(){
+			ids.push(this.fileId);	
+		});
+		$('#share_add_form').form('submit', {
+			url:'/BZCX/admin/file/update?fileId='+ids[0],
+			success:function(data){
+				if(data){
+					$.messager.alert('信息提示','提交成功！','info');
+					shareHtml.reloadTable();
+					$('#share_add_dialog').dialog('close');
+				}
+				else
+				{
+					$.messager.alert('信息提示','提交失败！','info');
+				}
+			}
+		});
+	}
+
+	
+	/**
+	* Name 删除记录
+	*/
+	function shareDele(){
+		$.messager.confirm('信息提示','确定要删除该记录？', function(result){
+			if(result){
+				var items = $('#share_datagrid').datagrid('getSelections');
+				var ids = [];
+				$(items).each(function(){
+					ids.push(this.fileId);	
+				});
+				//alert(ids);return;
+				console.info(ids);
+				$.ajax({
+					url:'/BZCX/admin/file/delefile',
+					type:"POST",
+					data:{
+						fileId : ids
+					},
+					async : false,
+		            cache : false,
+		            traditional: true,
+					success:function(data){
+						if(data){
+							$.messager.alert('信息提示','删除成功！','info');
+							shareHtml.reloadTable();
+							$("#share_datagrid").datagrid('reload');
+						}
+						else
+						{
+							$.messager.alert('信息提示','操作失败！','info');
+						}
+					}	
+				});
+			}	
+		});
+	}
+	
+	/**
+	* Name 打开修改窗口
+	*/
+	function shareEdit(){
+		$("#file_stye_bo").attr("style","display: none;");
+		$('#share_add_form').form('clear');
+		var item = $('#share_datagrid').datagrid('getSelected');
+		//alert(item.productid);return;
+		$.ajax({
+			url:'/BZCX/admin/file/detail',
+			type: "POST",
+			data:{
+				fileId : item.fileId
+			},
+			success:function(data){
+					//绑定值
+				$('#share_add_form').form('load', data.data);
+				$("#fileSize").attr("value",data.data.fileSize);
+			}	
+		});
+		$('#share_add_dialog').dialog({
+			closed: false,
+			modal:true,
+            title: "修改",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: edit
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#share_add_dialog').dialog('close');
+                }
+            }]
+        });
+	}
+
+	/**
+	 * Name 通过
+	 */
+	function shareOk(){
+		$.messager.confirm('信息提示','确定要通过该记录？', function(result){
+			if(result){
+				var items = $('#share_datagrid').datagrid('getSelections');
+				var ids = [];
+				$(items).each(function(){
+					ids.push(this.fileId);
+				});
+				console.info(ids);
+				$.ajax({
+					url:'/BZCX/admin/file/updatelistes',
+					type: "POST",
+					data:{
+						fileId:ids,
+						status : 2
+					},
+					async : false,
+					cache : false,
+					traditional: true,
+					success:function(data){
+						if(data){
+							$.messager.alert('信息提示','操作成功！','info');
+							//操作完成后重新加载页面
+							$("#share_datagrid").datagrid('reload');
+						}
+						else
+						{
+							$.messager.alert('信息提示','操作失败！','info');
+						}
+					}
+				});
+			}
+		});
+	}
+
+	/**
+	 * Name 拒绝
+	 */
+	function shareNo(){
+		$.messager.confirm('信息提示','确定要驳回该记录？', function(result){
+			if(result){
+				var items = $('#share_datagrid').datagrid('getSelections');
+				var ids = [];
+				$(items).each(function(){
+					ids.push(this.fileId);
+				});
+				//alert(ids);return;
+				$.ajax({
+					url:'/BZCX/admin/file/updatelistes',
+					type: "POST",
+					data:{
+						status:3,
+						fileId:ids
+					},
+					async : false,
+					cache : false,
+					traditional: true,
+					success:function(data){
+						if(data){
+							$.messager.alert('信息提示','操作成功！','info');
+							//操作完成后重新加载页面
+							$("#share_datagrid").datagrid('reload');
+						}
+						else
+						{
+							$.messager.alert('信息提示','操作失败！','info');
+						}
+					}
+				});
+			}
+		});
+	}
+	
+	
+	/**
+	 *点击界面的开始检索按钮
+	 */
+	function share_search(){
+		//获取开始检索输入框中的值
+		var keyword = $('#share_search_keyword_input').val();
+		file_selected
+		//获取下拉列表的值
+		var statu = $("#file_selected").val();
+		var queryParam = {
+				fileName : keyword,
+				comment : keyword,
+				relation : "or",
+				status : statu
+		}
+		shareHtml.reloadTable(queryParam)
+	}
+	
+	var shareHtml = {
+			// 初始化表格
+			intiTable : function(data){
+				$('#share_datagrid').datagrid({
+					url:'/BZCX/admin/file/list',
+					rownumbers:true,
+					singleSelect:false,
+					pageSize:20,
+					pagination:true,
+					multiSort:true,
+					fitColumns:false,
+					fit:true,
+					columns:[[
+						{ checkbox:true},
+			{ field:'fileName',title:'文件名称',width:100,sortable:true},
+			{ field:'fileSize',title:'文件大小',width:180,sortable:true},
+			{ field:'fileType',title:'文件类型',width:100,sortable:true},
+			{ field:'comment',title:'文件描述',width:100,sortable:true},
+			{ field:'uploadUser',title:'上传人',width:100,sortable:true},
+			{ field:'auditUser',title:'审核人',width:100,sortable:true},
+			{ field:'uploadDate',title:'上传时间',width:100,sortable:true},
+			{ field:'auditDate',title:'审核时间',width:100,sortable:true},
+			{ field:'note',title:'备注',width:100,sortable:true},
+			{ field:'status',title:'状态',width:100,sortable:true,
+				formatter:function(val,rec){
+					if(rec.status == 1){
+						return "待审核"
+					}else if(rec.status == 2){
+						return "通过并正常显示"
+					}else{
+						return "驳回"
+					}
+				}
+			},
+			{ field:'lastOperDate',title:'最后操作时间',width:100,sortable:true},
+			{ field:'lastOperType',title:'最后操作类型',width:100,sortable:true
+					//操作类型
+			},
+			{ field:'lastOperUser',title:'最后操作人',width:100,sortable:true},
+			{ field:'action',title:'操作',width:80,align:'center',
+				formatter:function(value,rec){
+					var openDetail = '<a onclick="downfile(\''+rec.fileId+'\')" href="#">下载</a>';
+					return openDetail;
+				}
+			}
+					]],
+				});
+			},
+			// 重新加载表格
+			reloadTable : function(data){
+				$('#share_datagrid').datagrid("reload", data);
+			},
+			getProgress : function(){
+					// 发送ajax 得到当前上传进度
+					$.ajax({
+						url: "/BZCX/admin/file/progress",
+						type : "post",
+						async : true,
+						data: {},
+						cache : false,
+						dataType : "json",
+						success: function (data) {
+							var value = $('#origin_upload_progress').progressbar('getValue');
+							if (value < 100){
+							    var percent = data.data.percent;
+							    var valueStr =percent.substring(0, percent.indexOf("."));
+								value=parseFloat(valueStr);
+							    $('#origin_upload_progress').progressbar('setValue', value);
+							}else{
+								window.clearInterval(timerId);
+							}
+						},
+						error:function(data){
+							window.clearInterval(timerId);
+						}
+					});
+			}
+	}
+	
+	
+	function downfile(fileid) {
+		$.ajax({
+			url :"/BZCX/admin/file/downlod",
+	        type : "post",
+	        data : {"id":fileid},
+	        ansyc : false,
+	        success : function(data){
+	        	alert(data.code)
+	        	if(data.code == 10004){
+	        		$.messager.alert('信息提示',data.msg,'info')
+	        	}else{
+	        		location.href="/BZCX/admin/file/downlod?id="+fileid;
+	        	}
+	        },
+	        error : function() {
+	        	$.messager.alert('信息提示',"文件不存在，请重新上传",'info')
+			}
+	    })
+	}
+	/**
+	 * Name 上传
+	 */
+	function shareUpload(){
+		$("#file_stye_bo").attr("style","display: table-row;");
+		//$('#architecture_file_tr').show();
+		$('#share_add_form').form('clear');
+		//$("#fileSize").append("");
+		$("#origin_file_input").change(function(){
+			var file = this.files[0];
+			var filename = file.name;
+			$("#fileSize").empty();
+			var mytd = file.size+"kb";
+			$("#fileSize").attr("value",mytd);
+			var arr = filename.split(".");
+			$("#fileNameid").attr("value",arr[0]);
+		});
+		$('#share_add_dialog').dialog({
+			closed: false,
+			modal:true,
+			title: "新增",
+			buttons: [{
+				text: '确定',
+				iconCls: 'icon-ok',
+				handler: function(){
+					$('#origin_progress_dialog').window({
+						modal:true,
+						title: "上传进度",
+						collapsible:false,
+						minimizable:false,
+						maximizable:false,
+						closable:false
+					});
+                	$('#share_add_form').form('submit', {
+            			url:'/BZCX/admin/file/upload',
+            			onSubmit: function(){
+            				var isValid = $(this).form('validate');
+            				if (!isValid){
+            					$.messager.progress('close');
+            				}
+            				return isValid;
+            			},
+            			success:function(data){
+            				data = JSON.parse(data);
+            				if(data.code == 200){
+            					$.messager.alert('信息提示','新增成功。','info');
+            					//重置form
+            					//alert("重置")
+            					document.getElementById("share_add_form").reset();
+            					$('#origin_progress_dialog').dialog('close');
+            					$('#share_add_dialog').dialog('close');
+            					shareHtml.reloadTable();
+            				}
+            				else
+            				{
+            					$.messager.alert('信息提示','新增失败，请联系管理员','info');
+            					//重置form
+            					document.getElementById("share_add_form").reset();
+            					$('#origin_progress_dialog').dialog('close');
+            					$('#share_add_dialog').dialog('close');
+            				}
+            			}
+            		});
+        			timerId = setInterval(function(){
+        				shareHtml.getProgress()
+    				 },1000);
+        			//重置表单
+        			document.getElementById("share_add_form").reset();
+                }
+			}, {
+				text: '取消',
+				iconCls: 'icon-cancel',
+				handler: function () {
+					//重置表单
+					document.getElementById("share_add_form").reset();
+					$('#share_add_dialog').dialog('close');
+				}
+			}]
+		});
+	}
+	/**
+	初始化表格
+	*/
+	$(function(){
+		shareHtml.intiTable();
+	});
+	
+	
+	/**
+	文件下载btn
+	*/
+	function openDetail(){
+		$('#share_datagrid').datagrid("reload", data);
+	};
+	
+	
+</script>

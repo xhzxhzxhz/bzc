@@ -1,0 +1,396 @@
+<div class="easyui-layout" data-options="fit:true">
+    <!-- Begin of toolbar -->
+    <div id="feedback_toolbar">
+		<div class="wu-toolbar-button">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-accept" onclick="feedbackRead()" plain="true">标记为已读</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-accept" onclick="headshow()" plain="true">前台显示</a>
+			<a href="javaScript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" onclick="feedbackDele()" plain="true">删除</a>
+		</div>
+        <div class="wu-toolbar-search">
+			<label>起始时间：</label><input editable="false" class="easyui-datebox" id="satrtTime" style="width:100px">
+			<label>结束时间：</label><input editable="false" class="easyui-datebox" id="endTime" style="width:100px">
+			<label>关键词：</label><input id="feedback_search_keyword_input" class="wu-text" style="width:200px" placeholder="反馈人或反馈内容">
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" onclick="feedback_search()">检索</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" onclick="feedback_reset()">重置</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<label>状态：</label>
+			<select editable="false" id="feedback_select" class="" panelHeight="auto" style="width:100px">
+				<option value="1">未读</option>
+				<option value="2">已读</option>
+				<option value="0">全部</option>
+			</select>
+        </div>
+    </div>
+    <!-- End of toolbar -->
+    <table id="feedback_datagrid" class="easyui-datagrid" toolbar="#feedback_toolbar"></table>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="feedback_dialog" class="easyui-dialog" data-options="closed:true" style="position:relative;width:600px;height: 600px;overflow: auto;padding:10px;">
+	<ul id="feedback_dialog_ul" class="dialog-ul">
+		<!-- 留言对话 -->
+	</ul>
+	<div style="position: absolute;bottom: 10px;">
+		<textarea id="suggest_textarea" name="content" rows="6" class="wu-textarea" style="width:566px;box-sizing: border-box;"></textarea>
+	</div>
+</div>
+<!-- End of easyui-dialog -->
+<script src="js/message.js"></script>
+<script type="text/javascript">
+	//声明feedbackId;
+	var myFeedbackId;
+	//声明UserId
+	var UserId;
+/**
+ *点击界面的开始检索按钮
+ */
+function feedback_search(){
+	//获取开始检索输入框中的值
+	var keyword = $('#feedback_search_keyword_input').val();
+	//获取下拉框选中的值
+	var status = $('#feedback_select').val();
+	//获得起始的时间值
+	var sTime = $("#satrtTime").datebox("getValue");
+	//alert(sTime);
+	//获得结束的时间值
+	var eTime = $("#endTime").datebox("getValue");
+	var queryParam = {
+			userId : keyword,
+			content : keyword,
+			//relations : "or",
+			satrtTime : sTime,
+			endTime : eTime,
+			//feedbackDate : feedbackDate,
+			status : status,
+			relation : "and"
+	}
+	feedbackHtml.reloadTable(queryParam)
+}
+
+
+/**
+ * 把未读状态标记为已读状态 
+ * 1:未读     2：已读
+ */	
+function feedbackRead(){
+	$.messager.confirm('信息提示','选中的反馈信息将会被标记为已读。', function(result){
+		if(result){
+			//获得选中行
+			var items = $('#feedback_datagrid').datagrid('getSelections');
+			var ids = [];
+			$(items).each(function(){
+				ids.push(this.feedbackId);
+				//alert(ids)
+			});
+			console.info(ids);
+			$.ajax({
+				url:'/BZCX/admin/interact/updateStatus',
+				type:"POST",
+				data: {
+					ids : ids
+				},
+				async : false,
+	            cache : false,
+	            traditional: true,
+				success:function(data){
+					if(data.code == 200){
+						$.messager.alert('信息提示','标记成功。','info');
+						$("#feedback_datagrid").datagrid('reload');  
+						if ('WebSocket' in window) {
+							messages();//更新消息
+							send("ok");
+						}
+					}
+					else
+					{
+						$.messager.alert('信息提示','标记失败。','info');
+					}
+				}	
+			});
+		}	
+	});
+}
+	
+
+/**
+ * Name 删除记录
+ */
+function feedbackDele(){
+	$.messager.confirm('信息提示','此反馈信息将会被删除。', function(result){
+		if(result){
+			var items = $('#feedback_datagrid').datagrid('getSelections');
+			var ids = [];
+			$(items).each(function(){
+				ids.push(this.feedbackId);
+			});
+			console.info(ids);
+			$.ajax({
+				url:'/BZCX/admin/interact/delete',
+				type:"POST",
+				data: {
+					feedbackId : ids 
+				},
+				async : false,
+	            cache : false,
+	            traditional: true,
+				success:function(data){
+					if(data.code == 200){
+						$.messager.alert('信息提示','删除成功。','info');
+						$("#feedback_datagrid").datagrid('reload');  
+						if ('WebSocket' in window) {
+							messages();//更新消息
+							send("delete");
+						}
+					}
+					else
+					{
+						$.messager.alert('信息提示','删除失败。','info');
+					}
+				}	
+			});
+		}	
+	});
+}
+
+/**
+ * 前台显示
+ */
+function headshow(){
+			var items = $('#feedback_datagrid').datagrid('getSelections');
+			var ids = [];
+			$(items).each(function(){
+				ids.push(this.feedbackId);
+			});
+			console.info(ids);
+			$.ajax({
+				url:'/BZCX/admin/interact/show',
+				type:"POST",
+				data: {
+					feedbackId : ids 
+				},
+				async : false,
+	            cache : false,
+	            traditional: true,
+				success:function(data){
+					if(data.code == 200){
+						$.messager.alert('信息提示','显示成功。','info');
+						$("#feedback_datagrid").datagrid('reload');  
+						if ('WebSocket' in window) {
+							messages();//更新消息
+							send("delete");
+						}
+					}
+					else
+					{
+						$.messager.alert('信息提示','显示失败。','info');
+					}
+				}	
+			});
+}
+
+	var feedbackHtml = {
+			// 初始化表格
+			intiTable : function(data){
+				$('#feedback_datagrid').datagrid({
+					url:'/BZCX/admin/interact/list',
+					rownumbers:true,
+					singleSelect:false,
+					pageSize:20,
+					pagination:true,
+					multiSort:true,
+					fitColumns:false,
+					fit:true,
+					queryParams : {
+						status : '1'
+					},
+					columns:[[
+						{ checkbox:true},
+						{ field:'userinfo.nickname',title:'反馈人',width:100,sortable:true,
+							formatter:function(val,rec){
+								if(rec.status == 1){
+									return "<span style='color:#555555'>"+rec.userinfo.nickname+"</span>"
+								}else if(rec.status == 2){
+									return "<span style='color:#A09D9D'>"+rec.userinfo.nickname+"</span>"
+								}
+							}
+						},
+						{ field:'content',title:'反馈内容',width:500,sortable:true,
+							formatter:function(val,rec){
+								if(rec.status == 1){
+									return "<span style='color:#555555'>"+rec.content+"</span>"
+								}else if(rec.status == 2){
+									return "<span style='color:#A09D9D'>"+rec.content+"</span>"
+								}
+							}
+						},
+						{ field:'feedbackDate',title:'反馈时间',width:100,sortable:true,
+							formatter:function(val,rec){
+								if(rec.status == 1){
+									return "<span style='color:#555555'>"+rec.feedbackDate+"</span>"
+								}else if(rec.status == 2){
+									return "<span style='color:#A09D9D'>"+rec.feedbackDate+"</span>"
+								}
+							}
+						},
+						{ field:'status',title:'状态',width:100,sortable:true,
+							formatter:function(val,rec){
+								if(rec.status == 1){
+									return "<span style='color:#555555'>未读</span>"
+								}else if(rec.status == 2){
+									return "<span style='color:#A09D9D'>已读</span>"
+								}
+							}
+						},
+						{ field:'userinfo.company',title:'公司',width:100,sortable:true,
+							formatter:function(val,rec) {
+								if(rec.status == 1){
+									return "<span style='color:#555555'>"+rec.userinfo.company+"</span>"
+								}else if(rec.status == 2){
+									return "<span style='color:#A09D9D'>"+rec.userinfo.company+"</span>"
+								}
+							}
+						},{ field:'userinfo.tel',title:'联系电话',width:100,sortable:true,
+							formatter:function(val,rec) {
+								if(rec.status == 1){
+									return "<span style='color:#555555'>"+rec.userinfo.tel+"</span>"
+								}else if(rec.status == 2){
+									return "<span style='color:#A09D9D'>"+rec.userinfo.tel+"</span>"
+								}
+							}
+						},
+					]],
+					onDblClickRow:function(rowIndex,rowData){
+						myFeedbackId=rowData.feedbackId;
+						UserId=rowData.userId;
+						console.info(rowData);
+						$("#suggest_textarea").val("");
+						//获得对话列表
+						$.ajax({
+							url:'/BZCX/admin/interact/replyDetail',
+							data: {
+								type : 3,
+								page : 1,
+								rows:10000,
+								feedbackId:rowData.feedbackId,
+							},
+							type : "post",
+							async : false,
+							cache : false,
+							dataType : "json",
+							success : function(data){
+								$("#feedback_dialog_ul").empty();
+								var mydata=data.rows;
+								var liStr;
+								for(var i in mydata){
+									if(mydata[i].side != null){
+									if(mydata[i].side == "left"){
+										liStr = '<li class="li-left">'
+												+ '<div class="dialog-left mydialog"><span style="font-weight:bold;">'+ mydata[i].userName +'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+ mydata[i].feedbackDate +':</div>'
+												+ '<div style="clear: both"></div>'
+												+ '<p>'+ mydata[i].content +'</p>'
+												+ '</li>';
+									}else if(mydata[i].side == "right"){
+										liStr = '<li class="li-right">'
+												+ '<div class="dialog-right mydialog"><span style="font-weight:bold;">'+ mydata[i].userName +'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+ mydata[i].feedbackDate +':</div>'
+												+ '<div style="clear: both"></div>'
+												+ '<p>'+ mydata[i].content +'</p>'
+												+ '</li>';
+									}
+									var myLi=$(liStr);
+									$("#feedback_dialog_ul").append(myLi);
+									usernumid=rowData.feedbackId;
+									}
+								}
+							},
+							error:function(){
+								alert("操作失败，请稍后再试！");
+							} 
+						});
+						$('#feedback_dialog').dialog({
+							closed: false,
+							modal:true,
+							title: "意见反馈",
+							buttons: [{
+								text: '确定',
+								iconCls: 'icon-ok',
+								handler: edit01
+							}, {
+								text: '取消',
+								iconCls: 'icon-cancel',
+								handler: function () {
+									$('#feedback_dialog').dialog('close');
+								}
+							}]
+						}); 
+					}
+				});
+			},
+			// 表格重新加载
+			reloadTable : function(data){
+				$('#feedback_datagrid').datagrid('reload',data);
+			}
+	}
+	
+	
+	function rowColor(value, row, index) {
+	    if(row.serviceCategory=='GSM'){
+	        return 'background-color:red;color:white';
+	    }
+
+	    if(row.serviceCategory=='WCDMA'){
+	        return 'background-color:cyan;color:white';
+	    }
+	    return 'background-color:blue;color:white';
+	    //alert(row.serviceCategory);
+	 }
+	
+	/**
+	* Name 添加反馈信息
+	*管理员回复反馈
+	*/
+	function edit01(){
+		var contents = $('#suggest_textarea').val();
+				//发送请求，获得反馈信息
+				 $.ajax({
+					url:'/BZCX/admin/interact/insertReply',
+					type:"POST",
+					data: {
+						feedbackId:myFeedbackId,
+						UserId:UserId,
+						content:contents,
+						type : 3
+					},
+					async : false,
+					cache : false,
+					traditional: true,
+					success:function(data){
+						if(data.code == 200){
+							$.messager.alert('信息提示',data.msg,'info');
+							$('#feedback_dialog').dialog('close');
+							$("#feedback_datagrid").datagrid('reload');
+							if ('WebSocket' in window) {
+								messages();//更新消息
+								send("ok");
+							}
+						}
+						else
+						{
+							$.messager.alert('信息提示',data.msg,'info');
+						}
+					}
+				}); 
+	}
+	//下拉搜素
+	$(function(){
+		// 第一步初始化表格
+		feedbackHtml.intiTable();
+		// 为新闻状态下拉框 添加搜索事件
+		$("#feedback_select").change(function(){
+			feedback_search();			  
+		});
+	});
+	function feedback_reset(){
+		$('#endTime').datebox('setValue', '');
+		$('#satrtTime').datebox('setValue', '');
+		$("#feedback_search_keyword_input").val('');
+	}
+</script>

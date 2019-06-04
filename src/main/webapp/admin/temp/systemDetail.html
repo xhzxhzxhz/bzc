@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>城镇燃气技术标准查询平台</title>
+	<link rel="stylesheet" type="text/css" href="../easyui/1.3.4/themes/default/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="../css/wu.css" />
+	<link rel="stylesheet" type="text/css" href="../css/icon.css" />
+	<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../publicjs/bzcxclass.js"></script>
+	<script type="text/javascript" src="../../publicjs/bzcxutil.js"></script>
+	<script type="text/javascript" src="../easyui/1.3.4/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../easyui/1.3.4/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'west',border:true,split:true," title="分类管理" style="width:150px; padding:5px;">
+		<!-- <input id="system_detail_tree_search" class="easyui-searchbox" data-options="prompt:'关键字',searcher:doSearch" style="width:135px"/> -->
+		<ul id="system_detail_tree" class="easyui-tree"></ul>
+    </div>
+    <div data-options="region:'center',border:false">
+    	<!-- Begin of toolbar -->
+        <div id="system_detail_toolbar">
+            <div class="wu-toolbar-button">
+                <a id="link_1" href="#" class="easyui-linkbutton link_oper" iconCls="icon-add" onclick="addNode()" plain="true">添加节点</a>
+                <a href="#" class="easyui-linkbutton link_oper" iconCls="icon-remove" onclick="deleNode()" plain="true">删除节点</a>
+				<a href="#" class="easyui-linkbutton link_oper" iconCls="icon-edit" onclick="editNode()" plain="true">修改节点</a>
+                <a href="#" class="easyui-linkbutton link_oper" iconCls="icon-link" onclick="bind()" plain="true">绑定</a>
+                <a href="#" class="easyui-linkbutton link_oper" iconCls="icon-link-break" onclick="unbind()" plain="true">解除绑定</a>
+            </div>
+            <div class="wu-toolbar-search">
+                <label>关键词：</label><input id="system_detail_standard_search_keyword" class="wu-text" style="width:150px">  
+                <a href="javascript:void(0)"  class="easyui-linkbutton" iconCls="icon-search" onclick="systemDetailStandardSearch()">开始检索</a>
+            </div>
+        </div>
+        <!-- End of toolbar -->
+        <table id="system_detail_datagrid" toolbar="#system_detail_toolbar"></table>
+    </div>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="system_detail_add_node_dialog" class="easyui-dialog" data-options="closed:true,iconCls:'icon-save'" style="width:400px; padding:10px;">
+	<form id="system_detail_add_node_form" method="post">
+        <table>
+        	<tr>
+                <td width="80" align="right">父级节点:</td>
+                <td><input type="text" name="" class="wu-text" id="parentNode_show" readonly="readonly"/>
+            </tr>
+            <tr>
+                <td width="80" align="right">节点中文名:</td>
+                <td><input id="node_enname_input" name="nodeCnName" class="easyui-validatebox" data-options="required:true" /></td>
+            </tr>
+            <tr>
+                <td align="right">节点英文名:</td>
+                <td><input type="text" name="nodeEnName" class="wu-text" /></td>
+            </tr>
+            <tr>
+                <td align="right">节点代码:</td>
+                <td><input id="node_nodeCode_input" type="text" name="nodeCode" class="wu-text" /></td>
+            </tr>
+            <tr>
+                <td valign="top" align="right">备注:</td>
+                <td><textarea name="note" rows="6" class="wu-textarea" style="width:260px"></textarea></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!-- End of easyui-dialog -->
+<script type="text/javascript">						
+	// 检索题录
+	function systemDetailStandardSearch(){
+		var keyword = $("#system_detail_standard_search_keyword").val();
+		var queryParam = {
+				standardNo : keyword,
+				standardCnName : keyword,
+				relation : "or"
+		}
+		systemDetailHtml.reloadTable(queryParam)
+	}
+	
+	// 绑定题录到节点
+	function bind(){
+		// 得到当前要绑定的节点
+		var node = $("#system_detail_tree").tree('getSelected');
+		// 得到当前选择的值
+		var standardIds = commonUtil.getCheckedIds("system_detail_datagrid", "standardId");
+		if(commonUtil.isEmpty(node) || standardIds.length == 0){
+			$.messager.alert('信息提示','请选择要绑定的题录和体系节点。','info');
+			return;
+		}
+		// 发送ajax请求，请求后台
+		$.ajax({
+			url : '/BZCX/admin/architecture/node/bind',
+			type : "POST",
+			traditional : true,
+			data:{
+				nodeId : node.id,
+				standardIds : standardIds,
+				architectureId : window.architectureId
+			},
+			success:function(data){
+				if(data.code == 200){
+					$.messager.alert('信息提示','绑定成功。','info');
+					// 绑定成功 刷新表格
+					var data = {
+							nodeId : node.id		
+						}
+					systemDetailHtml.reloadTable(data);
+				}else{
+					$.messager.alert('信息提示','绑定失败，请联系管理员。','info');
+				}
+			}
+		});
+	}
+	// 解除绑定 
+	function unbind(){
+		// 得到当前要解绑的节点
+		var node = $("#system_detail_tree").tree('getSelected');
+		// 得到当前选择的值
+		var standardIds = commonUtil.getCheckedIds("system_detail_datagrid", "standardId");
+		if(commonUtil.isEmpty(node) || standardIds.length == 0){
+			$.messager.alert('信息提示','请选择要绑定的题录和体系节点。','info');
+			return;
+		}
+		// 发送请求 解除绑定
+		$.ajax({
+			url : '/BZCX/admin/architecture/node/unbind',
+			type : "POST",
+			traditional : true,
+			data:{
+				nodeId : node.id,
+				standardIds : standardIds
+			},
+			success:function(data){
+				if(data.code == 200){
+					$.messager.alert('信息提示','解绑成功。','info');
+					// 解绑成功之后 刷新表格
+					var data = {
+						nodeId : node.id		
+					}
+					systemDetailHtml.reloadTable(data);
+				}else{
+					$.messager.alert('信息提示','解绑失败，请联系管理员。','info');
+				}
+			}
+		});
+	}
+	//tree节点查找
+	function doSearch(){
+		var value=$('#system_detail_tree_search').next().find("input").val();
+	};
+
+	/**
+	 * Name 打开添加节点窗口
+	 */
+	function addNode(){
+		$('#system_detail_add_node_form').form('clear');
+		var data = {
+			architectureId : window.architectureId
+		};
+		var node = $("#system_detail_tree").tree('getSelected');
+		if(!node){
+			data.parentId = "0";
+		}else{
+			data.parentId = node.id;
+			$('#parentNode_show').attr('placeholder', node.text);
+			systemDetailHtml.initComBox(node.id);
+		}
+		
+		$('#system_detail_add_node_dialog').dialog({
+			closed: false,
+			modal:true,
+			title: "增加节点",
+			buttons: [{
+				text: '确定',
+				iconCls: 'icon-ok',
+				handler: function(){
+					$('#system_detail_add_node_form').form('submit', {
+						url:'/BZCX/admin/architecture/node/insert?',
+						onSubmit: function(param){
+							for(key in data){
+								param[key] = data[key];	
+							}
+					    },		
+						success:function(data){
+							data = JSON.parse(data);
+							if(data.code == 200){
+								$.messager.alert('信息提示','新增节点成功。','info');
+								$('#system_detail_add_node_dialog').dialog('close');
+								$('#system_detail_tree').tree('reload');
+							}else
+							{
+								$.messager.alert('信息提示','新增节点失败，请联系管理员','info');
+							}
+						}
+					});
+				}
+			}, {
+				text: '取消',
+				iconCls: 'icon-cancel',
+				handler: function () {
+					$('#system_detail_add_node_dialog').dialog('close');
+				}
+			}]
+		});
+	}
+
+	/**
+	 * Name 打开修改节点窗口
+	 */
+	function editNode(){
+		$('#system_detail_add_node_form').form('clear');
+		var node = $('#system_detail_tree').tree('getSelected');
+		var parentNode = $('#system_detail_tree').tree('getParent', node.target);
+		if(parentNode){
+			$('#parentNode_show').attr('placeholder', parentNode.text);
+		}
+		if(node){
+			$.ajax({
+				url : '/BZCX/admin/architecture/node/detail',
+				type : "POST",
+				data:{
+					nodeId : node.id
+				},
+				success:function(data){
+					$('#system_detail_add_node_form').form('load', data.data);
+				}
+			});
+			$('#system_detail_add_node_dialog').dialog({
+				closed: false,
+				modal:true,
+				title: "修改节点",
+				buttons: [{
+					text: '确定',
+					iconCls: 'icon-ok',
+					handler: function(){
+						$('#system_detail_add_node_form').form('submit', {
+							url:'/BZCX/admin/architecture/node/update?nodeId=' + node.id,
+							success:function(data){
+								data = JSON.parse(data);
+								if(data.code == 200){
+									$.messager.alert('信息提示','修改节点成功。','info');
+									$('#system_detail_add_node_dialog').dialog('close');
+									$('#system_detail_tree').tree('reload');
+								}
+								else
+								{
+									$.messager.alert('信息提示','修改节点失败，请联系管理员。','info');
+								}
+							}
+						});
+					}
+				
+				}, {
+					text: '取消',
+					iconCls: 'icon-cancel',
+					handler: function () {
+						$('#system_detail_add_node_dialog').dialog('close');
+					}
+				}]
+			});
+		}else{
+			$.messager.alert('信息提示','请选择一个节点。','info');
+		}
+	}
+
+	/**
+	 * Name 删除节点
+	 */
+	function deleNode(){
+		//获得选中节点
+		var node = $('#system_detail_tree').tree('getSelected');
+		if(node){
+			$.messager.confirm('信息提示','确定要删除吗？', function(result){
+				if(result){
+					$.ajax({
+						url:'/BZCX/admin/architecture/node/delete',
+						type:"POST",
+						data:{
+							nodeId : node.id
+						},
+						success:function(data){
+							if(data.code == 200){
+								$.messager.alert('信息提示','删除节点成功！','info');
+								$('#system_detail_tree').tree('reload');
+							}else
+							{
+								$.messager.alert('信息提示','删除节点失败！','info');
+							}
+						}
+					});
+				}
+			});
+		}else{
+			$.messager.alert('信息提示','请选择一个节点','info');
+		}
+	}
+	var systemDetailHtml = {
+			// 初始化表格
+			initTable : function (data){
+				$('#system_detail_datagrid').datagrid({
+					url:'/BZCX/admin/standard/list',
+					rownumbers:true,
+					singleSelect:false,
+					pageSize:20,
+					pagination:true,
+					multiSort:true,
+					fitColumns:true,
+					fit:true,
+					columns:[[
+						{ checkbox:true},
+						{ field:'standardNo',title:'标准号',width:180,sortable:true},
+						{ field:'standardCnName',title:'中文名称',width:100,sortable:true},
+						{ field:'standardStatus',title:'标准状态',width:100,sortable:true},
+						{ field:'publisher',title:'发布单位',width:100,sortable:true},
+						{ field:'replaceStandard',title:'代替标准',width:100,sortable:true},
+						{ field:'quoteStandard',title:'采用标准',width:100,sortable:true},
+						{ field:'standardLevel',title:'宜定级别',width:100,sortable:true},
+						{ field:'digest',title:'备注',width:100,sortable:true}
+					]]
+				});
+			},
+			// 初始化树
+			initTree : function(data){
+				console.log(window.architectureId);
+				$('#system_detail_tree').tree({
+					url:'/BZCX/admin/architecture/node/tree?architectureId=' + window.architectureId,
+					onClick:function(node){
+						// 获得当前节点ID
+						var param = {
+							nodeId : node.id	
+						}
+						$('#system_detail_datagrid').datagrid("reload", param)
+					}
+				});
+			},
+			// 重新加载表格
+			reloadTable : function(data){
+				$('#system_detail_datagrid').datagrid("reload", data);
+			},
+			// 当点击添加节点的时候，初始化下拉框
+			initComBox : function(data){
+				var jsonArray = [];
+				// 到总体系下查询当前所选节点的子级节点
+				$.ajax({
+					url : '/BZCX/admin/architecture/node/child',
+					type : "POST",
+					traditional : true,
+					async:false,
+					data:{
+						nodeId : data,
+					},
+					success:function(data){
+						for(var i = 0; i < data.length; i++){
+							commonUtil.map.put(data[i].nodeCnName, data[i].nodeCode);
+							if(i == 0){
+								jsonArray.push(new EasyUISelect(data[i].nodeCnName, data[i].nodeCnName, true));
+						    	$('#node_nodeCode_input').val(data[i].nodeCode);
+							}else{
+								jsonArray.push(new EasyUISelect(data[i].nodeCnName, data[i].nodeCnName));
+							}
+						}
+					}
+				});
+				$('#node_enname_input').combobox({
+				    data:jsonArray,
+				    onSelect : function(data){
+				    	$('#node_nodeCode_input').val(commonUtil.map.get(data.id));
+				    },
+				    valueField:'id',
+				    textField:'text'
+				});		
+			}
+	}
+	$(function(){
+		// 得到体系ID
+		window.architectureId = commonUtil.getRequestParam("architectureId");
+		// 初始化表格
+		systemDetailHtml.initTable();
+		// 初始化树
+		systemDetailHtml.initTree();
+		// 验证权限
+		$.ajax({
+			url:'/BZCX/admin/architecture/check',
+			type:"POST",
+			data:{
+				architectureId : window.architectureId
+			},
+			traditional:true,
+			async:false,
+			success:function(data){
+				if(data.data == false){
+					$('.link_oper').hide();
+				}
+			}
+		});
+	});
+</script>
+</body>
+</html>

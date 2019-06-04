@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.user.UQueryHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.user.QueryHistoryVo" >
+    <result column="SEARCH_ID" property="searchId" jdbcType="VARCHAR" />
+    <result column="SEARCH_USER" property="searchUser" jdbcType="VARCHAR" />
+     <result column="SEARCH_URL" property="searchUrl" jdbcType="VARCHAR" />
+    <result column="MOUDLE" property="moudle" jdbcType="VARCHAR" />
+    <result column="KEYWORD" property="keyword" jdbcType="VARCHAR" />
+    <result column="QUERY_DATE" property="queryDate" jdbcType="TIMESTAMP" />
+    <result column="CLIENT_TYPE" property="clientType" jdbcType="INTEGER" />
+    <result column="IP" property="ip" jdbcType="VARCHAR" />
+    <result column="SEARCH_STATE" property="state" jdbcType="INTEGER"/>
+    <result column="SEARCH_CLASS" property="searchClass" jdbcType="CHAR"/>
+  </resultMap>
+  
+  <select id="listHotByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultType="string">
+      select keyword, COUNT(*) from U_QUERY_HISTORY 
+      <where>
+          <if test="moudle != null">
+ 			 MOUDLE = #{moudle} 
+          </if>
+          <if test="useropenid != null">
+ 			 and SEARCH_USER = #{useropenid} 
+          </if>
+           <if test="searchClass != null">
+ 			 and SEARCH_CLASS  = #{searchClass} 
+          </if>
+          
+      </where>
+      GROUP BY KEYWORD 
+      ORDER BY COUNT(*) desc
+  </select>
+  
+    <select id="listHistoryByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultType="string">
+      select a.keyword,b.time from U_QUERY_HISTORY as a right join 
+		(select keyword, max(query_date) 
+		as time from U_QUERY_HISTORY group by keyword) as b
+ 		on a.keyword = b.keyword and a.query_date = b.time  
+      <where>
+          <if test="moudle != null">
+ 			 a.MOUDLE = #{moudle} 
+          </if>
+          <if test="useropenid != null">
+ 			 and a.SEARCH_USER = #{useropenid} 
+          </if>
+          <if test="state != null">
+              and a.SEARCH_STATE = #{state}
+          </if>
+           <if test="searchClass != null">
+ 			 and SEARCH_CLASS  = #{searchClass} 
+          </if>
+      </where>
+     	group by b.keyword  ORDER BY b.time DESC
+  </select>
+  
+ <!--  <select id="listRelationWord" parameterType="string" resultType="string">
+      select DISTINCT(standard_CN_Name) as keyword from S_STANDARD 
+      where standard_CN_Name like '%'||#{0}||'%' and standard_CN_Name != #{0}
+	  UNION select DISTINCT(keyword) as keyword from U_QUERY_HISTORY 
+	  where keyword like '%'||#{0}||'%' and keyword != #{0}
+  </select> -->
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.user.U_Query_HistoryDo" >
+    insert into U_QUERY_HISTORY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="searchId != null" >
+        SEARCH_ID,
+      </if>
+      <if test="searchUser != null" >
+        SEARCH_USER,
+      </if>
+      <if test="searchUrl != null" >
+        SEARCH_URL,
+      </if>
+      <if test="moudle != null" >
+        MOUDLE,
+      </if>
+      <if test="keyword != null" >
+        KEYWORD,
+      </if>
+      <if test="queryDate != null" >
+        QUERY_DATE,
+      </if>
+      <if test="clientType != null" >
+        CLIENT_TYPE,
+      </if>
+      <if test="ip != null" >
+        IP,
+      </if>
+       <if test="state != null" >
+        SEARCH_STATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="searchId != null" >
+        #{searchId,jdbcType=VARCHAR},
+      </if>
+      <if test="searchUser != null" >
+        #{searchUser,jdbcType=VARCHAR},
+      </if>
+      <if test="searchUrl != null" >
+        #{searchUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="moudle != null" >
+        #{moudle,jdbcType=OTHER},
+      </if>
+      <if test="keyword != null" >
+        #{keyword,jdbcType=OTHER},
+      </if>
+      <if test="queryDate != null" >
+        #{queryDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="clientType != null" >
+        #{clientType,jdbcType=DECIMAL},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.user.U_Query_HistoryDo" >
+    update U_QUERY_HISTORY
+    <set >
+      <if test="searchUrl != null" >
+        SEARCH_URL = #{searchUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="moudle != null" >
+        MOUDLE = #{moudle,jdbcType=OTHER},
+      </if>
+      <if test="keyword != null" >
+        KEYWORD = #{keyword,jdbcType=OTHER},
+      </if>
+      <if test="queryDate != null" >
+        QUERY_DATE = #{queryDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="clientType != null" >
+        CLIENT_TYPE = #{clientType,jdbcType=DECIMAL},
+      </if>
+      <if test="ip != null" >
+        IP = #{ip,jdbcType=VARCHAR},
+      </if>
+       <if test="state != null" >
+        SEARCH_STATE = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    <where>
+        <if test="searchUser != null">
+           and SEARCH_USER = #{searchUser,jdbcType=VARCHAR}
+        </if>
+    </where>
+  </update>
+</mapper>

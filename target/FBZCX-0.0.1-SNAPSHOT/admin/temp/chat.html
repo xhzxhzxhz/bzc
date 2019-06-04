@@ -1,0 +1,454 @@
+<div class="easyui-layout" data-options="fit:true">
+    <div class="content">
+        <div class="chatBox">
+            <div class="chatLeft">
+                <div class="chat01">
+                    <div class="chat01_title">
+                        <ul class="talkTo">
+                            <li><a href="javascript:;"></a><input id="windowId" type="hidden" ></li></ul>
+                        <a class="close_btn" href="javascript:;"></a>
+                    </div>
+                    <div class="chat01_content">
+                        <div class="message_box mes1" style="display: block;">
+                        </div>
+                        <div class="message_box mes2">
+                        </div>
+                        <div class="message_box mes3">
+                        </div>
+                        <div class="message_box mes4">
+                        </div>
+                        <div class="message_box mes5">
+                        </div>
+                        <div class="message_box mes6">
+                        </div>
+                        <div class="message_box mes7">
+                        </div>
+                        <div class="message_box mes8">
+                        </div>
+                        <div class="message_box mes9">
+                        </div>
+                        <div class="message_box mes10">
+                        </div>
+                    </div>
+                </div>
+                <div class="chat02">
+                    <div class="chat02_title">
+                        <a class="chat02_title_btn ctb01" href="javascript:;"></a>
+                       <!--  <a class="chat02_title_btn ctb02"
+                                                                                     href="javascript:;" title="选择文件">
+                        <embed width="15" height="16" flashvars="swfid=2556975203&amp;maxSumSize=50&amp;maxFileSize=50&amp;maxFileNum=1&amp;multiSelect=0&amp;uploadAPI=http%3A%2F%2Fupload.api.weibo.com%2F2%2Fmss%2Fupload.json%3Fsource%3D209678993%26tuid%3D1887188824&amp;initFun=STK.webim.ui.chatWindow.msgToolBar.upload.initFun&amp;sucFun=STK.webim.ui.chatWindow.msgToolBar.upload.sucFun&amp;errFun=STK.webim.ui.chatWindow.msgToolBar.upload.errFun&amp;beginFun=STK.webim.ui.chatWindow.msgToolBar.upload.beginFun&amp;showTipFun=STK.webim.ui.chatWindow.msgToolBar.upload.showTipFun&amp;hiddenTipFun=STK.webim.ui.chatWindow.msgToolBar.upload.hiddenTipFun&amp;areaInfo=0-16|12-16&amp;fExt=*.jpg;*.gif;*.jpeg;*.png|*&amp;fExtDec=选择图片|选择文件"
+                               data="upload.swf" wmode="transparent" bgcolor="" allowscriptaccess="always" allowfullscreen="true"
+                               scale="noScale" menu="false" type="application/x-shockwave-flash" src="http://service.weibo.com/staticjs/tools/upload.swf?v=36c9997f1313d1c4"
+                               id="swf_3140">
+                    </a><a class="chat02_title_btn ctb03" href="javascript:;" title="选择附件">
+                        <embed width="15" height="16" flashvars="swfid=2556975203&amp;maxSumSize=50&amp;maxFileSize=50&amp;maxFileNum=1&amp;multiSelect=0&amp;uploadAPI=http%3A%2F%2Fupload.api.weibo.com%2F2%2Fmss%2Fupload.json%3Fsource%3D209678993%26tuid%3D1887188824&amp;initFun=STK.webim.ui.chatWindow.msgToolBar.upload.initFun&amp;sucFun=STK.webim.ui.chatWindow.msgToolBar.upload.sucFun&amp;errFun=STK.webim.ui.chatWindow.msgToolBar.upload.errFun&amp;beginFun=STK.webim.ui.chatWindow.msgToolBar.upload.beginFun&amp;showTipFun=STK.webim.ui.chatWindow.msgToolBar.upload.showTipFun&amp;hiddenTipFun=STK.webim.ui.chatWindow.msgToolBar.upload.hiddenTipFun&amp;areaInfo=0-16|12-16&amp;fExt=*.jpg;*.gif;*.jpeg;*.png|*&amp;fExtDec=选择图片|选择文件"
+                               data="upload.swf" wmode="transparent" bgcolor="" allowscriptaccess="always" allowfullscreen="true"
+                               scale="noScale" menu="false" type="application/x-shockwave-flash" src="http://service.weibo.com/staticjs/tools/upload.swf?v=36c9997f1313d1c4"
+                               id="swf_3140">
+                    </a>
+                        <label class="chat02_title_t">
+                            <a href="chat.htm" target="_blank">聊天记录</a></label> -->
+                        <div class="wl_faces_box">
+                            <div class="wl_faces_content">
+                                <div class="title">
+                                    <ul>
+                                        <li class="title_name">常用表情</li><li class="wl_faces_close"><span>&nbsp;</span></li></ul>
+                                </div>
+                                <div class="wl_faces_main">
+                                    <ul>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_01.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_02.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_03.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_04.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_05.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_06.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_07.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_08.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_09.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_10.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_11.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_12.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_13.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_14.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_15.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_16.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_17.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_18.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_19.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_20.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_21.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_22.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_23.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_24.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_25.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_26.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_27.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_28.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_29.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_30.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_31.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_32.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_33.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_34.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_35.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_36.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_37.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_38.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_39.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_40.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_41.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_42.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_43.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_44.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_45.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_46.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_47.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_48.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_49.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_50.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_51.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_52.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_53.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_54.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_55.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_56.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_57.gif" /></a></li>
+                                        <li><a href="javascript:;">
+                                            <img src="images/emo_58.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_59.gif" /></a></li><li><a href="javascript:;">
+                                        <img src="images/emo_60.gif" /></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="wlf_icon">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat02_content">
+                        <textarea id="textarea"></textarea>
+                    </div>
+                    <div class="chat02_bar">
+                        <ul>
+                            <li style="left: 20px; top: 10px; padding-left: 30px;"></li>
+                            <li style="right: 5px; top: 5px;"><a href="javascript:;">
+                                <img src="images/send_btn.jpg"></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="chatRight">
+                <div class="chat03">
+                    <div class="chat03_title">
+                        <label class="chat03_title_t">
+                            成员列表</label>
+                    </div>
+                    <div class="chat03_content">
+                        <ul>
+                            <li>
+                                <label class="online">
+                                </label>
+                                <a href="javascript:;">
+                                    <img src="images/head/2013.jpg"></a><a href="javascript:;" class="chat03_name">刘秀</a>
+                            </li>
+                            <li>
+                                <label class="offline">
+                                </label>
+                                <a href="javascript:;">
+                                    <img src="images/head/2014.jpg"></a><a href="javascript:;" class="chat03_name">陈诚</a>
+                            </li>
+                            <li class="choosed">
+                                <label class="offline">
+                                </label>
+                                <a href="javascript:;">
+                                    <img src="images/head/2015.jpg"></a><a href="javascript:;" class="chat03_name">王旭</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div style="clear: both;">
+            </div>
+        </div>
+    </div>
+    <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+        <p></p>
+        <p></p>
+    </div>
+</div>
+
+<script>
+
+//聊天列表排序
+var a = 1,
+//发件人的图片
+b = "img/head/2024.jpg",
+//接受人的图片
+c = "img/head/2015.jpg",
+//接受人名字
+name = "";
+//接受人的id
+receiverid = ""
+	//传入管理员Id，获取聊天列表
+	var data = {"adminId":"user-5590cf2e466b427787153f7dcb4ec60c"};
+	//轮询方法获取消息
+	function query(){
+		$.ajax({
+		    url : '/BZCX/admin/chat/selectByReceiver',
+		    type : 'POST',
+			data : {"userId":"user-5590cf2e466b427787153f7dcb4ec60c"},
+			cache : false,
+			success : function(data) {
+				if(data != []){
+					news(data);
+				}
+			},
+			error : function(data) {
+				alert("操作失败，请稍后再试。")
+			}
+		});
+	}
+	//把获取的消息转成html并追加
+	function news(newsData){
+		for(var i = 0; i < newsData.length;i++){
+			var news = newsData[i];
+			var chatDate = news.chatDate;
+			var newDate = new Date();
+			newDate.setTime(chatDate);
+			f = "";
+			f += newDate.getFullYear() + "-",
+		    f += newDate.getMonth() + 1 + "-",
+		    f += newDate.getDate() + "  ",
+		    f += newDate.getHours() + ":",
+		    f += newDate.getMinutes() + ":",
+		    f += newDate.getSeconds();
+			name = news.receiverName;
+			content = news.content;
+			var html = "<div class='message clearfix'><div class='user-logo'><img src=''/>" + "</div>" + "<div class='wrap-text'>" + "<h5 class='clearfix'>"+name+"</h5>" + "<div>" + content + "</div>" + "</div>" + "<div class='wrap-ri'>" + "<div clsss='clearfix'><span>" + f + "</span></div>" + "</div>" + "<div style='clear:both;'></div>" + "</div>";
+			//放到对应的发送人会话框
+			var sender = news.sender
+			$("#"+sender).append(html);
+			//如果管理员不在当前对话框 或 当前对话框为空的时候  名字后面增加（有新消息）
+			var windowId = $("#windowId").val();
+			debugger
+			if(windowId != sender || windowId == "" || windowId == null){
+				$("#userName"+sender).attr("class","online");
+			}
+			//未读改成已读
+			$.ajax({
+			    url : '/BZCX/admin/chat/update',
+			    type : 'POST',
+				data : {"chatId":news.chatId},
+				cache : false,
+				success : function(data) {
+					
+				},
+				error : function(data) {
+				}
+			});	
+		}
+	}
+	
+	$(function(){
+		setInterval("query()",1000);
+		//获取聊天列表
+		$.ajax({
+			url : '/BZCX/admin/user/chatList',
+			type : 'POST',
+			data : data,
+			dataType : 'JSON',
+			cache : false,
+			success : function(data) {
+				var userlistData = data.data; 
+				var userListHtml = "<ul>"
+				var chat01_content_html =""; 
+					for(var i=0;i<userlistData.length;i++){
+						var user = userlistData[i];
+						var realname = user.realname;
+						var userId = user.id;
+						var img = user.icon;
+						userListHtml += "<li><label id='userName"+userId+"' class='offline'></label><a href='javascript:;'><img src='images/head/2022.jpg'><a href='javascript:;' hidden='hidden' class='chat03_id'>"+userId+"</a></a><a class='chat03_name'><span>"+realname+"</span></a></li>";
+						chat01_content_html +="<div id="+userId+" class='message_box mes"+a+"'></div>";
+						a++;
+					}
+					userListHtml +="</ul>";
+					$(".chat03_content").html(userListHtml);
+					$(".chat01_content").html(chat01_content_html);
+			},
+			error : function(data) {
+				alert("操作失败，请稍后再试。")
+			}
+		});
+	})
+	
+    //title提示消息
+    function message() {
+        var a = $.blinkTitle.show();
+        setTimeout(function() {
+            $.blinkTitle.clear(a)
+        },8e3)
+    }
+    $(document).ready(function() {
+        function e() {
+        	debugger
+            function h() { - 1 != content.indexOf("*#emo_") && (content = content.replace("*#", "<img src='chat/img/").replace("#*", ".gif'/>"), h())
+            }
+            var e = new Date,
+                    f = "";
+            f += e.getFullYear() + "-",
+                    f += e.getMonth() + 1 + "-",
+                    f += e.getDate() + "  ",
+                    f += e.getHours() + ":",
+                    f += e.getMinutes() + ":",
+                    f += e.getSeconds();
+
+            //获取发送内容
+            var content = $("#textarea").val();
+            h();
+            var i = "<div class='message clearfix'><div class='user-logo'><img src='" + name + "'/>" + "</div>" + "<div class='wrap-text'>" + "<h5 class='clearfix'>我</h5>" + "<div>" + content + "</div>" + "</div>" + "<div class='wrap-ri'>" + "<div clsss='clearfix'><span>" + f + "</span></div>" + "</div>" + "<div style='clear:both;'></div>" + "</div>";
+            if(null != content && "" != content){
+            	$(".mes" + a).append(i);
+            	$(".chat01_content").scrollTop($(".mes" + a).height());
+            	//$("#textarea").val(""), message())
+            	//添加一条发送
+            	var chat = {};
+            	chat.sender = "user-5590cf2e466b427787153f7dcb4ec60c";
+            	chat.receiver = receiverid;
+            	chat.content = content;
+            	chat.status = 0;
+            	$.ajax({
+        			url : '/BZCX/admin/chat/insert',
+        			type : 'POST',
+        			data : chat,
+        			dataType : 'JSON',
+        			cache : false,
+        			success : function(data) {
+        				$("#textarea").val("");
+        			},
+        			error : function(data) {
+        				alert("操作失败，请稍后再试。")
+        			}
+        		});
+            	
+            }else{
+            	alert("请输入聊天内容!")
+            }
+        }
+       
+
+        $(".close_btn").click(function() {
+            $(".chatBox").hide()
+        }),
+        $(".chat03_content li").mouseover(function() {
+            $(this).addClass("hover").siblings().removeClass("hover")
+        }).mouseout(function() {
+            $(this).removeClass("hover").siblings().removeClass("hover")
+        }),
+    //切换聊天人
+        $(".chat03_content").on('click','li',function() {
+        	debugger
+        	
+        	var userId = $(this).children(".chat03_id").text();
+            var b = $(this).index() + 1;
+            a = b;
+            c = "img/head/20" + (12 + a) + ".jpg";
+            name = $(this).find(".chat03_name").text();
+            receiverid = $(this).find(".chat03_id").text();
+            $(".chat01_content").scrollTop(0);
+            $(this).addClass("choosed").siblings().removeClass("choosed");
+            $(".talkTo a").text($(this).children(".chat03_name").children("span").text());
+            $(".talkTo input").val(userId);
+            $(".mes" + b).show().siblings().hide();
+            
+            $("#userName"+userId).attr("class","offline");
+        }),
+    //表情弹出框的显示与隐藏
+        $(".ctb01").mouseover(function() {
+            $(".wl_faces_box").show()
+        }).mouseout(function() {
+            $(".wl_faces_box").hide()
+        }),
+        $(".wl_faces_box").mouseover(function() {
+            $(".wl_faces_box").show()
+        }).mouseout(function() {
+            $(".wl_faces_box").hide()
+        }),
+        $(".wl_faces_close").click(function() {
+            $(".wl_faces_box").hide()
+        }),
+        $(".wl_faces_main img").click(function() {
+        	debugger
+            var a = $(this).attr("src");
+            $("#textarea").val($("#textarea").val() + "*#" + a.substr(a.indexOf("images/") + 7, 6) + "#*"),
+            $("#textarea").focusEnd(),
+            $(".wl_faces_box").hide()
+        }),
+        $(".chat02_bar img").click(function() {
+        	 if($(".talkTo a").text() == ""){
+        		 alert("请选择聊天人！");
+        	 }else{
+        		 e() 
+        	 }
+        }),
+        document.onkeydown = function(a) {
+            var b = document.all ? window.event: a;
+            return 13 == b.keyCode ? (e(), !1) : void 0
+        },
+        $.fn.setCursorPosition = function(a) {
+            return 0 == this.lengh ? this: $(this).setSelection(a, a)
+        },
+        $.fn.setSelection = function(a, b) {
+            if (0 == this.lengh) return this;
+            if (input = this[0], input.createTextRange) {
+                var c = input.createTextRange();
+                c.collapse(!0),
+                c.moveEnd("character", b),
+                c.moveStart("character", a),
+                c.select()
+            } else input.setSelectionRange && (input.focus(), input.setSelectionRange(a, b));
+            return this
+        },
+        $.fn.focusEnd = function() {
+            this.setCursorPosition(this.val().length)
+        }
+    }),
+    function(a) {
+        a.extend({
+            blinkTitle: {
+                show: function() {
+                    var a = 0,
+                            b = document.title;
+                    if ( - 1 == document.title.indexOf("\u3010")) var c = setInterval(function() {
+                                a++,
+                                3 == a && (a = 1),
+                                1 == a && (document.title = "\u3010\u3000\u3000\u3000\u3011" + b),
+                                2 == a && (document.title = "\u3010\u65b0\u6d88\u606f\u3011" + b)
+                            },
+                            500);
+                    return [c, b]
+                },
+                clear: function(a) {
+                    a && (clearInterval(a[0]), document.title = a[1])
+                }
+            }
+        })
+    } (jQuery);
+</script>

@@ -1,0 +1,896 @@
+<style>
+	.item {
+	padding: 3px 5px;
+	cursor: pointer;
+	overflow:hidden;
+	height:20px;
+	}
+	#append{
+		position:absolute;
+		left:0;
+		top:24px;
+		z-index:999;
+		background:#fff;
+		line-height:16px;
+		width:206px;
+		border:1px solid #ccc;
+		display:none;
+        height:260px;
+        overflow:hidden;
+	}
+	#append2{
+		position:absolute;
+		left:0;
+		top:24px;
+		z-index:999;
+		background:#fff;
+		line-height:16px;
+		width:206px;
+		border:1px solid #ccc;
+		display:none;
+        height:260px;
+        overflow:hidden;
+	}
+	#append li{
+		width:206px;
+		text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height:20px;
+	}
+	#append2 li{
+		width:206px;
+		text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height:20px;
+	}
+	#append li:hover{
+		background:#ccc;
+	}
+	#append2 li:hover{
+		background:#ccc;
+	}
+</style>
+<div class="easyui-layout" data-options="fit:true">
+	<div data-options="region:'west',border:true,split:true," title="分类管理"
+		style="width: 150px; padding: 5px;">
+		<ul id="bibliography_tree" class="easyui-tree"></ul>
+	</div>
+	<div data-options="region:'center',border:false">           
+		<!-- Begin of toolbar -->
+		<div id="bibliography_toolbar">
+			<div class="wu-toolbar-button">
+				<a href="#" class="easyui-linkbutton" iconCls="icon-add"
+					onclick="bibliographyAdd()" plain="true">添加</a> <a href="#"
+					class="easyui-linkbutton" iconCls="icon-edit"
+					onclick="bibliographyEdit()" plain="true">修改</a> <a href="#"
+					class="easyui-linkbutton" iconCls="icon-remove"
+					onclick="bibliographyDele()" plain="true">删除</a> <a href="#"
+					class="easyui-linkbutton" iconCls="icon-disk-download"
+					onclick="bibliographyInput()" plain="true">导入</a> <a href="#"
+					class="easyui-linkbutton" iconCls="icon-disk-upload"
+					onclick="bibliographyExport()" plain="true">导出</a> <input
+					type="hidden" id="standard_import_button" />
+			</div>
+			<div class="wu-toolbar-search">
+				<label>关键词：</label><input id="standard_search_keyword_input"
+					class="wu-text" style="width: 200px" placeholder="标准号或标准名称">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					iconCls="icon-search" onclick="standard_search()">开始检索</a>
+			</div>
+		</div>
+		<!-- End of toolbar -->
+		<table id="bibliography_datagrid" toolbar="#bibliography_toolbar"></table>
+	</div>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="bibliography_add_dialog" class="easyui-dialog"
+	data-options="closed:true,iconCls:'icon-save'"
+	style="width: 780px; height: 600px; padding: 10px; overflow: auto">
+	<form id="bibliography_add_form" method="post">
+		<table>
+			<tr>
+				<td width="80" align="right">标准号:</td>
+				<td><input id="standardNo_input" type="text" name="standardNo"
+					class="wu-text easyui-validatebox" data-options="required:true" /></td>
+				<td width="80" align="right">标准中文名:</td>
+				<td><input type="text" name="standardCnName"
+					class="wu-text easyui-validatebox" data-options="required:true" /></td>
+			</tr>
+			<tr>
+				<td align="right">标准英文名:</td>
+				<td><input type="text" name="standardEnName" class="wu-text" /></td>
+				<td align="right">标准的原文名称:</td>
+				<td><input type="text" name="standardFileName" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">发布单位:</td>
+				<td style="position:relative;">
+					<input id="kw" name="pubOrg" class="wu-text">
+					<ul id="append" style="">
+						<!-- <li>我请客OK我去偶尔开全屏我看</li> -->
+					</ul>
+				</td>
+				<td align="right">采用关系:</td>
+				<td><input type="text" name="adoptRelation" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">代替标准:</td>
+				<td><input type="text" name="replaceStandard" class="wu-text" /></td>
+				<td align="right">被代替标准:</td>
+				<td><input type="text" name="replacedStandard" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">引用标准:</td>
+				<td><input type="text" name="quoteStandard" class="wu-text" /></td>
+				<td align="right">修改件:</td>
+				<td><input type="text" name="modifyObject" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">补充件:</td>
+				<td><input type="text" name="supplementaryObject"
+					class="wu-text" /></td>
+				<td align="right">发布日期:</td>
+				<td><input editable="false" type="text" name="publishDate"
+					class="easyui-datebox" style="width: 208px" /></td>
+			</tr>
+			<tr>
+				<td align="right">实施日期:</td>
+				<td><input editable="false" type="text"
+					name="implementationDate" class="easyui-datebox"
+					style="width: 208px" /></td>
+				<td align="right">确认日期:</td>
+				<td><input editable="false" type="text" name="confirmDate"
+					class="easyui-datebox" style="width: 208px" /></td>
+			</tr>
+			<tr>
+				<td align="right">截止日期:</td>
+				<td><input editable="false" type="text" name="endDate"
+					class="easyui-datebox" style="width: 208px" /></td>
+				<td align="right">废止日期:</td>
+				<td><input editable="false" type="text" name="invalidDate"
+					class="easyui-datebox" style="width: 208px" /></td>
+			</tr>
+			<tr>
+				<td align="right">归口单位:</td>
+				<td><input type="text" name="belongToUnit" class="wu-text" /></td>
+				<td align="right">起草单位:</td>
+				<td style="position:relative;">
+					<input id="kw2"  name="draftUnit" class="wu-text">
+					<ul id="append2" style="">
+						<!-- <li>我请客OK我去偶尔开全屏我看</li> -->
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">标准类型:</td>
+				<td>
+				<select id="standardType_input"  type="text" name="standardType" >
+					<option value="G">国标</option>
+					<option value="H">行标</option>
+					<option value="Q">企标</option>
+					<option value="S">三化文件</option>
+					<option value="T">团标</option>
+					</select>
+				</td>
+				<td align="right">标准水平:</td>
+				<td><input type="text" name="standardLevel2" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">中文主题词:</td>
+				<td><input type="text" name="themeCnName" class="wu-text" /></td>
+				<td align="right">英文主题词:</td>
+				<td><input type="text" name="themeEnName" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">中文自由词:</td>
+				<td><input type="text" name="freeCnName" class="wu-text" /></td>
+				<td align="right"><label>正文语种：</label></td>
+				<td><select id="language_select"
+					name="language" class="my-select" panelHeight="auto"
+					style="width: 208px">
+						<option value="1">中文</option>
+						<option value="2">英文</option>
+						<option value="3">其他</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td align="right">国别:</td>
+				<td><input type="text" name="country" class="wu-text" /></td>
+				<td align="right">国际标准分类法:</td>
+				<td><input type="text" name="internationClass" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">中国标准分类法:</td>
+				<td><input type="text" name="chineseClass" class="wu-text" /></td>
+				<td align="right">标准级别:</td>
+				<td><input type="text" name="standardLevel" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">立项日期:</td>
+				<td><input editable="false" type="text" name="projectStartDate"
+					class="easyui-datebox" style="width: 208px" /></td>
+				<td align="right">技术领域:</td>
+				<td><input type="text" name="technicalField" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">起草人员或者专家:</td>
+				<td><input type="text" name="draftStaff" class="wu-text" /></td>
+				<td align="right">联系方式:</td>
+				<td><input type="text" name="contactWay" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">管辖权:</td>
+				<td><input type="text" name="jurisdiction" class="wu-text" /></td>
+				<td align="right">译文:</td>
+				<td><input type="text" name="translation" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">UDC号:</td>
+				<td><input type="text" name="udc" class="wu-text" /></td>
+				<td align="right">页数:</td>
+				<td><input type="text" name="pageNumber" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">出版社:</td>
+				<td><input type="text" name="publisher" class="wu-text" /></td>
+				<td align="right">出版时间:</td>
+				<td><input type="text" name="pubDate" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">书号:</td>
+				<td><input type="text" name="isbn" class="wu-text" /></td>
+				<td align="right">摘要:</td>
+				<td><input type="text" name="digest" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right">标准状态:</td>
+				<td><select id="standard_status_select"
+					name="standardStatus" class="my-select" panelHeight="auto"
+					style="width: 208px">
+						<option value="1">现行</option>
+						<option value="2">暂行</option>
+						<option value="3">废止</option>
+				</select></td>
+				<td align="right">体系代码:</td>
+				<td><input id="nodeCode_input" type="text" name="nodeCode" class="wu-text easyui-validatebox" data-options="required:true" /></td>
+			</tr>
+		</table>
+	</form>
+	<p style="text-align: center; color: red">*提示：“体系代码”输入错误或为空，本条标准无法自动绑定到相应体系分类下。</p>
+</div>
+<!-- End of easyui-dialog -->
+<script type="text/javascript">
+	/**
+	 *点击界面的开始检索按钮
+	 */
+	function standard_search(){
+		var keyword = $('#standard_search_keyword_input').val();
+		var queryParam = {
+				standardNo : keyword,
+				standardCnName : keyword,
+				relation : "or"
+		}
+		standardHtml.reloadTable(queryParam)
+	}
+	
+	/**
+	 * 删除题录
+	 */
+	function bibliographyDele(){
+		$.messager.confirm('信息提示','确定要删除所选题录吗？', function(result){
+			if(result){
+				var items = $('#bibliography_datagrid').datagrid('getSelections');
+				var ids = [];
+				$(items).each(function(){
+					ids.push(this.standardId);
+				});
+				$.ajax({
+					url:'/BZCX/admin/standard/delete',
+					type:'POST',
+					traditional:true,
+					data:{
+						standardIds : ids
+					},
+					success:function(data){
+						$('#bibliography_datagrid').datagrid('reload');
+						if(data.code == 200){
+							$.messager.alert('信息提示','删除成功！','info');
+						}else{
+							$.messager.alert('信息提示', data.msg,'info');
+						}
+					}
+				});
+			}
+		});
+	}
+	/**
+	* Name 打开添加窗口
+	*/
+	function bibliographyAdd(){
+		$('#bibliography_add_form').form('reset');
+		//setCombox();
+		//setUnit();
+		$('#bibliography_add_dialog').dialog({
+			closed: false,
+			modal:true,
+            title: "添加题录",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: function(){
+            		$('#bibliography_add_form').form('submit', {
+            		url:'/BZCX/admin/standard/insert',
+            		success:function(data){
+            				data = JSON.parse(data);
+            				if(data.code == 200){
+            					$.messager.alert('信息提示','新增成功！','info');
+            					$('#bibliography_add_dialog').dialog('close');
+            					$('#bibliography_datagrid').datagrid('reload');
+            				}else if(data.code == 10000){
+            					var standarNo = $("#standardNo_input").val();
+            					$.messager.alert('信息提示','新增失败。标准号：' + standarNo + ' 已存在。','info');
+            				}else if(data.code == 9000){
+            					$.messager.alert('信息提示',data.msg,'info');
+            					$('#bibliography_add_dialog').dialog('close');
+            				}else{
+            					$.messager.alert('信息提示','新增题录失败。请联系管理员。','info');
+            				}
+            			}
+            		});
+                }
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#bibliography_add_dialog').dialog('close');
+                }
+            }]
+        });
+	}
+	// 题录导出
+	function bibliographyExport(){
+		// 得到当前选定的体系的Id
+		var item = 
+		window.location = "/BZCX/admin/standard/export";
+	}
+	// 题录导入
+	function bibliographyInput(){
+		// alert("导入");
+        $('#standard_import_button').after('<input type="file" id="standard_import_input" name="standard_file" style="display:none">');
+        document.getElementById("standard_import_input").click();
+        document.getElementById("standard_import_input").onchange = standardHtml.fileUpload;
+		//fileList = $('#folder-upload-input').get(0).files;
+	}
+
+	/**
+	* Name 打开修改窗口
+	*/
+	function bibliographyEdit(){
+		$('#bibliography_add_form').form('reset');
+		var item = $('#bibliography_datagrid').datagrid('getSelected');
+		$.ajax({
+			url:'/BZCX/admin/standard/detail',
+			type : 'POST',
+			data:{
+				standardId : item.standardId
+			},
+			success:function(data){
+					// 绑定值
+					if(data.code == 200){
+						 $('#bibliography_add_form').form('load', data.data);
+						 var languageTxt = data.data.language;
+						 var standardStatusTxt = data.data.standardStatus;
+						 var language = $('[name="language"]');
+						 var standardStatus = $('[name="standardStatus"]');
+						 language.val(commonUtil.map.get(languageTxt));
+						 standardStatus.val(commonUtil.map.get("standardStatus_" + standardStatusTxt));
+					}else{
+						$.messager.alert('信息提示','请求详情失败。','info');
+					}
+			}
+		});
+		$('#bibliography_add_dialog').dialog({
+			closed: false,
+			modal:true,
+            title: "修改信息",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: function(){
+                	var standardId = $('#bibliography_datagrid').datagrid('getSelected').standardId;
+                	$('#bibliography_add_form').form('submit', {
+            			url:'/BZCX/admin/standard/update?standardId=' + standardId ,
+            			success:function(data){
+							data = JSON.parse(data);
+            				if(data.code == 200){
+            					$.messager.alert('信息提示','修改成功。','info');
+            					$('#bibliography_add_dialog').dialog('close');
+            					$('#bibliography_datagrid').datagrid('reload');
+            				}else if(data.code == 10000){
+            					var standarNo = $("#standardNo_input").val();
+            					$.messager.alert('信息提示','修改失败。标准号：' + standarNo + '已存在。','info');
+            				}else if(data.code == 900){
+            					$.messager.alert('信息提示',data.msg,'info');
+            					$('#bibliography_add_dialog').dialog('close');
+            				}else {
+            					$.messager.alert('信息提示','修改题录失败。请联系管理员。','info');
+            				}
+            			}
+            		});
+                }
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#bibliography_add_dialog').dialog('close');
+                }
+            }]
+        });
+	}
+	var standardHtml = {
+			// 初始化表格
+			initTable : function(data){
+				$('#bibliography_datagrid').datagrid({
+					url:'/BZCX/admin/standard/list',
+					rownumbers:true,
+					singleSelect:false,
+					pageSize:20,
+					pagination:true,
+					multiSort:true,
+					fitColumns:false,
+					fit:true,
+					columns:[[
+						{ checkbox:true},
+						{ field:'standardNo',title:'标准号',width:100,sortable:true},
+						{ field:'standardCnName',title:'标准中文名',width:100,sortable:true},
+						{ field:'standardEnName',title:'标准英文名',width:100,sortable:true},
+						{ field:'standardFileName',title:'标准的原文名称',width:100,sortable:true},
+						{ field:'pubOrg',title:'发布单位',width:100,sortable:true},
+						{ field:'adoptRelation',title:'采用关系',width:100,sortable:true},
+						{ field:'replaceStandard',title:'代替标准',width:100,sortable:true},
+						{ field:'replacedStandard',title:'被代替标准',width:100,sortable:true},
+						{ field:'quoteStandard',title:'引用标准',width:100,sortable:true},
+						{ field:'modifyObject',title:'修改件',width:100,sortable:true},
+						{ field:'supplementaryObject',title:'补充件',width:100,sortable:true},
+						{ field:'publishDate',title:'发布日期',width:100,sortable:true},
+						{ field:'implementationDate',title:'实施日期',width:100,sortable:true},
+						{ field:'confirmDate',title:'确认日期',width:100,sortable:true},
+						{ field:'endDate',title:'截止日期',width:100,sortable:true},
+						{ field:'invalidDate',title:'废止日期',width:100,sortable:true},
+						{ field:'belongToUnit',title:'归口单位',width:100,sortable:true},
+						{ field:'draftUnit',title:'起草单位',width:100,sortable:true},
+						{ field:'standardType',title:'标准类型',width:100,sortable:true},
+						{ field:'standardLevel2',title:'标准水平',width:100,sortable:true},
+						{ field:'themeCnName',title:'中文主题词',width:100,sortable:true},
+						{ field:'themeEnName',title:'英文主题词',width:100,sortable:true},
+						{ field:'freeCnName',title:'中文自由词',width:100,sortable:true},
+						{ field:'language',title:'正文语种',width:100,sortable:true},
+						{ field:'country',title:'国别',width:100,sortable:true},
+						{ field:'internationClass',title:'国际标准分类法',width:100,sortable:true},
+						{ field:'chineseClass',title:'中国标准分类法',width:100,sortable:true},
+						{ field:'standardLevel',title:'标准级别',width:100,sortable:true},
+						{ field:'projectStartDate',title:'立项日期',width:100,sortable:true},
+						{ field:'technicalField',title:'技术领域',width:100,sortable:true},
+						{ field:'draftStaff',title:'起草人员或者专家',width:100,sortable:true},
+						{ field:'contactWay',title:'联系方式',width:100,sortable:true},
+						{ field:'jurisdiction',title:'管辖权',width:100,sortable:true},
+						{ field:'translation',title:'译文',width:100,sortable:true},
+						{ field:'udc',title:'UDC号',width:100,sortable:true},
+						{ field:'pageNumber',title:'页数',width:100,sortable:true},
+						{ field:'publisher',title:'出版社',width:100,sortable:true},
+						{ field:'pubDate',title:'出版时间',width:100,sortable:true},
+						{ field:'isbn',title:'书号',width:100,sortable:true},
+						{ field:'digest',title:'摘要',width:100,sortable:true},
+						{ field:'standardStatus',title:'标准状态',width:100,sortable:true}
+					]]
+				});
+			},
+			// 表格重新加载
+			reloadTable : function(data){
+				$('#bibliography_datagrid').datagrid('reload',data);
+			},
+			// 初始化树
+			initTree : function(data){
+				$('#bibliography_tree').tree({
+					state: 'closed',
+					url:'/BZCX/admin/architecture/node/tree',
+					onClick:function(node){
+						// 获得当前节点ID
+						var param = {
+							nodeId : node.id	
+						}
+						$('#bibliography_datagrid').datagrid('reload', param);
+					} ,onLoadSuccess:function()  
+		            {  
+		                $("#bibliography_tree").tree("collapseAll");  
+		            }  
+				});
+			},
+			fileUpload : function(){
+				var standardFile = $('#standard_import_input').get(0).files[0];
+				if(!standardFile.name.endWith(".xls") && !standardFile.name.endWith(".xlsx")){
+					$.messager.alert('信息提示','只支持xls和xlsx格式的文件。','info');
+					return;
+				}
+				$.messager.confirm('信息提示','重复的题录将会被覆盖，确定导入吗？', function(result){
+					// 发送ajax请求
+					var formData = new FormData();
+			    	formData.append("standardFile", standardFile);
+			    	$.ajax({
+			            url: 'standard/import',
+			            type: 'POST',
+			            data: formData,
+			            dataType: 'JSON',
+			            cache: false,
+			            processData: false,
+			            contentType: false,
+			            success:function(data){
+			            	if(data.code == "200"){
+			            		var message = "题录总数:" + data.data.total + "条<br/>"
+								  + "成功数量:" + data.data.suc + "条<br/>"
+								  + "覆盖数量:" + data.data.repeat + "条<br/>"
+								  + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp失败:" + data.data.fail + "条<br/>";
+								$.messager.alert('信息提示', message,'info');
+								standardHtml.reloadTable();
+			            	}else if(data.code == "400"){
+			            		$.messager.alert('信息提示', data.msg,'info');
+			            	}else {
+								$.messager.alert('信息提示', "导入失败。",'info');
+			            	}
+			            },
+			            error:function(data){
+			                alert("操作失败，请稍后再试。")
+			            }
+			        });
+				})
+			}
+	}
+	 // 填充增加题录表单的起草单位和发布单位的下拉框
+	function setCombox(){
+		var key =$('#pubOrg_input').val();
+		$.ajax({
+			url:'/BZCX/admin/standard/getdepartment',
+			type:'POST',
+			data:key,
+			async:false,
+			success:function(data){
+				var jsonArray = [];
+				var list = data.data;
+				for(var i = 0; i < list.length; i++){
+					jsonArray.push(new EasyUISelect(list[i].pubOrg, list[i].pubOrg, i==0?true:false));
+				}
+				$('#pubOrg_input').combobox({
+				    data:jsonArray,
+				    valueField:'id',
+				    textField:'text'
+				});
+			}
+		});
+	} 
+	function setUnit(){
+		$.ajax({
+			url:'/BZCX/admin/standard/getdeparUnit',
+			type:'POST',
+			async:false,
+			success:function(data){
+				console.log()
+				var jsonArray = [];
+				var list = data.data;
+				for(var i = 0; i < list.length; i++){
+					jsonArray.push(new EasyUISelect(list[i].draftUnit,list[i].draftUnit, i==0?true:false));
+				}
+				console.info(jsonArray);
+				 $('#draftUnit_input').combobox({
+				    data:jsonArray,
+				    valueField:'id',
+				    textField:'text'
+				}); 
+			}
+		});
+	}
+	
+	//搜索框
+$(function(){
+	// 先初始化表格
+	standardHtml.initTable();
+	// 再初始化树
+	standardHtml.initTree();
+	/* search($('#pubOrg_input'),$('#pubOrg_input_save'),'/BZCX/admin/standard/getdepartment')
+	search($('#draftUnit_input'),$('#draftUnit_input_boox'),'/BZCX/admin/standard/getdeparUnit?wd=')
+	//"https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd="
+	function search(searchipt,searchsave,url){
+        var searchModule = (function(){
+        var $searchInp =searchipt,
+            $searchBox =searchsave;
+        //向百度的服务器发送JSONP请求，把数据绑定到容器当中
+        function bindHTML(){
+            var searchKey = $searchInp.val();
+            function callback(data){
+            	data=data.s;
+            	console.log(data);
+                var str = '';
+                console.log(str)
+                $.each(data,function(index,item){
+                    if(index<=9){
+                        str += '<li>'+item+'</li>'
+                    }
+                })
+                $searchBox.html(str).show();
+            }
+            $.ajax({
+                url:url,
+                type:"GET",
+                 //dataType:"jsonp",
+                //jsonp:'cb', 
+                success:callback
+                	
+                	 //function(data){
+                		//console.log(data);
+    			}   
+            //
+            })
+        }
+        //事件绑定和模块的入口
+        function init(){
+            //文本框获取焦点或者输入内容，判断当前文本框中是否有内容，有内容绑定数据，没有内容隐藏展示框
+            $searchInp.on("focus keyup",function(){
+                var val = $(this).val();
+                if(val.length>0){
+                    bindHTML();
+                    return;
+                }
+                $searchBox.hide();
+            }).on('blur',function(){
+                window.setTimeout(function(){
+                    $searchBox.hide();
+                },3000)
+            })
+            //给展示框中的li绑定方法
+            $searchBox.on('click',function(e){
+                var tar = e.target,
+                        tarTag = tar.tagName.toUpperCase(),
+                        $tar = $(tar);
+                if(tarTag==="LI"){
+                    $searchInp.val($tar.html());
+                    $(this).hide();
+                }
+            })
+        }
+        return {
+            init:init
+        }
+    })()
+        searchModule.init();
+    } */
+	 	$.ajax({
+		url:'/BZCX/admin/standard/getdepartment',
+		type:'GET',
+		async:false,
+		success:function(data){
+			var data = data.s;
+			  $(document).keydown(function(e) {
+		        e = e || window.event;
+		        var keycode = e.which ? e.which : e.keyCode;
+		        if (keycode == 38) {
+		        if (jQuery.trim($("#append").html()) == "") {
+		        return;
+		        }
+		        movePrev();
+		        } else if (keycode == 40) {
+		        if (jQuery.trim($("#append").html()) == "") {
+		        return;
+		        }
+		        $("#kw").blur();
+		        if ($(".item").hasClass("addbg")) {
+		        moveNext();
+		        } else {
+		        $(".item").removeClass('addbg').eq(0).addClass('addbg');
+		        }
+		        } else if (keycode == 13) {
+		        dojob();
+		        }
+		    });
+		    var movePrev = function() {
+		        $("#kw").blur();
+		        var index = $(".addbg").prevAll().length;
+		        if (index == 0) {
+		        $(".item").removeClass('addbg').eq($(".item").length - 1).addClass('addbg');
+		        } else {
+		        $(".item").removeClass('addbg').eq(index - 1).addClass('addbg');
+		        }
+		    }
+		    var moveNext = function() {
+		        var index = $(".addbg").prevAll().length;
+		        if (index == $(".item").length - 1) {
+		        $(".item").removeClass('addbg').eq(0).addClass('addbg');
+		        } else {
+		        $(".item").removeClass('addbg').eq(index + 1).addClass('addbg');
+		        }
+		    }
+		    var dojob = function() {
+		        $("#kw").blur();
+		        var value = $(".addbg").text();
+		        $("#kw").val(value);
+		        $("#append").hide().html("");
+		    }
+				 
+		    var movePrev = function() {
+		        $("#kw").blur();
+		        var index = $(".addbg").prevAll().length;
+		        if (index == 0) {
+		        $(".item").removeClass('addbg').eq($(".item").length - 1).addClass('addbg');
+		        } else {
+		        $(".item").removeClass('addbg').eq(index - 1).addClass('addbg');
+		        }
+		    }
+		    var moveNext = function() {
+		        var index = $(".addbg").prevAll().length;
+		        if (index == $(".item").length - 1) {
+		        $(".item").removeClass('addbg').eq(0).addClass('addbg');
+		        } else {
+		        $(".item").removeClass('addbg').eq(index + 1).addClass('addbg');
+		        }
+		    }
+		    var dojob = function() {
+		        $("#kw").blur();
+		        var value = $(".addbg").text();
+		        $("#kw").val(value);
+		        $("#append").hide().html("");
+		    }
+		$("#kw").keyup(function(){
+			data.splice(0,1);
+			//console.log(data)
+			var kw = jQuery.trim($(this).val());
+			//console.log(kw)
+		    if (kw == "") {
+		    $("#append").hide().html("");
+		    return false;
+		    }
+		    var html = "";
+		    //console.log(data.length)
+		    for (var i = 0; i < data.length; i++) {
+		        //console.log(data[i])
+		    if (data[i].indexOf(kw) >= 0) {
+		    	html = html + "<li class='item'>" + data[i] + "</li>"
+		    } 
+		    }
+		    if (html != "") {
+		    $("#append").show().html(html);
+		    } else {
+		    $("#append").hide().html("");
+		    }
+		})
+		
+			$("#append").on('click',function(e){
+                var tar = e.target,
+                        tarTag = tar.tagName.toUpperCase(),
+                        $tar = $(tar);
+                if(tarTag==="LI"){
+                    $("#kw").val($tar.html());
+                    $(this).hide();
+                }
+            })		
+			
+		
+		
+		},
+		error:function(){
+			console.log("shibai")
+		}
+	}); 
+    
+    $.ajax({
+    	url:'/BZCX/admin/standard/getdeparUnit',
+		type:'GET',
+		async:false,
+   		success:function(data){
+   			var data = data.data;
+   			$(document).keydown(function(e) {
+		        e = e || window.event;
+		        var keycode = e.which ? e.which : e.keyCode;
+		        if (keycode == 38) {
+		        if (jQuery.trim($("#append2").html()) == "") {
+		        return;
+		        }
+		        movePrev();
+		        } else if (keycode == 40) {
+		        if (jQuery.trim($("#append2").html()) == "") {
+		        return;
+		        }
+		        $("#kw2").blur();
+		        if ($(".item").hasClass("addbg")) {
+		        moveNext();
+		        } else {
+		        $(".item").removeClass('addbg').eq(0).addClass('addbg');
+		        }
+		        } else if (keycode == 13) {
+		        dojob();
+		        }
+		    });
+		    var movePrev = function() {
+		        $("#kw2").blur();
+		        var index = $(".addbg").prevAll().length;
+		        if (index == 0) {
+		        $(".item").removeClass('addbg').eq($(".item").length - 1).addClass('addbg');
+		        } else {
+		        $(".item").removeClass('addbg').eq(index - 1).addClass('addbg');
+		        }
+		    }
+		    var moveNext = function() {
+		        var index = $(".addbg").prevAll().length;
+		        if (index == $(".item").length - 1) {
+		        $(".item").removeClass('addbg').eq(0).addClass('addbg');
+		        } else {
+		        $(".item").removeClass('addbg').eq(index + 1).addClass('addbg');
+		        }
+		    }
+		    var dojob = function() {
+		        $("#kw2").blur();
+		        var value = $(".addbg").text();
+		        $("#kw2").val(value);
+		        $("#append2").hide().html("");
+		    }
+				 
+		    var movePrev = function() {
+		        $("#kw2").blur();
+		        var index = $(".addbg").prevAll().length;
+		        if (index == 0) {
+		        $(".item").removeClass('addbg').eq($(".item").length - 1).addClass('addbg');
+		        } else {
+		        $(".item").removeClass('addbg').eq(index - 1).addClass('addbg');
+		        }
+		    }
+		    var moveNext = function() {
+		        var index = $(".addbg").prevAll().length;
+		        if (index == $(".item").length - 1) {
+		        $(".item").removeClass('addbg').eq(0).addClass('addbg');
+		        } else {
+		        $(".item").removeClass('addbg').eq(index + 1).addClass('addbg');
+		        }
+		    }
+		    var dojob = function() {
+		        $("#kw2").blur();
+		        var value = $(".addbg").text();
+		        $("#kw2").val(value);
+		        $("#append2").hide().html("");
+		    }
+		$("#kw2").keyup(function(){
+			data.splice(0,1);
+			//console.log(data)
+			var kw = jQuery.trim($(this).val());
+			//console.log(kw)
+		    if (kw == "") {
+		    $("#append2").hide().html("");
+		    return false;
+		    }
+		    var html = "";
+		    //console.log(data.length)
+		    for (var i = 0; i < data.length; i++) {
+		        //console.log(data[i])
+		    if (data[i].indexOf(kw) >= 0) {
+		    	html = html + "<li class='item'>" + data[i] + "</li>"
+		    } 
+		    }
+		    if (html != "") {
+		    $("#append2").show().html(html);
+		    } else {
+		    $("#append2").hide().html("");
+		    }
+		})
+		
+			$("#append2").on('click',function(e){
+                var tar = e.target,
+                        tarTag = tar.tagName.toUpperCase(),
+                        $tar = $(tar);
+                if(tarTag==="LI"){
+                    $("#kw2").val($tar.html());
+                    $(this).hide();
+                }
+            })		
+   		},
+   		error:function(){
+   			console.log("失败")
+   		}
+    })
+})
+</script>

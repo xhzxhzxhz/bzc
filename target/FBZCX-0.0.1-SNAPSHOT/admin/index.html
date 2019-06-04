@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit" />
+<title>昆仑能源有限公司城镇燃气技术标准查询平台后台管理系统</title>
+<link rel="stylesheet" type="text/css" href="easyui/1.3.4/themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="kindeditor/themes/default/default.css" />
+<link rel="stylesheet" type="text/css" href="css/wu.css" />
+<link rel="stylesheet" type="text/css" href="css/icon.css" />
+    <link rel="stylesheet" type="text/css" href="css/chat.css" />
+<script type="text/javascript" src="http://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="easyui/1.3.4/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="easyui/1.3.4/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="kindeditor/kindeditor-all-min.js"></script>
+<script type="text/javascript" src="kindeditor/lang/zh-CN.js"></script>
+<script type="text/javascript" src="../publicjs/bzcxclass.js"></script>
+<script type="text/javascript" src="../publicjs/bzcxutil.js"></script>
+<script type="text/javascript" src="js/right.js"></script>
+</head>
+<body class="easyui-layout">
+	<!-- begin of header -->
+	<div class="wu-header" data-options="region:'north',border:false,split:true">
+    	<div class="wu-header-left">
+            <img src="images/logos.png"/>
+        	<h1>昆仑能源有限公司城镇燃气技术标准查询平台后台管理系统</h1>
+        </div>
+        <div class="wu-header-right">
+            <div>
+            	<span id="user_name_p" style="margin-right: 20px"></span>
+            	<span class="pending" id="pending_click" style="display: block;">
+            		<i></i>
+            	</span>
+            	<a href="#">网站首页</a><span>|</span><a href="#">支持论坛</a><span>|</span><a href="#">帮助中心</a><span>|</span><a href="#" onclick="exit()">安全退出</a>
+            </div>
+        </div>
+    </div>
+    <!-- end of header -->
+    <!-- begin of sidebar -->
+	<div class="wu-sidebar" data-options="region:'west',split:true,border:true,title:'导航菜单'"> 
+
+    	<div id="left_menu" class="easyui-accordion" data-options="border:false,fit:true"> 
+        	<div title="数据维护" data-options="iconCls:'icon-application-cascade'" style="padding:5px;">    			<ul class="easyui-tree wu-side-tree">
+                	<li iconCls="icon-book"><a href="javascript:void(0)" data-icon="icon-book" data-link="temp/bibliography.html" iframe="0" id="default">标准题录维护</a></li>
+                    <li iconCls="icon-text-padding-right"><a href="javascript:void(0)" data-icon="icon-text-padding-right" data-link="temp/origin.html" iframe="0" id="default2">标准原文维护</a></li>
+                    <li iconCls="icon-chart-organisation"><a href="javascript:void(0)" data-icon="icon-chart-organisation" data-link="temp/system.html" iframe="0" id="default3">标准体系维护</a></li>
+                    <li iconCls="icon-user-group"><a href="javascript:void(0)" data-icon="icon-user-group" data-link="temp/share.html" iframe="0" id="default4">资源共享维护</a></li>
+                </ul>
+            </div>
+            <div title="互动维护" data-options="iconCls:'icon-application-side-list'" style="padding:5px;">
+    			<ul class="easyui-tree wu-side-tree">
+                    <li iconCls="icon-user-edit"><a href="javascript:void(0)" data-icon="icon-user-edit" data-link="temp/feedback.html" id="feedbackMessage" iframe="0">意见反馈维护</a></li>
+                </ul>
+            </div>
+            <div title="标准工作维护" data-options="iconCls:'icon-application-form-edit'" style="padding:5px;">
+                <ul class="easyui-tree wu-side-tree">
+                    <li iconCls="icon-plugin-edit"><a href="javascript:void(0)" data-icon="icon-plugin-edit" data-link="temp/demand.html" id="demandMessage" iframe="0">需求征集维护</a></li>
+                    <li iconCls="icon-user-accept16"><a href="javascript:void(0)" data-icon="icon-user-accept16" data-link="temp/validity.html" id="reqMessage" iframe="0">有效性确认维护</a></li>
+                </ul>
+            </div>
+            <div title="标准动态维护" data-options="iconCls:'icon-newspaper-add'" style="padding:5px;">
+                <ul class="easyui-tree wu-side-tree">
+                    <li iconCls="icon-newspaper"><a href="javascript:void(0)" data-icon="icon-newspaper" data-link="temp/news.html" iframe="0">标准动态维护</a></li>
+                </ul>
+            </div>
+            <div title="权限管理" data-options="iconCls:'icon-group-add'" style="padding:5px;">
+    			<ul class="easyui-tree wu-side-tree">
+                	<li iconCls="icon-user-suit"><a href="javascript:void(0)" data-icon="icon-user-suit" data-link="temp/user.html" iframe="0">用户管理</a></li>
+                    <li iconCls="icon-user-business-boss"><a href="javascript:void(0)" data-icon="icon-user-business-boss" data-link="temp/role.html" iframe="0">角色管理</a></li>
+                    <li iconCls="icon-photo-edit"><a href="javascript:void(0)" data-icon="icon-photo-edit" data-link="temp/resource.html" iframe="0">资源管理</a></li>
+                </ul>
+            </div>
+            <div title="数据备份" data-options="iconCls:'icon-database-copy'" style="padding:5px;">
+    			<ul class="easyui-tree wu-side-tree">
+					<li iconCls="icon-page-copy"><a href="javascript:void(0)" data-icon="icon-page-copy" data-link="temp/statistics.html" iframe="0">数据备份</a></li>
+				</ul>
+            </div>
+            <div title="计费管理" data-options="iconCls:'icon-bricks'" style="padding:5px;">
+    			<ul class="easyui-tree wu-side-tree">
+                	<li iconCls="icon-image-add"><a href="javascript:void(0)" data-icon="icon-image-add" data-link="temp/accountManage.html" iframe="0">账户管理</a></li>
+                    <li iconCls="icon-calendar-edit"><a href="javascript:void(0)" data-icon="icon-calendar-edit" data-link="temp/layout-3.html" iframe="0">计费管理</a></li></ul>
+            </div>
+            <div title="操作日志" data-options="iconCls:'icon-chart-curve'" style="padding:5px;">
+    			<ul class="easyui-tree wu-side-tree">
+                	<li iconCls="icon-chart-bar"><a href="javascript:void(0)" data-icon="icon-chart-bar" data-link="temp/log.html" iframe="0">操作日志</a></li>
+                </ul>
+            </div>
+            <div title="在线聊天" data-options="iconCls:'icon-comment-record'" style="padding:5px;">
+    			<ul class="easyui-tree wu-side-tree">
+                	<li iconCls="icon-comments"><a href="javascript:void(0)" data-icon="icon-comments" data-link="temp/statistics.html" iframe="0">在线聊天</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>	
+    <!-- end of sidebar -->    
+    <!-- begin of main -->
+    <div class="wu-main" data-options="region:'center'">
+        <div id="wu-tabs" class="easyui-tabs" data-options="border:false,fit:true">  
+            <!--<div title="首页" data-options="href:'temp/home.html',closable:false,iconCls:'icon-tip',cls:'pd3'"></div>-->
+        </div>
+    </div>
+    <!-- end of main --> 
+    <!-- begin of footer -->
+	<div class="wu-footer" data-options="region:'south',border:true,split:true">
+    	&copy; 中石油昆仑燃气有限公司燃气技术研究院
+    </div>
+    <!-- end of footer -->
+    <!-- 消息通知对话框 -->
+    <div id="pending_div" class="easyui-dialog" style="width:300px;height:200px;"data-options="closed:true,modal:true">
+    	<ul class="pending-box" id="messageLi">
+
+         </ul>
+	</div>
+	<!--js for this-->
+	<script src="js/message.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('.wu-side-tree a').bind("click",function(){
+                var title = $(this).text();
+                var url = $(this).attr('data-link');
+                var iconCls = $(this).attr('data-icon');
+                var iframe = $(this).attr('iframe')==1?true:false;
+                if(url == "temp/statistics.html"){
+                	window.open("http://192.168.3.77:8080/BZCX/statistics.html");
+                }else{
+                	 addTab(title,url,iconCls,iframe);
+                }
+            });
+            //默认打开标准题录页
+           if(showad == 1){
+            	$("#default").trigger('click');
+            }else if(showad == 2){
+            	$("#default2").trigger('click');
+            }else if(showad == 3){
+            	$("#default3").trigger('click');
+            }else if(showad == 4){
+            	$("#default4").trigger('click');
+            }
+            //调用消息提醒
+            //feedbackmessage();
+            //点击未读消息，弹出待处理弹框
+            $("#pending_click").click(function(){
+            	$('#pending_div').dialog({
+        			closed: false,
+        			modal:true,
+                    title: "待处理工作"
+                });
+            });
+        });
+        
+        /**
+         * Name 添加菜单选项
+         * Param title 名称
+         * Param href 链接
+         * Param iconCls 图标样式
+         * Param iframe 链接跳转方式（true为iframe，false为href）
+         */
+        function addTab(title, href, iconCls, iframe){
+            var tabPanel = $('#wu-tabs');
+            // 体系的tab的添加逻辑是，点击的时候，点击体系的时候，判断是否已经打开了体系详情tab
+            // 如果有就是替换，没有就是更改。
+            if(!tabPanel.tabs('exists',title)){
+                var content = '<iframe scrolling="auto" frameborder="0"  src="'+ href +'" style="width:100%;height:100%;"></iframe>';
+                if(iframe){
+                    tabPanel.tabs('add',{
+                        title:title,
+                        content:content,
+                        iconCls:iconCls,
+                        fit:true,
+                        cls:'pd3',
+                        closable:true
+                    });
+                }
+                else{
+                    tabPanel.tabs('add',{
+                        title:title,
+                        href:href,
+                        iconCls:iconCls,
+                        fit:true,
+                        cls:'pd3',
+                        closable:true
+                    });
+                }
+                
+            }else{
+                tabPanel.tabs('select',title);
+            }
+        }
+        var webs = null;
+        var url = "ws://" +window.location.host +"/BZCX/websocket";
+        //判断当前浏览器是否支持WebSocket
+        if ('WebSocket' in window) {
+        	messages();
+            webs = new WebSocket(url);
+            //连接发生错误的回调方法
+            webs.onerror = function () {
+            };
+            //连接成功建立的回调方法
+             webs.onopen = function () {
+            }
+            //接收到消息的回调方法layer.
+            webs.onmessage = function (event) {
+            		messages();
+            }
+            //连接关闭的回调方法
+            webs.onclose = function () {
+            } 
+            //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+            window.onbeforeunload = function () {
+                closeWebSocket();
+            } 
+        }
+        else {
+        	messagePolling();
+        }
+        
+      //关闭WebSocket连接
+        function closeWebSocket() {
+            webs.close();
+        }
+        //发送消息
+        function send() {
+            webs.send("我的");
+        }
+        
+        function exit(){
+        	if('WebSocket' in window){
+        		closeWebSocket();
+        		location.href="/BZCX/login/out";
+        	}else{
+        		location.href="/BZCX/login/out";
+        	}
+        }
+    </script>
+</body>
+</html>

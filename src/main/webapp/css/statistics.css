@@ -1,0 +1,316 @@
+#main{
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+#main_top{
+    margin-top: 30px;
+    position: relative;
+}
+.export-btn{
+	text-align: center;
+    line-height: 30px;
+	height: 30px;
+    width: 100px;
+    background: #1446A7;
+    color: #ffffff;
+    position: absolute;
+    top: -5px;
+    right: 0px;
+}
+#main_top ul{
+    overflow: hidden;
+    border-bottom: 1px solid #E6E6E6;
+    padding-bottom: 6px;
+}
+#main_top ul li{
+    float: left;
+    overflow: hidden;
+    font-size: 14px;
+}
+#main_top ul li:nth-of-type(1) i{
+    float: left;
+    width: 19px;
+    height: 19px;
+    background: url("../imgs/search/home.png") no-repeat;
+}
+#main_top ul li a{
+    float: left;
+    margin: 0 10px;
+    color: #1446A7;
+}
+#main_top ul li:last-of-type a{
+    color: #868686;
+}
+#main_top ul li span{
+    float: left;
+    color: #7F7F7F;
+}
+#main_bot{
+    margin-top: 22px;
+    overflow: hidden;
+}
+.main-bot-con1{
+    padding: 0 35px;
+}
+.main-bot-con1 ul{
+    overflow: hidden;
+}
+.main-bot-con1 ul li{
+    width: 212px;
+    height: 132px;
+    position: relative;
+    float: left;
+    margin-right: 17px;
+}
+.main-bot-con1 ul li:nth-of-type(5n){
+    margin-right: 0px;
+}
+.main-bot-con1 ul li i{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    right: 25px;
+    top: 25px;
+}
+.main-bot-con1 ul li .text{
+    position: absolute;
+    left: 31px;
+    top: 59px;
+}
+.main-bot-con1 ul li .text.wu{
+    left: 92px;
+    top: 51px;
+}
+.main-bot-con1 ul li .text.wu p{
+    font-size: 18px;
+}
+.main-bot-con1 ul li .text b{
+    font-weight: bold;
+    font-size: 18px;
+}
+.main-bot-con1 ul li .text p{
+    font-size: 14px;
+    color: #808080;
+    margin-top: 6px;
+}
+.total1{
+    background: url("../imgs/statistics/b1.png") no-repeat;
+}
+.total1 i{
+    background: url("../imgs/statistics/c1.png") no-repeat;
+}
+.total2{
+    background: url("../imgs/statistics/b2.png") no-repeat;
+}
+.total2 i{
+    background: url("../imgs/statistics/c2.png") no-repeat;
+}
+.total3{
+    background: url("../imgs/statistics/b3.png") no-repeat;
+}
+.total3 i{
+    background: url("../imgs/statistics/c3.png") no-repeat;
+}
+.total4{
+    background: url("../imgs/statistics/b4.png") no-repeat;
+}
+.total4 i{
+    background: url("../imgs/statistics/c4.png") no-repeat;
+}
+.total5{
+    background: url("../imgs/statistics/b5.png") no-repeat;
+}
+.total5 i{
+    background: url("../imgs/statistics/c5.png") no-repeat;
+}
+.total6{
+    background: url("../imgs/statistics/b6.png") no-repeat;
+}
+.total6 i{
+    background: url("../imgs/statistics/c6.png") no-repeat;
+}
+.total7{
+    background: url("../imgs/statistics/b7.png") no-repeat;
+}
+.total7 i{
+    background: url("../imgs/statistics/c7.png") no-repeat;
+}
+.total8{
+    background: url("../imgs/statistics/b8.png") no-repeat;
+}
+.total8 i{
+    background: url("../imgs/statistics/c8.png") no-repeat;
+}
+.total9{
+    background: url("../imgs/statistics/b.png") no-repeat;
+}
+.total10{
+    background: url("../imgs/statistics/b.png") no-repeat;
+}
+/*图表部分*/
+.main-bot-con2,.main-bot-con3,.main-bot-con4,.main-bot-con5{
+    overflow: hidden;
+    margin-top: 20px;
+}
+.main-bot-con2{
+    margin-top: 30px;
+}
+.main-bot-con2-left{
+    width: 720px;
+    float: left;
+    border: 1px solid #E6E6E6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.main-bot-con2-left-top{
+    height: 53px;
+    border-bottom: 1px solid #E6E6E6;
+    overflow: hidden;
+    position:relative;
+}
+.main-bot-con2-left-top>i{
+    margin: 20px 12px 0 10px;
+    width: 17px;
+    height: 14px;
+    float: left;
+}
+.main-bot-con2-left-top>span{
+    float: left;
+    margin-top: 17px;
+}
+.panel-more{
+    position: absolute;
+    right: 12px;
+    top: 15px;
+}
+.panel-more span{
+    margin-top: 2px;
+    float: left;
+    font-size: 14px;
+    color: #406AB9;
+}
+.panel-more a{
+    overflow: hidden;
+    display: block;
+}
+.panel-more i{
+    float: left;
+    margin-top: 3px;
+    margin-left: 5px;
+    width: 15px;
+    height: 16px;
+    background: url("../imgs/index/gd.png") no-repeat;
+}
+.chartContainer{
+    width: 100%;
+    height: 375px;
+}
+.main-bot-con2-right{
+    float: right;
+    width: 460px;
+    border: 1px solid #E6E6E6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.chart-icon1 i{
+    background: url("../imgs/statistics/xitong.png") no-repeat;
+}
+.chart-icon2 i{
+    width: 18px;
+    height: 18px;
+    margin-top: 18px;
+    background: url("../imgs/statistics/pingtu.png") no-repeat;
+}
+.chart-icon3 i{
+    width: 16px;
+    height: 14px;
+    margin-top: 21px;
+    background: url("../imgs/statistics/redupaihang.png") no-repeat;
+}
+.chart-icon4>i{
+    width: 20px;
+    height: 14px;
+    margin-top: 21px;
+    background: url("../imgs/statistics/erjidanwei.png") no-repeat;
+}
+.chart-icon5 i{
+    width: 18px;
+    height: 14px;
+    margin-top: 20px;
+    background: url("../imgs/statistics/syl.png") no-repeat;
+}
+.chart-icon6>i{
+    width: 21px;
+    height: 18px;
+    margin-top: 18px;
+    background: url("../imgs/statistics/dwsyl.png") no-repeat;
+}
+.chart-icon7 i{
+    width: 20px;
+    height: 16px;
+    margin-top: 20px;
+    background: url("../imgs/statistics/dwfwph.png") no-repeat;
+}
+.chart-icon8>i{
+    width: 19px;
+    height: 20px;
+    margin-top: 18px;
+    background: url("../imgs/statistics/erjidanweiyujsc.png") no-repeat;
+}
+.chart-page{
+    height: 30px;
+    position: relative;
+}
+.chart-page img{
+    display: block;
+    width: 12px;
+    height: 20px;
+    cursor: pointer;
+}
+.chart-prev{
+    position: absolute;
+    left: 230px;
+    top: 0px;
+}
+.chart-next{
+    position: absolute;
+    right: 230px;
+    top: 0px;
+}
+/* 按时间检索热词 */
+.form-item{
+    overflow: hidden;
+    margin:14px auto 0;
+    width:370px;
+}
+.form-item>span{
+    float: left;
+    width: 110px;
+    height: 36px;
+    line-height: 36px;
+}
+.form-item>div{
+    float: left;
+}
+/*复写下拉框样式*/
+.main-bot-con3 select{
+    width: 260px;
+    height: 36px;
+    /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+    border: 1px solid #E3E3E3;
+
+    /*很关键：将默认的select选择框样式清除*/
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+
+    /*在选择框的最右侧中间显示小箭头图片*/
+    background: url("../imgs/search/select.png") no-repeat scroll right center transparent;
+
+
+    /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+    padding:0 36px 0 10px;
+}
+/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+select::-ms-expand { display: none; }

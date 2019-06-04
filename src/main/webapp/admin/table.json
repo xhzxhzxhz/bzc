@@ -1,0 +1,89 @@
+{
+"status":"success",
+"total":10,
+"rows":[
+		{
+			"account":"user1",
+			"userName":"昆仑内部初级用户",
+			"operType":"燃气压力容器检验所",
+			"operDetail":null,
+			"operDate":"内部初级用户",
+			"operUrl":"￥100.00"
+		},
+		{
+			"account":"admin22",
+			"userName":"上海分部管理员",
+			"operType":"上海分公司",
+			"operDetail":null,
+			"operDate":"标准管理员",
+			"operUrl":"￥500.00"
+		},
+		{
+			"account":"admin21",
+			"userName":"标准管理员21",
+			"operType":"燃气工程设计研究院",
+			"operDetail":"无",
+			"operDate":"标准管理员",
+			"operUrl":"￥500.00"
+		},
+		{
+			"account":"admin31",
+			"userName":"外部初级用户",
+			"operType":"昆仑测试部门",
+			"operDetail":"无",
+			"operDate":"外部初级用户",
+			"operUrl":"￥300.00"
+		},
+		{
+			"account":"admin1",
+			"userName":"系统管理员",
+			"operType":"昆仑公司燃气院",
+			"operDetail":"无",
+			"operDate":"系统管理员",
+			"operUrl":"￥1000.00"
+		},
+		{
+			"account":"user5",
+			"userName":"昆仑内部初级用户",
+			"operType":"燃气压力容器检验所",
+			"operDetail":null,
+			"operDate":"内部初级用户",
+			"operUrl":"￥400.00"
+		},
+		{
+			"account":"admin63",
+			"userName":"上海分部管理员",
+			"operType":"上海分公司",
+			"operDetail":null,
+			"operDate":"标准管理员",
+			"operUrl":"￥600.00"
+		},
+		{
+			"account":"admin31",
+			"userName":"标准管理员21",
+			"operType":"燃气工程设计研究院",
+			"operDetail":"无",
+			"operDate":"标准管理员",
+			"operUrl":"￥800.00"
+		},
+		{
+			"account":"admin18",
+			"userName":"外部初级用户",
+			"operType":"昆仑测试部门",
+			"operDetail":"无",
+			"operDate":"外部初级用户",
+			"operUrl":"￥550.00"
+		},
+		{
+			"account":"admin16",
+			"userName":"系统管理员",
+			"operType":"昆仑公司燃气院",
+			"operDetail":"无",
+			"operDate":"系统管理员",
+			"operUrl":"￥900.00"
+		}
+
+
+
+	]
+}

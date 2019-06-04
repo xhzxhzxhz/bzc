@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit" />
+    <title>昆仑能源有限公司城镇燃气技术标准查询平台</title>
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <link rel="stylesheet" href="css/jquery.pagination.css"/>
+    <link rel="stylesheet" href="highcharts/css/highcharts.css"/>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/statistics.css"/>
+</head>
+<body>
+    <div id="homepage">
+        <div id="header"></div>
+        <div id="nav"></div>
+        <div id="main">
+            <div id="main_bot">
+                <div class="main-bot-con1">
+                    <ul id="liststatistics">
+                        <li class="total1">
+                            <i></i>
+                            <div class="text">
+                                <b id="TodayAcess"></b>
+                                <p>今日访问量</p>
+                            </div>
+                        </li>
+                        <li class="total2">
+                            <i></i>
+                            <div class="text">
+                                <b id="CumulaAcess"></b>
+                                <p>累计访问量</p>
+                            </div>
+                        </li>
+<!--                         <li class="total3">
+                            <i></i>
+                            <div class="text">
+                                <b id="ActiveUserNumber"></b>
+                                <p>过去30天活跃用户</p>
+                            </div>
+                        </li> -->
+                        <li class="total4">
+                            <i></i>
+                            <div class="text">
+                                <b id="TotalUserNumber"></b>
+                                <p >系统总用户数</p>
+                            </div>
+                        </li>
+                        <li class="total5">
+                            <i></i>
+                            <div class="text">
+                                <b id="TodayRetrieval"></b>
+                                <p>今日检索次数</p>
+                            </div>
+                        </li>
+                        <li class="total6">
+                            <i></i>
+                            <div class="text">
+                                <b id="TotalRetrieval"></b>
+                                <p>累计检索次数</p>
+                            </div>
+                        </li>
+                        <li class="total7">
+                            <i></i>
+                            <div class="text">
+                                <b id="StandardView"></b>
+                                <p>标准查看次数</p>
+                            </div>
+                        </li>
+                        <li class="total8">
+                            <i></i>
+                            <div class="text">
+                                <b id="StandardDownload"></b>
+                                <p>标准下载次数</p>
+                            </div>
+                        </li>
+                         <li class="total9">
+                            <i></i>
+                            <div class="text wu">
+                                <p>题录数量</p>
+                            </div>
+                        </li>
+                         <li class="total10">
+                            <i></i>
+                            <div class="text wu">
+                                <p>原文数量</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="main-bot-con2">
+                    <div class="main-bot-con2-left">
+                        <div class="main-bot-con2-left-top chart-icon1">
+                            <i></i>
+                            <span>系统访问量排行</span>
+                        </div>
+                        <div class="chartContainer" id="container1" ></div>
+                    </div>
+                    
+                    <div class="main-bot-con2-right">
+                        <div class="main-bot-con2-left-top chart-icon2">
+                            <i></i>
+                            <span>标准分类统计</span>
+                        </div>
+                        <div class="chartContainer" id="container2" style="height:298px"></div>
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="line-height: 57px;" id="gb">国标:962</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="line-height: 57px;" id="hb">行标619</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       <span style="line-height: 57px;" id="qb">企标:167</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="line-height: 57px;" id="sh">三化:161</span><br/>
+                    </div>
+                </div>
+                <div class="main-bot-con3">
+                    <div class="main-bot-con2-left" style="width:49%">
+                        <div class="main-bot-con2-left-top chart-icon3">
+                            <i></i>
+                            <span>检索词热度排行</span>
+                        </div>
+                        <div class="form-item" >
+                                        <span>时间范围：</span>
+                                        <div>
+                                            <select id="changeTime">
+                                                <option value="30" selected>近一个月</option>
+                                                <option value="180">近半年</option>
+                                                <option value="365">近一年</option>
+                                            </select>
+                                        </div>
+                          </div>
+                        <div style="height:325px;" class="chartContainer" id="container3"></div>
+                        <div class="chart-page">
+                            <img   name="container3" class="chart-prev" src="../../imgs/statistics/zuo.png"/>
+                            <input name="container3" id="con3" value=1 type="hidden">
+                            <img   name="container3" class="chart-next" src="../../imgs/statistics/you.png"/>
+                        </div>
+                    </div>
+                    <!-- <div class="main-bot-con2-right" style="width: 49%">
+                        <div class="main-bot-con2-left-top chart-icon4">
+                            <i></i>
+                            <span>二级单位标准数量排行</span>
+                            <div class="panel-more">
+								<a href="statisticsDetail.html?chart=1" target="_self">
+								<span>更多</span><i></i></a>
+							</div>
+                        </div>
+                        <div class="chartContainer" id="container4"></div>
+                        <div class="chart-page">
+                            <img name="container4" class="chart-prev" src="imgs/statistics/zuo.png"/>
+                            <input name="container4" id="con4"  value='1' type="hidden">
+                            <img name="container4" class="chart-next" src="imgs/statistics/you.png"/>
+                        </div>
+                    </div> -->
+                </div>
+                <!-- <div class="main-bot-con4">
+                 <div class="main-bot-con2-left" style="width: 49%">
+                        <div class="main-bot-con2-left-top chart-icon7">
+                            <i></i>
+                            <span>二级单位访问量排行</span>
+                        </div>
+                        <div style="height: 49%" class="chartContainer" id="container7"></div>
+                    </div>
+              
+                    <div class="main-bot-con2-right" style="width:49%">
+                        <div class="main-bot-con2-left-top chart-icon6">
+                            <i></i>
+                            <span>二级单位用户数排行</span>
+                            <div class="panel-more">
+								<a href="statisticsDetail.html?chart=2" target="_self"><span>更多</span><i></i></a>
+							</div>
+                        </div>
+                        <div class="chartContainer" id="container6"></div>
+                        <div class="chart-page">
+                            <img  name="container6" class="chart-prev" src="imgs/statistics/zuo.png"/>
+                            <input value="1" type="hidden" name="container6" id="con6">
+                            <img  name="container6" class="chart-next" src="imgs/statistics/you.png"/>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="main-bot-con5" >
+                         <div class="main-bot-con2-left" style="width:49%">
+                        <div class="main-bot-con2-left-top chart-icon5">
+                            <i></i>
+                            <span>标准使用率排行</span>
+                        </div>
+                        <div class="chartContainer" id="container5"></div>
+                        <div class="chart-page">
+                            <img name="container5" class="chart-prev" src="../../imgs/statistics/zuo.png"/>
+                            <input type="hidden" container5" id="con5"  value="1">
+                            <img name="container5" class="chart-next" src="../../imgs/statistics/you.png"/>
+                        </div>
+                    </div>
+                    <!-- <div class="main-bot-con2-right" style="width: 590px">
+                        <div class="main-bot-con2-left-top chart-icon8">
+                            <i></i>
+                            <span>二级单位与检索词统计</span>
+                            <div class="panel-more">
+								<a href="statisticsDetail.html?chart=3" target="_self"><span>更多</span><i></i></a>
+							</div>
+                        </div>
+                        <div class="chartContainer" id="container8"></div>
+                        <div class="chart-page">
+                            <input value="1" name="container8" type="hidden" id="con8">
+                            <img name="container8" class="chart-prev" src="imgs/statistics/zuo.png"/>
+                            <img name="container8" class="chart-next"  src="imgs/statistics/you.png"/>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <div id="footer"></div>
+    </div>
+ <script src="js/jquery.min.js"></script>
+    <script src="layer/layer.js"></script>
+    <script src="highcharts/js/highcharts.js"></script>
+    <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+    <script src="highcharts/js/highcharts-more.js"></script>
+    <script src="highcharts/js/funnel.js"></script>
+    <script src="highcharts/js/highcharts-3d.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/statistics.js"></script>
+</body>
+</html>

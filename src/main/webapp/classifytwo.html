@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>分类查询</title>
+    <link rel="stylesheet" href="css/jstree/style.css"/>
+    <link rel="stylesheet" href="css/userAttention.css">
+    <style>
+        .classify2{
+            width: 100%;
+            height: 100%;
+            background: #ececec;
+        }
+        .classify2 img{
+            transform: scale(0.6);
+        }
+        .company{
+            padding-left:.2rem; 
+        }
+        .company{
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            font-size: .3rem;
+            width: 98%;
+            height: .8rem;
+            background: #fff;
+            color: #333;
+            margin-bottom: .2rem;
+            text-align: left
+        }
+        .companyName{
+            flex: 6;
+        }
+        .companyName select{
+        	border:none;
+        	width:99%;
+        	outline:none;
+        	background:#fff;
+        	appearance: none;
+            -webkit-appearance:none;
+        }
+        .unsenen{
+            flex:.5;
+        }
+        .industry{
+            margin-top: .2rem;
+            font-size: .3rem;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+        .stair,.access{
+            width: 100%;
+            min-height: .8rem;
+            background: #fff;
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            padding-left: .2rem;
+        }
+        .access{
+        	padding-left:.3rem;
+        }
+        .stair{
+            border-bottom: 1px solid #ececec;
+        }
+        .standardTitle{
+            width: 100%;
+            min-height: .8rem;
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+        .btnDiv{
+            width: 100%;
+            height: 1rem;
+            background: #fff;
+            position: fixed;
+            left: 0;
+            bottom:2px;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btnDiv button{
+            height: 80%;
+            line-height:80%;
+            width: 45%;
+            border: none;
+            outline: none;
+        }
+        .btn1{
+            color: #63CDDF;
+            background: #eee;
+            border-radius: 6px 0px 0px 6px;
+        }
+        .btn2{
+            color: #fff;
+            background:linear-gradient(90deg,rgba(0,218,254,1),rgba(0,75,226,1));
+            border-radius:0px 6px 6px 0px;
+        }
+        .btn1:active{
+        	background: #d1f2f7;
+        }
+        .btn2:active{
+            background: linear-gradient(90deg,rgba(0,218,254,1),rgba(0,75,226,1));
+        }
+        /*用户未关注头部显示*/
+        .attention{  
+        	width:100%;
+        	height:1.6rem;
+        	background:#ececec;
+        	display:-webkit-flex;
+        	display:flex;
+        	align-items:center;
+        	justify-content: space-between ;
+        }
+        .attention img{       
+        	margin-left:-.75rem;       	
+        	transform: scale(0.5);
+        }
+        .attention button{
+        	border:1px solid #004BE2;
+        	height:.56rem;
+        	width:1.66rem;
+        	color:#004BE2;
+        	background:#ececec;
+        	outline:none;  
+        	border-radius:2px;
+        	margin-right:.42rem;      	
+        }
+        .attention button:active{
+        	color:#fff;
+        	background:#004BE2;
+        }
+        .attentionHide{
+        	display:none;
+        }
+        .error{        	
+        	display: -webkit-flex;
+        	display: flex;
+        	justify-content: center;
+        }
+        #error img{
+        	transform: scale(0.5);
+        	margin-left:.1rem;
+        }
+        .errorHide{
+        	display:none;
+        }
+    </style>
+</head>
+<body>
+    <div class="classify2">
+    	<div class="attention attentionHide" id="follow">  <!-- 未关注的用户显示 -->
+    		<img src="img/gz_logo.png"/>
+    		<button>关注</button>
+    	</div>
+        <div class="company"> 
+            <div class="companyName" id="classi_parten">
+				<select id="cate_search_parent_select">
+					
+                </select>
+			</div>
+            <div class="unsenen"><img src="img/icon_in.png" alt="暂无图片"></div>
+        </div>              
+        <div class="industry" id="view_search_tree">  <!-- 行业标准内容外部div   -->
+                   
+        </div>
+        <div class="btnDiv">
+            <button class="btn1" onclick="cleanselect()">取消</button>
+            <button class="btn2" onclick="classifynext()">确定</button>
+        </div>
+        <div id="error" class="errorHide">
+        	<img src="img/pic_weikong.png">
+        </div>
+    </div>
+    <script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js "></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jstree.min.js"></script>
+    <script src="js/common.js"></script>
+      <script src="js/rem.js"></script>
+</body>
+<script>
+var nodeId = "";
+var text = "";
+    $(function(){
+    	select.initCateList("cate_search_parent_select","view_search_tree",function(data){
+    		nodeId = data.instance.get_node(data.selected[0]).id;
+    		text = data.instance.get_node(data.selected[0]).text;
+    		// 点击的时候 重新加载表格
+			//searchHtml.viewSearch.queryParam.nodeId = nodeId;
+			//searchHtml.viewSearch.initTable();
+    		//节点id
+		})
+    })
+    
+     //微信分享
+    wx.ready(function () {
+        	wx.onMenuShareAppMessage({
+        		title: '分类查询', // 分享标题
+            	desc: '通过选择体系和输入条件进行检索', // 分享描述
+            	link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            	imgUrl : imgUrl, // 分享图标
+            	type: '', // 分享类型,music、video或link，不填默认为link
+            	dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            	success: function () {
+            		// 用户确认分享后执行的回调函数
+            	},
+            	cancel: function () {
+            		// 用户取消分享后执行的回调函数
+            	}
+        	});
+        });
+    
+    function cleanselect() {
+    	select.initCateList("cate_search_parent_select","view_search_tree",function(data){
+    		nodeId = data.instance.get_node(data.selected[0]).id;
+    		text = data.instance.get_node(data.selected[0]).text;
+    		// 点击的时候 重新加载表格
+			//searchHtml.viewSearch.queryParam.nodeId = nodeId;
+			searchHtml.viewSearch.initTable();
+    		//节点id
+		})
+    	nodeId = "";
+	}
+    function classifynext() {
+		if(nodeId == ""){
+			alert("请选择一个节点")
+		}else{
+			window.location.href = "classify.html?nodeId="+nodeId+"&"+text;
+		}
+	}
+    var select = {
+    		/**
+    		 * 初始化标准分类下拉列表
+    		 * selectId :下拉列表的ID
+    		 * treeId : 下拉列表对应的树的ID
+    		 * moudle : 昆仑公司标准体系 或者 本单位标准体系 或者 具体的体系ID
+    		 * callBack : 点击树之后的回调
+    		 */
+    		initCateList : function(selectId, treeId, callBack){
+    			// 发送ajax 得到昆仑总树的所有最父级
+    			var listUrl = "/BZCX/department/get?type=list";
+    			var treeUrl = "/BZCX/architecture/tree?type=max";
+    			var	title = "标准体系";
+    			// 先加载出来树
+    			if(bzcxTree.initTree(treeId, "0", treeUrl, callBack,title)){
+    				// 再填充下拉列表
+    				$.ajax({
+    					url : listUrl,
+    			        type : "post",
+    			        ansyc : false,
+    			        success : function(data){
+    			        	// 将部门列表放到下拉框里面
+    			        	var parent = $("#cate_search_parent_select");
+    			        	parent.html("");
+    			        	if(data.data.length){
+    			        		for(var i = 0; i < data.data.length; i ++){
+    			        			var childStr = "";
+    			        			if(i == 0){
+    			        				childStr = '<option value="' + data.data[i].architectureId + '" selected>' + data.data[i].departmentName + "标准体系" + "</option>";
+    			        			}else{
+    			        				childStr = '<option value="' + data.data[i].architectureId + '" >' + data.data[i].departmentName + "标准体系" + "</option>";
+    			        			}
+    			        			parent.append($(childStr));
+    			        		}
+    			        	}else{
+    	        				var childStr = '<option value="' + data.data.architectureId + '" selected>' + data.data.departmentName + "标准体系" + "</option>";
+    		        			parent.append($(childStr));
+    			        	}
+    			        	// 给最父级分类下拉框增加change事件
+    			        	$("#cate_search_parent_select").change(function(){
+    			        		$("#error").addClass("errorHide");
+    			        		var architectureId = $(this).children('option:selected').val();
+    			        		bzcxTree.initTree(treeId, "0", '/BZCX/architecture/tree?architectureId=' + architectureId, callBack,title);
+    			        	})
+    			        }
+    			    });
+    			}
+    		}
+    }
+    
+    
+    
+     /**
+         * 将jstree树插件基于我们的业务，封装一次
+         * @returns
+         */
+        var bzcxTree = {
+        		/**
+        		 * 加载树
+        		 * treeId ：树的ID
+        		 * nodeId ：树的最父级节点的ID（用来请求树用）
+        		 * url : 加载树的后台接口的url
+        		 * callback : 点击了树节点之后的回调函数
+        		 */
+        		initTree : function(treeId, nodeId,url, callback,title){
+        			// 先把树销毁bzcxTree.initTree
+        			$('#' + treeId).jstree("destroy");
+        			var tree = $('#' + treeId).jstree({
+        				"plugins" : ["themes", "wholerow", "json_data", "search"],
+        				"search" : {
+        			                "case_insensitive" : true,
+        			                "ajax" : {
+        			                    url : url,
+        			                    data : {
+        			                    	nodeId : nodeId 
+        								},
+        								type : "POST"
+        			                }
+        				},
+        				"core" : {
+        					'multiple' : false,
+        					"opened" : true,
+        					"animation" : 0,
+        					"themes" : { "dots": true, "stripes" : true,"icons":false},
+        					'data' : function (obj, callback) {
+        						var data = {
+        							nodeId : nodeId
+        						}
+        						$.ajax({
+        							type: "POST",
+        							url: url,
+        							dataType:"json",
+        							data:data,
+        							async: false,
+        							success:function(data) {
+        								if(data.length > 0 && title == "标准体系"){
+        									console.log(data)
+        									/* systemHtml.queryParam.nodeId = data[0].id;
+        									systemHtml.initStandardTable(); */
+        								}else{
+        									$("#error").removeClass("errorHide");
+        								}
+        								jsonarray=data;
+        							}
+        						});
+        						if(typeof(jsonarray) === "undefined"){
+        							alert("暂未建立体系，请联系本公司管理员");
+        							return false;
+        						}else{
+        							callback.call(this, jsonarray);
+        						}
+        					}
+        				}
+        			});
+        			// 树的点击事件
+        			tree.on("changed.jstree", function (e, data) {
+        				callback(data);
+        			});
+        		return tree;
+        	},
+        }
+</script>
+</html>

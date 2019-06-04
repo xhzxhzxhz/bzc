@@ -1,0 +1,163 @@
+b{
+    font-weight: normal;
+}
+#menu li a span.myicon-user{
+    width: 25px;
+    height: 17px;
+    background: url("../../imgs/user/grzl.png") no-repeat;
+    margin-left: 23px;
+    margin-top: 14px;
+}
+#menu li a span.myicon-user.active{
+    background: url("../../imgs/user/grzlwhite.png") no-repeat;
+}
+#menu li a span.myicon-psd{
+    width: 20px;
+    height: 24px;
+    background: url("../../imgs/user/psd.png") no-repeat;
+    margin-left: 23px;
+    margin-top: 9px;
+}
+#menu li a span.myicon-psd.active{
+    background: url("../../imgs/user/psdwhite.png") no-repeat;
+}
+#main{
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+#main #main_left{
+    float: left;
+    padding: 10px 20px;
+    width: 20%;
+    height: 100%;
+}
+#main #main_right{
+    float: left;
+    width: 100%;
+    padding: 10px 0;
+    height: 100%;
+    overflow: hidden;
+}
+/*�Զ��帴ѡ��*/
+#main_right_bot{
+    overflow: hidden;
+}
+/*主体区域*/
+.main_right_bot_con{
+    margin: 15px 0 0 60px;
+}
+.main_right_bot_conin{
+    overflow: hidden;
+    width: 580px;
+}
+.con-left{
+    float: left;
+    width: 130px;
+    overflow: hidden;
+}
+.con-right{
+    float: right;
+    width: 420px;
+}
+.tit{
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+.con-left img{
+    border: none;
+    display: block;
+    width: 100px;
+    height: 100px;
+    border: 1px solid #68A1FF;
+    border-radius: 50%;
+    margin-top: 10px;
+}
+.user-btn{
+    border: none;
+    outline: none;
+    background: #ffffff;
+    border: 1px solid #68A1FF;
+    border-radius: 5px;
+    color: #68A1FF;
+}
+.edit-pic{
+    margin: 14px 0 0 14px;
+}
+.con-right-item{
+    overflow: hidden;
+    padding:3px;
+}
+.con-right-item b{
+    float: left;
+    width: 75px;
+    height: 35px;
+    line-height: 35px;
+    color: #999999;
+}
+.con-right-item>input{
+    width: 290px;
+    float: left;
+    height: 35px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    border: none;
+    border: 1px solid #E3E3E3;
+}
+.con-right-item em{
+    float: left;
+}
+.con-right-item input.edit{
+    border: 1px solid #68A1FF;
+    border-radius: 4px;
+}
+.con-right-item button{
+    float: right;
+    margin-top: 6px;
+}
+.user-btn.add-btn{
+    border-color: #999999;
+    color: #999999;
+}
+.rgt-btn-wrap{
+	margin-top:25px;
+	text-align: center;
+}
+.rgt-btn,.reset-btn {
+	border:none;
+	outline:none;
+    text-align: center;
+    line-height: 30px;
+    height: 30px;
+    width: 100px;
+    background: #1446A7;
+    color: #ffffff;
+    cursor:pointer;
+}
+.rgt-btn{
+	margin-left:50px;
+}
+.myradio{
+	float:left;
+	margin-top: 7px;
+}
+.myradio input[type='radio']{
+    margin-left: 2px;
+    margin-right: 2px;
+    display: none;
+}
+.myradio input[type='radio']+label:before{
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    background: url("../imgs/index/unselect.png") no-repeat;
+}
+.myradio input[type='radio']:checked+label:before{
+    background: url("../imgs/index/select.png") no-repeat;
+}
+.myradio input[type='radio']:checked+label{
+    color: #1446A7;
+}

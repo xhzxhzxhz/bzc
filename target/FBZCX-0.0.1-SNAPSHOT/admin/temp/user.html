@@ -1,0 +1,616 @@
+<div class="easyui-layout" data-options="fit:true">
+    <div  data-options="region:'west',border:true,split:true," title="部门" style="width:200px; padding:5px;">
+        <ul id="department_tree" class="easyui-tree"></ul>
+    </div>
+    <div data-options="region:'center',border:false">
+    	<!-- Begin of toolbar -->
+        <div id="user_toolbar">
+			<div class="wu-toolbar-button">
+				<a href="javascript:void(0)" class="easyui-linkbutton right_element" resourceId="res-f1a3aff4eca045b4ba21217a7df8f847" onclick="sectionAdd()">新增部门</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton right_element" resourceId="res-2401a66b792a497d9866095090d4152f" onclick="sectionEdit()">编辑部门</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton right_element" resourceId="res-e0f8b6d754c44897ad1346c24490b92f" onclick="sectionDele()">删除部门</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton right_element" resourceId="res-9de922ec558a483d9e638e11a6e8dd31" style="margin-left: 50px" onclick="userAdd()">新增人员</a>
+			</div>
+            <div class="wu-toolbar-search">
+                <label>关键词：</label><input id="user_keyword_input"class="wu-text" style="width:250px">
+                <a href="javascript:void(0)" class="easyui-linkbutton right_element" resourceId="res-01716439db014ea5bd3ad7e1856206ba" iconCls="icon-search" onclick="userSearch()">检索</a>
+            </div>
+        </div>
+        <!-- End of toolbar -->
+        <table id="user_datagrid" toolbar="#user_toolbar"></table>
+    </div>
+</div>
+<!-- Begin of easyui-dialog -->
+<div id="section_add_dialog" class="easyui-dialog" data-options="closed:true" style="width:400px;padding:10px">
+	<form id="section_add_form" method="post">
+        <table>
+            <tr>
+                <td width="80" align="right">部门名称:</td>
+                <td><input type="text" name="departmentName" class="wu-text easyui-validatebox" data-options="required:true"/></td>
+            </tr>
+			<tr>
+				<td align="right">部门地址:</td>
+				<td><input type="text" name="address" class="wu-text"/></td>
+			</tr>
+			<tr>
+				<td align="right">部门联系方式:</td>
+				<td><input type="text" name="contact" class="wu-text"/></td>
+			</tr>
+			<tr>
+				<td align="right">排序码:</td>
+				<td><input type="text" name="sortCode" class="wu-text"/></td>
+			</tr>
+			<tr>
+				<td valign="top" align="right">备注:</td>
+				<td><textarea name="departmentDescribe" rows="6" class="wu-textarea" style="width:260px"></textarea></td>
+			</tr>
+        </table>
+    </form>
+</div>
+<!-- End of easyui-dialog -->
+<!-- Begin of easyui-dialog -->
+<div id="user_add_dialog" class="easyui-dialog" data-options="closed:true" style="width:520px;padding:10px">
+	<form id="user_add_form" method="post">
+		<table>
+			<tr>
+				<td width="80" align="right">账号:</td>
+				<td><input type="text" name="account" class="wu-text easyui-validatebox" data-options="required:true"/></td>
+			</tr>
+			<tr id="trps" > <!-- style="display:none" -->
+				<td id="tdps1" width="80" align="right">密码:</td>
+				<td id="tdps2">
+				<input  type="text" id="password" name="password" 
+				class="wu-text easyui-validatebox password" value="123456"  readonly="readonly"/>
+				</td>
+			</tr>
+			<tr>
+				<td width="80" align="right">真实姓名:</td>
+				<td><input type="text" name="realname" class="wu-text easyui-validatebox" data-options="required:true"/></td>
+			</tr>
+			<tr>
+				<td align="right">性别:</td>
+				<td>
+					<label><input style="margin-top: 0px;" type="radio" name="sex" value="0" checked/>男</label>
+					<label style="margin-left: 150px"><input style="margin-top: 0px;" type="radio" name="sex" value="1"/>女</label>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">出生日期:</td>
+				<td><input class="easyui-datebox" name="brithday" style="width: 368px"></td>
+			</tr>
+			<tr>
+				<td width="80" align="right">邮箱:</td>
+				<td><input type="text" name="email" class="wu-text easyui-validatebox" data-options="required:true"/></td>
+			</tr>
+			<tr>
+				<td align="right">手机:</td>
+				<td><input type="text" name="tel" class="wu-text"/></td>
+			</tr>
+			<tr>
+				<td align="right">办公电话:</td>
+				<td><input type="text" name=officeTel class="wu-text"/></td>
+			</tr>
+			<tr>
+				<td align="right">QQ号码:</td>
+				<td><input type="text" name="qq" class="wu-text"/></td>
+			</tr>
+			<tr>
+				<td align="right">职务:</td>
+				<td><input type="text" name="duty" class="wu-text"/></td>
+			</tr>
+			<tr>
+				<td align="right">工位:</td>
+				<td><input type="text" name="officeLocation" class="wu-text"/></td>
+			</tr>
+			<tr>
+				<td valign="top" align="right">备注:</td>
+				<td><textarea name="note" rows="6" class="wu-textarea" style="width:360px"></textarea></td>
+			</tr>
+			<tr>
+				<td align="right">用户角色:</td>
+				<td>
+					<input id="user_role_input"   name="roleIds">
+				</td>
+			</tr>
+			<tr>
+				<td align="right">所属部门:</td>
+				<td><input id="departmentId_show" type="text" name="departmentName" class="wu-text" disabled/>
+					<input id="departmentId_hide" type="hidden"  name="departmentId" class="wu-text" /></td>
+			</tr>
+			<tr>
+				<td align="right"></td>
+				<td>
+					<div style="height: 100px;border: 1px #95b8e7 solid;overflow: auto;width: 366px">
+						<ul id="department_user_add_tree" class="easyui-tree"></ul>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<script type="text/javascript" src="../js/md5.js"></script>
+<!-- End of easyui-dialog -->
+<script type="text/javascript">
+	
+	/**
+	 * 检索用户
+	 */
+	function userSearch(){
+		var keyword = $('#user_keyword_input').val();
+		var data = {
+			keyword:keyword
+		}
+		userHtml.reloadTable(data);
+	}
+
+   /**
+	* 删除部门
+	*/
+	function sectionDele(){
+		// 最父级的部门不能删除
+		var rootNode = $("#department_tree").tree("getRoot");
+		var node = $('#department_tree').tree('getSelected');
+		if(rootNode.id == node.id){
+			$.messager.alert('信息提示','不可删除此部门。','info');
+			return;
+		}
+		if(node){
+			$.messager.confirm('信息提示','确定要删除此部门及其子部门吗？', function(result){
+				if(result){
+					$.ajax({
+						url:'/BZCX/admin/department/delete',
+						type:'POST',
+						data:{
+							departmentId:node.id
+						},
+						success:function(data){
+							if(data.code == 200){
+								$.messager.alert('信息提示','删除成功！','info');
+								userHtml.reloadTree();
+							}
+							else
+							{
+								$.messager.alert('信息提示','删除失败！','info');
+							}
+						}
+					});
+				}
+			});
+		}else{
+			$.messager.alert('信息提示','请选择一个部门！','info');
+		}
+	}
+
+   /**
+	* 打开添加部门窗口
+	*/
+	function sectionAdd(){
+		$('#section_add_form').form('reset');
+		var rootNode = $("#department_tree").tree("getRoot");
+		var node = $('#department_tree').tree('getSelected');
+		// 如果当前没有部门的话，那么新增的部门的parentId就是0
+		if(!rootNode){
+			parentId = 0;
+		}else if(rootNode && !node){
+			$.messager.alert('信息提示','请选择父级部门。','info');
+			return;
+		}else if(rootNode && node){
+			parentId = node.id
+		}
+		var parentId;
+		$('#section_add_dialog').dialog({
+			closed: false,
+			modal:true,
+            title: "新增部门",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: function(){
+                	$('#section_add_form').form('submit', {
+            			url:'/BZCX/admin/department/insert?parentId=' + parentId,
+            			success:function(data){
+            				data = JSON.parse(data);
+            				if(data.code == 200){
+            					$.messager.alert('信息提示','新增部门成功！','info');
+            					$('#section_add_dialog').dialog('close');
+            					userHtml.reloadTree()
+            					location.replace("")   
+            				}
+            				else
+            				{
+            					$.messager.alert('信息提示','提交失败！','info');
+            				}
+            			}
+            		});	
+                }
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#section_add_dialog').dialog('close');
+                }
+            }]
+        });
+	}
+   /**
+	*  打开修改部门窗口
+	*/
+	function sectionEdit(){
+		$('#section_add_form').form('reset');
+		var node = $('#department_tree').tree('getSelected');
+		if(!node){
+			return;
+		}
+		$.ajax({
+			url:'/BZCX/admin/department/detail',
+			type:'POST',
+			data:{
+				departmentId:node.id
+			},
+			success:function(data){
+				if(data.code == 200){
+					//绑定值
+					$('#section_add_form').form('load', data.data);
+				}
+			}
+		});
+		$('#section_add_dialog').dialog({
+			closed: false,
+			modal:true,
+            title: "编辑部门",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: function(){
+                	$('#section_add_form').form('submit', {
+            			url:'/BZCX/admin/department/update?id=' + node.id,
+            			success:function(data){
+            				data = JSON.parse(data);
+            				if(data.code == 200){
+            					$.messager.alert('信息提示','修改成功。','info');
+            					$('#section_add_dialog').dialog('close');
+            					userHtml.reloadTree()
+            				}
+            				else
+            				{
+            					$.messager.alert('信息提示','提交失败！','info');
+            				}
+            			}
+            		});	
+                }
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#section_add_dialog').dialog('close');
+                }
+            }]
+        });
+	}
+	/**
+	 * 删除用户
+	 */
+	function userDele(userId){
+		$.messager.confirm('信息提示','确定要删除当前人员吗？', function(result){
+			if(result){
+				$.ajax({
+					url:'/BZCX/admin/user/delete?audit=' + userHtml.audit,
+					type:'POST',
+					data:{
+						userId : userId
+					},
+					success:function(data){
+						if(data.code == 200){
+							if(userHtml.audit){
+								$.messager.alert('信息提示','删除申请已提交，待审核。','info');
+							}else{
+								$.messager.alert('信息提示','删除成功。','info');
+							}
+							userHtml.reloadTable();
+						}else
+						{ 
+							$.messager.alert('信息提示','删除失败。','info');
+						}
+					}
+				});
+			}
+		});
+	}
+	/**
+	 * Name 打开添加人员窗口
+	 */
+	function userAdd(){
+		$('#trps').show();
+		$('#user_add_form').form('reset');
+		userHtml.initRoleCombox();
+		$('#user_add_dialog').dialog({
+			closed: false,
+			modal:true,
+			title: "新增人员",
+			buttons: [{
+				text: '确定',
+				iconCls: 'icon-ok',
+				handler: function(){
+					// 验证权限
+					var departmentId = $('#departmentId_hide').val();
+					if(!window.resourceNameArray.contains("添加所有部门人员") && departmentId != window.user.departmentId){
+    					$.messager.alert('信息提示','只能新增本部门人员。','info');
+						return;
+					}
+					//所属部门是否为空
+					var department = $("#departmentId_show").val();
+                	if(department == ""){
+                		$.messager.alert('信息提示','所属部门不能为空','info');
+                		return;
+                	}
+                	console.log($(".password").val());
+                	if($(".password").val()!=null &&$(".password").val()!=""){
+                	$(".password").val(hex_md5($(".password").val()));
+					$('#user_add_form').form('submit', {
+            			url:'/BZCX/admin/user/insert?audit=' + userHtml.audit,
+            			type:'POST',
+            			success:function(data){
+            				data = JSON.parse(data);
+            				if(data.code == 200){
+            					var msg = "";
+            					if(userHtml.audit){
+            						msg = "人员新增申请提交成功，待审核。";
+            					}else{
+            						msg = "新增人员成功。"
+            					}
+            					$.messager.alert('信息提示',msg,'info');
+            					$('#user_add_dialog').dialog('close');
+            					userHtml.reloadTable();
+            				}
+            				else
+            				{
+            					$.messager.alert('信息提示','新增失败！','info');
+            				}
+            			}
+            		});	
+                	}else{
+                		$.messager.alert('信息提示','密码不能为空');
+                	}
+				}
+			}, {
+				text: '取消',
+				iconCls: 'icon-cancel',
+				handler: function () {
+					$('#user_add_dialog').dialog('close');
+				}
+			}]
+		});
+	}
+	/**
+	 * Name 打开修改人员窗口
+	 */
+	function userEdit(userId){
+		$('#trps').hide();
+		$('#user_add_form').form('reset');
+		userHtml.initRoleCombox(userId);
+		$.ajax({
+			url:'/BZCX/admin/user/detail',
+			type:'POST',
+			data:{
+				userId : userId
+			},
+			success:function(data){
+				if(data.code == 200){
+					//绑定值
+				$('#user_add_form').form('load', data.data);
+				$(".password").val("");
+				}
+			}
+		});
+		$('#user_add_dialog').dialog({
+			closed: false,
+			modal:true,
+			title: "修改人员",
+			buttons: [{
+				text: '重置密码',
+				handler: function () {
+					$('#trps').show();
+					$('#password').val("123456");
+				}
+			    },{
+				text: '确定',
+				iconCls: 'icon-ok',
+				handler: function(){
+					// 验证权限
+					var departmentId = $('#departmentId_hide').val();
+					if(!window.resourceNameArray.contains("添加所有部门人员") && departmentId != window.user.departmentId){
+    					$.messager.alert('信息提示','部门选择有误，请选择当前人员所在部门。','info');
+						return;
+					}
+				    if($(".password").val()!=""){
+					$(".password").val(hex_md5($(".password").val()));
+				     }
+					$('#user_add_form').form('submit', {
+            			url:'/BZCX/admin/user/update?id=' + userId,
+            			type:'POST',
+            			success:function(data){
+            				data = JSON.parse(data);
+            				if(data.code == 200){
+            					$.messager.alert('信息提示','修改成功！','info');
+            					$('#user_add_dialog').dialog('close');
+            					userHtml.reloadTable();
+            				}else{
+            					$.messager.alert('信息提示','新增失败！','info');
+            				}
+            			}
+            		});	
+				}
+			}, {
+				text: '取消',
+				iconCls: 'icon-cancel',
+				handler: function () {
+					$('#user_add_dialog').dialog('close');
+				}
+			}]
+		});
+	}
+	function userAudit(userId, result){
+		var pass;		
+		var msg;
+		if(result == "pass"){
+			pass = true;
+			msg = "通过";
+		}else if(result == "refuse"){
+			pass = false;
+			msg = "驳回";
+		}
+		$.messager.confirm('信息提示','确定' + msg + '这条申请吗？', function(result){
+			if(result){
+				var data = {
+					userId : userId,
+					pass : pass
+				}
+				$.ajax({
+					url:'/BZCX/admin/user/audit',
+					type:'POST',
+					data:data,
+					success:function(data){
+						if(data.code == 200){
+        					userHtml.reloadTable();
+						}else{ 
+							$.messager.alert('信息提示','服务器错误，操作失败。','info');
+						}
+					}
+				});
+			}
+		});
+	}
+	var userHtml = {
+			initDepartmentTree : function(data){
+				$('#department_tree').tree({
+					url:'/BZCX/admin/department/tree',
+					onSelect:function(node){
+						var data = {
+							
+						}
+						var departmentId = node.id;
+						if(window.resourceNameArray.contains("检索所有人员") || departmentId == window.user.departmentId){
+							data.departmentId = departmentId;
+						}else{
+							$.messager.alert('信息提示','只能查看本部门人员。','info');
+							return;
+						}
+						userHtml.reloadTable(data);
+					}
+				});
+			},
+			initDepartUserAddTree : function(){
+				$('#department_user_add_tree').tree({
+					url:'/BZCX/admin/department/tree',
+					onSelect:function(node){
+						$('#departmentId_hide').val(node.id);
+						$('#departmentId_show').val(node.text);
+					}
+				});
+			},
+			reloadTree : function(data){
+				$('#department_tree').tree("reload");
+			},
+			initTable : function(data){
+				$('#user_datagrid').datagrid({
+					url:'/BZCX/admin/user/list',
+					queryParams:data,
+					rownumbers:true,
+					singleSelect:false,
+					pageSize:20,
+					pagination:true,
+					multiSort:true,
+					fitColumns:true,
+					fit:true,
+					columns:[[
+					    { checkbox:true},
+						{ field:'nickname',title:'昵称',width:100,sortable:true},
+						{ field:'realname',title:'姓名',width:100,sortable:true},
+						{ field:'city',title:'城市',width:100},
+						{ field:'duty',title:'职务',width:30},
+						{ field:'roleName',title:'系统角色',width:80},
+						{ field:'email',title:'邮箱',width:110},
+						{ field:'tel',title:'手机',width:90},
+						{ field:'status',title:'状态',width:50,
+							formatter:function(value,rec){
+								return commonUtil.map.get("userStatus_" + rec.status);
+							}
+						},
+						{ field:'lastOperType',title:'最后操作类型',width:90,
+							formatter:function(value,rec){
+								return commonUtil.map.get("userLastOperType_" + rec.lastoperateType);
+							}
+						},
+						{ field:'action',title:'操作',width:150,align:'center',
+							formatter:function(value,rec){
+								var str = ""; 
+								if(rec.lastoperateType == 0 || rec.lastoperateType == 3 || rec.lastoperateType == 6){
+									if(!userHtml.audit){
+										return '<a onclick="userAudit(\'' + rec.id + '\', \'pass\')" href="javascript:void(0)" style="text-decoration: underline;">通过</a>'
+										    + '<a onclick="userAudit(\'' + rec.id + '\', \'refuse\')" href="javascript:void(0)" style="margin-left:8px;text-decoration: underline;">驳回</a>';
+									}else{
+										return "";
+									}
+								}else{
+									return '<a onclick="userDele(\'' + rec.id + '\')" href="javascript:void(0)" style="text-decoration: underline;">删除</a>'
+									+ '<a onclick="userEdit(\'' + rec.id + '\')" href="javascript:void(0)" style="margin-left:8px;text-decoration: underline;">修改</a>';
+								}
+								return str;
+							}
+						}
+					]]
+				});
+			},
+			reloadTable : function(data){
+				$('#user_datagrid').datagrid("reload", data)
+			},
+			initRoleCombox : function(userId){
+				var jsonArray = [];
+				$.ajax({
+					url:'/BZCX/admin/role/list',
+					type:'POST',
+					data:{
+						userId : userId
+					},
+					async:false,
+					success:function(data){
+						var list = data.rows;
+						var flag = false;
+						for(var i = 0; i < list.length; i++){
+							if(list[i].checked){
+								flag = true;
+							}
+							if(!window.resourceNameArray.contains("添加所有角色") && (list[i].id == "d03279784ca44c0fb5b82cad4722719f")){
+								continue;		
+							}
+							jsonArray.push(new EasyUISelect(list[i].id, list[i].name, list[i].checked));
+						}
+						if(!flag){
+							jsonArray[0].selected = true;							
+						}
+						console.info(jsonArray);
+					}
+				});
+				$('#user_role_input').combobox({
+				    data:jsonArray,
+				    valueField:'id',
+				    textField:'text'
+				});
+			},
+			// 增加 删除人员操作是否需要审核
+			audit : window.resourceNameArray.contains("添加所有部门人员") == true?false : true
+	}
+	$(function(){
+		// 先初始化部门树
+		userHtml.initDepartmentTree();
+		// 初始化增加人员时候 弹出的部门树
+		userHtml.initDepartUserAddTree();
+		// 再初始化表格数据
+		var data = {
+			departmentId : window.user.departmentId
+		}
+		userHtml.initTable(data);
+		// 根据当前的登录人是否有编辑部门，查看部门，删除部门的权限来判断按钮是否要显示
+		adminRight.checkElement();
+	});
+</script>

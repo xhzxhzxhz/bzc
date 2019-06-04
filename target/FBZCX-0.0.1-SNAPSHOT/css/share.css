@@ -1,0 +1,187 @@
+#main{
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+#main_top{
+    margin-top: 30px;
+}
+#main_top ul{
+    overflow: hidden;
+    border-bottom: 1px solid #E6E6E6;
+    padding-bottom: 6px;
+}
+#main_top ul li{
+    float: left;
+    overflow: hidden;
+    font-size: 14px;
+}
+#main_top ul li:nth-of-type(1) i{
+    float: left;
+    width: 19px;
+    height: 19px;
+    background: url("../imgs/search/home.png") no-repeat;
+}
+#main_top ul li a{
+    float: left;
+    margin: 0 10px;
+    color: #1446A7;
+}
+#main_top ul li:last-of-type a{
+    color: #868686;
+}
+#main_top ul li span{
+    float: left;
+    color: #7F7F7F;
+}
+#main_bot{
+    margin-top: 22px;
+    overflow: hidden;
+}
+#main_bot_left{
+    width: 830px;
+    float: left;
+}
+#main_bot_right{
+    width: 350px;
+    float: right;
+}
+.main-bot-left-top{
+    height: 1000px;
+    overflow: hidden;
+}
+/*主题左边部分*/
+.main-bot-left-top ul li{
+    overflow: hidden;
+    height: 50px;
+    line-height: 50px;
+    color: #868686;
+    font-size: 16px;
+}
+.main-bot-left-top ul li:nth-of-type(2n){
+    background: #ffffff;
+}
+.main-bot-left-top ul li:nth-of-type(2n-1){
+    background: #FCFDFF;
+}
+.main-bot-left-top ul li i{
+    width: 21px;
+    height: 21px;
+    float: left;
+    margin: 15px 12px 0 20px;
+}
+.main-bot-left-top ul li p{
+    float: left;
+    width: 260px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+.main-bot-left-top ul li a{
+    float: right;
+    margin-right: 20px;
+    color: #1446A7;
+    cursor:pointer;
+}
+.main-bot-left-top ul li b{
+    float: right;
+    margin-right: 30px;
+}
+.main-bot-left-top ul li em{
+    float: right;
+    margin-right: 30px;
+}
+.main-bot-left-top ul li span{
+    float: right;
+    margin-right: 30px;
+}
+.myword{
+    background: url("../imgs/share/word.png") no-repeat;
+}
+.myppt{
+    background: url("../imgs/share/ppt.png") no-repeat;
+}
+.mypdf{
+    background: url("../imgs/share/pdf.png") no-repeat;
+}
+.myaudio{
+    background: url("../imgs/share/audio.png") no-repeat;
+}
+.myvideo{
+    background: url("../imgs/share/video.png") no-repeat;
+}
+.myexcel{
+    background: url("../imgs/share/excel.png") no-repeat;
+}
+.myunknown{
+    background: url("../imgs/share/unknown.png") no-repeat;
+}
+.main-bot-left-bot{
+    margin-top: 20px;
+}
+/*主体部分右侧*/
+.main-bot-right-top{
+    overflow: hidden;
+}
+.main-bot-right-top i{
+    float: left;
+    width: 21px;
+    height: 25px;
+    background: url("../imgs/share/hot.png") no-repeat;
+}
+.main-bot-right-top span{
+    float: left;
+    font-size: 18px;
+    margin: 2px 0 0 10px;
+}
+.main-bot-right-bot ul li{
+    margin-top: 22px ;
+    overflow: hidden;
+}
+.main-bot-right-bot ul li i{
+    float: left;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-style: normal;
+    background: #8EB9F5;
+    font-size: 16px;
+    margin-top: 1px;
+    color: #ffffff;
+}
+.main-bot-right-bot ul li p{
+    float: left;
+    width: 250px;
+    margin-left: 12px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+.main-bot-right-bot ul li em{
+    float: right;
+}
+.main-bot-right-bot ul li span{
+    float: right;
+}
+.up{
+    margin: 4px 0 0 8px;
+    width: 12px;
+    height: 16px;
+    background: url("../imgs/share/shangsheng.png") no-repeat;
+}
+.down{
+    margin: 4px 0 0 8px;
+    width: 12px;
+    height: 16px;
+    background: url("../imgs/share/xiajiang.png") no-repeat;
+}
+.main-bot-right-bot ul li:nth-of-type(1) i{
+    background: #F54545;
+}
+.main-bot-right-bot ul li:nth-of-type(2) i{
+    background: #FF8547;
+}
+.main-bot-right-bot ul li:nth-of-type(3) i{
+    background: #FFAC38;
+}

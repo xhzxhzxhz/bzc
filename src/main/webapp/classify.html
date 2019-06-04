@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>分类查询</title>
+    <link rel="stylesheet" href="css/userAttention.css">
+    <style>
+    	body{
+    		margin:0;
+    		padding:0;
+    		background:#ececec;
+    	}
+        .classify{
+            width: 100%;
+            background: #ececec;
+        }
+        .subtitle{
+            width: 100%;
+            height:.6rem;
+            font-size: .3rem;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-end;
+            padding-left: .2rem;
+            padding-bottom: .1rem;
+            color: #a2a2a2;
+        }
+        .nameDiv{
+            width: 98%;
+            height:.8rem;
+            background: #fff;
+            font-size: .3rem;
+            display:-webkit-flex;
+            display: flex;    
+            justify-content: start;
+            align-items: center;
+            color: #333;   
+            padding-left: .2rem;
+        }
+        .company,.trade{
+            flex:2.8;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            margin-left: -.1rem;
+        }
+        .unsenen{
+            flex:1;
+        }
+        .unsenen1{
+	        position: relative;
+	        right: .2rem;
+        }
+        .classify img{
+            transform: scale(0.6);
+        }
+        .stand{
+            flex:13;            
+        }
+        .inquire,.crux,.category,.status,.rank,.asc{
+            height: .8rem;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            font-size: .3rem;
+            background: #fff;        
+            padding-left:.2rem; 
+        }
+        .crux input{
+        	border:none;
+        	outline:none;
+        	overflow: hidden;
+        	text-overflow: ellipsis;
+        	white-space: nowrap;
+        	margin-left:.1rem;
+        }
+        .inquire,.category{
+            margin-top: .2rem;
+        }      
+        .crux,.status,.rank,.asc{
+            border-top:1px solid #ececec;
+        }
+        .inquire div,.crux div,.category div,.status div,.rank div,.asc div{
+            flex: 1;
+            height: 100%;
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+        }
+        .crux div:nth-child(2){
+            flex: 3;
+        }
+        .status div:nth-child(2){
+            flex: 3;
+            padding-left:.1rem;
+        }
+        .status select{
+        	border:none;
+        	outline:none;
+        	background:#fff;
+        	appearance: none;
+            -webkit-appearance:none;
+        }
+        .asc div:nth-child(3){
+            flex:2;
+        }
+        .btnDiv{
+            width: 100%;
+            height: 1rem;
+            background: #fff;
+            position: fixed;
+            left: 0;
+            bottom:2px;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btnDiv button{
+            height: 80%;
+            line-height:80%;
+            width: 45%;
+            border: none;
+            outline: none;
+        }
+        .btn1{
+            color: #63CDDF;
+            background: #eee;
+            border-radius: 6px 0px 0px 6px;
+        }
+        .btn2{
+            color: #fff;
+            background:linear-gradient(90deg,rgba(0,218,254,1),rgba(0,75,226,1));
+            border-radius:0px 6px 6px 0px;
+        }
+        .btn1:active{
+        	background: #d1f2f7;
+        }
+        .btn2:active{
+            background: linear-gradient(90deg,rgba(0,218,254,1),rgba(0,75,226,1));
+        }        
+    </style>
+</head>
+<body>
+    <div class="classify">
+    	<div class="attention attentionHide" id="follow">  <!-- 未关注的用户显示 -->
+    		<img src="img/gz_logo.png"/>
+    		<button>关注</button>
+    	</div>
+        <div class="subtitle">标准分类游览</div>
+        <div class="nameDiv">
+           <!--  <span class="company">福克斯通科技有限公司</span>
+            <span class="unsenen">></span>
+            <span class="trade">福克斯通科技有限公司</span>
+            <span class="unsenen">></span> -->
+            <span class="stand" id="classify_system">福克斯通科技技术有限公司</span>
+            <!-- <span class="unsenen1"><img src="img/icon_in.png" alt="暂无图片"></span> -->
+        </div>
+        <div class="inquire" id="standardtype">
+            <div>查询项</div><!-- 单选，定义一个变量，标准号：standardNo，标准名称：standardCnName，发布单位pubOrg -->
+             <div class="inquireImg"><img src="img/button_sel_xuankuang.png" alt="暂无图片" id="classinput_reset">标准名称</div>
+            <div class="inquireImg"><img src="img/button_nor_xuankuang.png" alt="暂无图片">标准号</div>
+            <div class="inquireImg"><img src="img/button_nor_xuankuang.png" alt="暂无图片">发布单位</div>
+        </div>
+        <div class="crux">
+            <div>关键词</div>
+            <div><input type="text" placeholder="请输入关键词" id="classfity_text"></div>
+        </div>
+        <div class="category" >
+            <div>类别</div>
+            <div class="categoryImg"><img src="img/button_sel_xuankuang.png" alt="暂无图片" id="classcategory_reset">全部</div>
+            <div class="categoryImg"><img src="img/button_nor_xuankuang.png" alt="暂无图片">国家标准</div>
+            <div class="categoryImg"><img src="img/button_nor_xuankuang.png" alt="暂无图片">行业标准</div>
+        </div>
+        <div class="status">
+            <div>标准状态</div>
+            <div>
+	            <select id="standstate">
+	            	<option select="select" id="">全部</option>
+	            	<option>现行</option>
+	            	<option>暂行</option>
+	            	<option>废止</option>
+	            </select>
+	            <img alt="" src="img/icon_sanjiao.png">
+            </div>
+        </div>
+        <div class="rank">
+            <div>结果排序</div>
+            <div class="rankImg"><img src="img/button_sel_xuankuang.png" alt="暂无图片" id="classrank_reset">标准名称</div>
+            <div class="rankImg"><img src="img/button_nor_xuankuang.png" alt="暂无图片">发布时间</div>
+            <div class="rankImg"><img src="img/button_nor_xuankuang.png" alt="暂无图片">标准状态</div>
+        </div>
+        <div class="asc">
+            <div>结果排序</div>
+            <div class="ascImg"><img src="img/button_sel_xuankuang.png" alt="暂无图片" id="classasc_reset">升序</div>
+            <div class="ascImg"><img src="img/button_nor_xuankuang.png" alt="暂无图片">降序</div>
+        </div>
+        <div class="btnDiv">
+            <button class="btn1" onclick="reset()">重置</button>
+            <button class="btn2" onclick="classification()">查询</button>
+        </div>
+    </div>
+     <script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js "></script>
+   <script src="js/jquery.min.js"></script>
+     <script src="js/common.js"></script>
+     <script src="js/rem.js"></script>
+</body>
+<script>
+   var nodeId = "";
+   var seachtype = 'standardCnName';
+   var standardType = '';
+   var ordertype = 'STANDARD_CN_NAME';
+   var des = '';
+    $(function(){
+    	var searh = window.location.search;
+    	var nodeIdarry = searh.split("=")[1];
+    	nodeId = nodeIdarry.split("&")[0];
+    	var text = nodeIdarry.split("&")[1];
+    	text = decodeURIComponent(text);
+    	$("#classify_system").empty();
+    	$("#classify_system").append(text);
+    });
+    
+  //微信分享
+    wx.ready(function () {
+        	wx.onMenuShareAppMessage({
+        		title: '分类查询', // 分享标题
+            	desc: '通过选择体系和输入条件进行检索', // 分享描述
+            	link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            	imgUrl : imgUrl, // 分享图标
+            	type: '', // 分享类型,music、video或link，不填默认为link
+            	dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            	success: function () {
+            		// 用户确认分享后执行的回调函数
+            	},
+            	cancel: function () {
+            		// 用户取消分享后执行的回调函数
+            	}
+        	});
+        });
+
+    $('.inquireImg').each(function(){
+    	$(this).click(function(){
+    		$('.inquireImg img').attr("src","img/button_nor_xuankuang.png");
+    		$(this).children('img').attr("src","img/button_sel_xuankuang.png");
+    		if($(this).text()=='标准号'){
+        		seachtype='standardNo';
+    		}else if($(this).text()=='标准名称'){
+    			seachtype='standardCnName';
+    		}else if($(this).text()=='发布单位'){
+    			seachtype = "pubOrg";
+    		}else{
+    			seachtype = "standardCnName";
+    		}
+    	})
+    })
+    
+    $('.categoryImg').each(function(){
+    	$(this).click(function(){
+    		$('.categoryImg img').attr("src","img/button_nor_xuankuang.png");
+    		$(this).children('img').attr("src","img/button_sel_xuankuang.png");
+    		if($(this).text()=='国家标准'){
+        		standardType='G';
+    		}else if($(this).text()=='行业标准'){
+    			standardType='H';
+    		}else{
+    			standardType = "";
+    		}
+    	})
+    })
+   
+    $('.rankImg').each(function(){
+    	$(this).click(function(){
+    		$('.rankImg img').attr("src","img/button_nor_xuankuang.png");
+    		$(this).children('img').attr("src","img/button_sel_xuankuang.png");
+    		if($(this).text()=='标准名称'){
+        		ordertype='STANDARD_CN_NAME';
+    		}else if($(this).text()=='标准状态'){
+    			ordertype='STANDARD_STATUS';
+    		}else if($(this).text()=='发布时间'){
+    			ordertype = "PUBLISH_DATE";
+    		}
+    	})
+    })
+    
+    $('.ascImg').each(function(){
+    	$(this).click(function(){
+    		$('.ascImg img').attr("src","img/button_nor_xuankuang.png");
+    		$(this).children('img').attr("src","img/button_sel_xuankuang.png");
+    		if($(this).text()=='降序'){
+    			des='desc';
+    		}else{
+    			des='';
+    		}
+    	})
+    })
+    
+    function classification() {
+    	var seachtypeword = $("#classfity_text").val();
+    	var standstate = "";
+    	if($('#standstate option:selected').text()=='现行'){
+    		standstate='1';
+		}else if($('#standstate option:selected').text()=='暂行'){
+			standstate='2';
+		}else if($('#standstate option:selected').text()=='废止'){
+			standstate='3';
+		}else{
+			standstate = '';
+		}
+		var info = {
+			"moudle" : "4003",
+			"nodeId" : nodeId,
+			"standardType" : standardType,//类别，国标就传G；行标就传H，就这两个类型
+			"order" :ordertype,//排序，标准名称倒序STANDARD_CN_NAME，发布时间PUBLISH_DATE，标准状态STANDARD_STATUS
+			"sort" : des,//什么都不传是升序；desc是降序
+			"standardStatus" : standstate,
+			"rows" : 15,
+			"page" : 1
+		}
+		info[seachtype] = seachtypeword;
+		//seachtype : seachtypeword,//标准号standardNo，标准中文名standardCnName，发布单位pubOrg
+		console.log(info)
+		var nextinfo = JSON.stringify(info); 
+		nextinfo = myencodeURI(nextinfo);
+		window.location.href = "hightwo.html?classification="+nextinfo;
+	}
+
+    function myencodeURI(str){  
+         return  encodeURIComponent(encodeURIComponent(str));  
+    } 
+    
+    function reset(){
+    	$("select").find("option:first").prop("selected",true);
+    	//$("#classify_system").text("");
+    	$("#classfity_text").val("");
+    	$('.rankImg img').attr("src","img/button_nor_xuankuang.png");
+    	$('#classrank_reset').attr("src","img/button_sel_xuankuang.png");
+    	$('.ascImg img').attr("src","img/button_nor_xuankuang.png");
+    	$("#classasc_reset").attr("src","img/button_sel_xuankuang.png");
+    	$('.categoryImg img').attr("src","img/button_nor_xuankuang.png")
+    	$("#classcategory_reset").attr("src","img/button_sel_xuankuang.png")
+    	$('.inquireImg img').attr("src","img/button_nor_xuankuang.png")
+    	$("#classinput_reset").attr("src","img/button_sel_xuankuang.png")
+    	
+    }
+</script>
+</html>

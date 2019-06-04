@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.user.RDepartmentMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.user.DepartmentVo" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="DEPARTMENT_NAME" property="departmentName" jdbcType="VARCHAR" />
+    <result column="DEPARTMENT_DESCRIB" property="describe" jdbcType="VARCHAR" />
+    <result column="CONTACT_USER_ID" property="contactUserId" jdbcType="VARCHAR" />
+    <result column="CONTACT" property="contact" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="SORT_CODE" property="sortCode" jdbcType="BIGINT" />
+     <result column="REALNAME" property="contactUserName" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="LASTOPERATE_TIME" property="lastoperateTime" jdbcType="TIMESTAMP" />
+    <result column="LASTOPERATE_USER" property="lastoperateUser" jdbcType="VARCHAR" />
+    <result column="LASTOPERATE_TYPE" property="lastoperateType" jdbcType="VARCHAR" />
+     <result column="PATH" property="path" jdbcType="LONGVARCHAR" />
+     <result column="ARCHITECTURE_ID" property="architectureId" jdbcType="VARCHAR" />
+     <result column="ACCOUNT" property="account" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getDepartment" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+     SELECT de.*,COUNT(de.ID) as usertotal FROM r_department de LEFT JOIN r_user u ON de.ID = u.DEPARTMENT_ID
+      GROUP BY de.ID ORDER BY de.PARENT_ID,de.SORT_CODE
+  </select>
+  
+  <select id="getDepartmentByStandard" parameterType="string" resultMap="BaseResultMap">
+      SELECT de.* FROM S_STANDARD sta LEFT JOIN R_DEPARTMENT de ON STA.UPLOAD_UNIT = DE.ID 
+      WHERE STA.STANDARD_ID = #{0}
+  </select>
+  
+  
+   <select id="getDepartmentByArchitectureId"  parameterType="string" resultMap="BaseResultMap" >
+  		 select * from A_ARCHITECTURE_MANAGE aam
+  		 LEFT JOIN R_DEPARTMENT rd ON aam.PUBLISH_UNIT = rd.ID
+  		 where aam.ARCHITECTURE_ID = #{0} 
+  </select>
+  <select id="getDepartmentById"  parameterType="string" resultMap="BaseResultMap" >
+  		 select * from R_DEPARTMENT d
+  		 LEFT JOIN r_user u on d.CONTACT_USER_ID = U.ID 
+  		 where d.ID = #{0} 
+  </select>
+  <select id="listDepartmentByQuery"  parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap" >
+  		 select rd.*,aam.ARCHITECTURE_ID from R_DEPARTMENT rd
+  		 LEFT JOIN A_ARCHITECTURE_MANAGE aam on rd.ID = aam.PUBLISH_UNIT
+  		 <where>
+  		     <if test="parentId != null">
+  		         PARENT_ID like CONCAT('%',#{parentId},'%')
+  		     </if>
+  		 </where>
+  		 <choose>
+        <when test="order != null">
+           	order by ${order} desc
+        </when>
+        <otherwise>
+           	order by SORT_CODE
+        </otherwise>
+    </choose>
+  </select>
+  <select id="secondUnitOrderByStandardCount" resultMap="BaseResultMap">
+	select "COUNT"(*) total, rd.DEPARTMENT_NAME, rd.id, AAM.ARCHITECTURE_ID from R_DEPARTMENT rd
+	LEFT JOIN A_ARCHITECTURE_MANAGE aam on rd.ID = aam.PUBLISH_UNIT
+	LEFT JOIN A_ARCHITECTURE_NODE aan on aam.ARCHITECTURE_ID = aan.ARCHITECTURE_ID
+	LEFT JOIN A_STANDARD_NODE asn on aan.NODE_ID =	asn.NODE_ID
+	where rd.PARENT_ID like #{0}
+	GROUP BY rd.DEPARTMENT_NAME, rd.id, AAM.ARCHITECTURE_ID 
+	ORDER BY total desc
+  </select>
+  <select id="secondUnitOrderByActive" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+	select "COUNT"(*) as total, rd.Id, aam.ARCHITECTURE_ID,rd.department_name from R_DEPARTMENT rd
+	left join R_USER ru on rd.Id = RU.DEPARTMENT_ID
+	left join A_ARCHITECTURE_MANAGE aam on aam.publish_unit = rd.id
+	LEFT JOIN U_OPER_LOG uol on UOL.MAPPING_ID = RU.ID and (uol.oper_type = '1001' or uol.oper_type = '1002')
+	<where>
+		<if test="startTime != null">
+			uol.OPER_DATE &gt; STR_TO_DATE(#{startTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="endTime != null">
+			and uol.OPER_DATE &lt; STR_TO_DATE(#{endTime},'%Y-%m-%d %H:%i:%s') 
+		</if>
+	</where>
+	group by RD.id,rd.department_name,aam.ARCHITECTURE_ID
+	order by total desc
+  </select>
+  <select id="listDepartmentLeader" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultType="string" >
+  		select * from r_user u
+		LEFT JOIN r_user_role ur ON  u.ID = ur.ALLOW_ID 
+		LEFT JOIN r_role r ON ur.ROLE_ID = r.ID 
+		where u.DEPARTMENT_ID = #{departmentId} and r.ID = #{roleId}
+		GROUP BY u.ID
+  </select>
+  <delete id="deleteById" parameterType="string">
+  		 delete from R_DEPARTMENT where PATH like CONCAT('%',#{0},'%')
+  </delete>
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.user.R_DepartmentDo" >
+    insert into R_DEPARTMENT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="departmentName != null" >
+        DEPARTMENT_NAME,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="sortCode != null" >
+        SORT_CODE,
+      </if>
+      <if test="contactUserId != null" >
+        CONTACT_USER_ID,
+      </if>
+      <if test="contact != null" >
+        CONTACT,
+      </if>
+      <if test="describe != null" >
+        DEPARTMENT_DESCRIB,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="lastoperateTime != null" >
+        LASTOPERATE_TIME,
+      </if>
+      <if test="lastoperateUser != null" >
+        LASTOPERATE_USER,
+      </if>
+      <if test="lastoperateType != null" >
+        LASTOPERATE_TYPE,
+      </if>
+      <if test="path != null" >
+        PATH,
+      </if>
+      <if test="createTime != null">
+          CREATE_TIME,
+      </if>
+        <if test="account != null">
+          ACCOUNT,
+      </if>
+        <if test="password != null">
+          PASSWORD,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null" >
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="sortCode != null" >
+        #{sortCode,jdbcType=VARCHAR},
+      </if>
+      <if test="contactUserId != null" >
+        #{contactUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null" >
+        #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastoperateTime != null" >
+        #{lastoperateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastoperateUser != null" >
+        #{lastoperateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastoperateType != null" >
+        #{lastoperateType,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="createTime != null">
+         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+       <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.user.R_DepartmentDo" >
+    update R_DEPARTMENT
+    <set >
+      <if test="departmentName != null" >
+        DEPARTMENT_NAME = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactUserId != null" >
+        CONTACT_USER_ID = #{contactUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        CONTACT = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="sortCode != null" >
+        SORT_CODE = #{sortCode,jdbcType=BIGINT},
+      </if>
+      <if test="describe != null" >
+        DEPARTMENT_DESCRIB = #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastoperateTime != null" >
+        LASTOPERATE_TIME = #{lastoperateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastoperateUser != null" >
+        LASTOPERATE_USER = #{lastoperateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastoperateType != null" >
+        LASTOPERATE_TYPE = #{lastoperateType,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        ACCOUNT = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

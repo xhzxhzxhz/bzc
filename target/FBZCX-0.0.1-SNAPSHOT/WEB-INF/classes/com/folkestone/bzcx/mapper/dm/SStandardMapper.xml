@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.dm.SStandardMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.dm.StandardVo" >
+    <result column="STANDARD_ID" property="standardId" jdbcType="VARCHAR" />
+    <result column="PUBLISH_DATE" property="publishDate" jdbcType="TIMESTAMP" />
+    <result column="IMPLEMENTATION_DATE" property="implementationDate" jdbcType="TIMESTAMP" />
+    <result column="CONFIRM_DATE" property="confirmDate" jdbcType="TIMESTAMP" />
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="INVALID_DATE" property="invalidDate" jdbcType="TIMESTAMP" />
+    <result column="STANDARD_TYPE" property="standardType" jdbcType="VARCHAR" />
+    <result column="STANDARD_LEVEL2" property="standardLevel2" jdbcType="VARCHAR" />
+    <result column="LANGUAGE" property="language" jdbcType="INTEGER" />
+    <result column="COUNTRY" property="country" jdbcType="VARCHAR" />
+    <result column="STANDARD_LEVEL" property="standardLevel" jdbcType="INTEGER" />
+    <result column="PROJECT_START_DATE" property="projectStartDate" jdbcType="TIMESTAMP" />
+    <result column="UDC" property="udc" jdbcType="VARCHAR" />
+    <result column="PAGE_NUMBER" property="pageNumber" jdbcType="INTEGER" />
+    <result column="PUB_DATE" property="pubDate" jdbcType="TIMESTAMP" />
+    <result column="ISBN" property="isbn" jdbcType="VARCHAR" />
+    <result column="STANDARD_STATUS" property="standardStatus" jdbcType="INTEGER" />
+    <result column="LAST_OPER_DATE" property="lastOperDate" jdbcType="TIMESTAMP" />
+    <result column="LAST_OPER_TYPE" property="lastOperType" jdbcType="INTEGER" />
+    <result column="LAST_OPER_USER" property="lastOperUser" jdbcType="VARCHAR" />
+    <result column="UPLOAD_UNIT" property="uploadUnit" jdbcType="VARCHAR" />
+    <result column="STANDARD_NO_TRIM" property="standardNoTrim" jdbcType="VARCHAR" />
+     <result column="STANDARD_NO" property="standardNo" jdbcType="VARCHAR" />
+    <result column="STANDARD_CN_NAME" property="standardCnName" jdbcType="VARCHAR" />
+    <result column="STANDARD_EN_NAME" property="standardEnName" jdbcType="VARCHAR" />
+    <result column="STANDARD_FILE_NAME" property="standardFileName" jdbcType="VARCHAR" />
+    <result column="PUB_ORG" property="pubOrg" jdbcType="VARCHAR" />
+    <result column="ADOPT_RELATION" property="adoptRelation" jdbcType="VARCHAR" />
+    <result column="REPLACE_STANDARD" property="replaceStandard" jdbcType="LONGVARCHAR" />
+    <result column="REPLACED_STANDARD" property="replacedStandard" jdbcType="LONGVARCHAR" />
+    <result column="QUOTE_STANDARD" property="quoteStandard" jdbcType="LONGVARCHAR" />
+    <result column="MODIFY_OBJECT" property="modifyObject" jdbcType="VARCHAR" />
+    <result column="SUPPLEMENTARY_OBJECT" property="supplementaryObject" jdbcType="VARCHAR" />
+    <result column="BELONG_TO_UNIT" property="belongToUnit" jdbcType="VARCHAR" />
+    <result column="DRAFT_UNIT" property="draftUnit" jdbcType="VARCHAR" />
+    <result column="THEME_CN_NAME" property="themeCnName" jdbcType="VARCHAR" />
+    <result column="THEME_EN_NAME" property="themeEnName" jdbcType="VARCHAR" />
+    <result column="FREE_CN_NAME" property="freeCnName" jdbcType="VARCHAR" />
+    <result column="INTERNATION_CLASS" property="internationClass" jdbcType="VARCHAR" />
+    <result column="CHINESE_CLASS" property="chineseClass" jdbcType="VARCHAR" />
+    <result column="TECHNICAL_FIELD" property="technicalField" jdbcType="VARCHAR" />
+    <result column="DRAFT_STAFF" property="draftStaff" jdbcType="VARCHAR" />
+    <result column="CONTACT_WAY" property="contactWay" jdbcType="VARCHAR" />
+    <result column="JURISDICTION" property="jurisdiction" jdbcType="VARCHAR" />
+    <result column="TRANSLATION" property="translation" jdbcType="VARCHAR" />
+    <result column="PUBLISHER" property="publisher" jdbcType="VARCHAR" />
+    <result column="DIGEST" property="digest" jdbcType="VARCHAR" />
+    <result column="HTML_URL" property="htmlUrl" jdbcType="VARCHAR"/>
+    <result column="ICS_CODE" property="icsCode" jdbcType="VARCHAR"/>
+    <result column="PINGYING" property="pinyin" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="listPinyin" resultType="java.lang.String">
+      SELECT PINGYING FROM s_standard GROUP BY PINGYING ORDER BY PINGYING 
+  </select>
+  
+  <select id="getdepartment" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultType="java.lang.String">
+		SELECT distinct(PUB_ORG) PUB_ORG from S_STANDARD 
+		<where>
+	
+		<if test="key != null">
+		 PUB_ORG like CONCAT('%',#{key,jdbcType=VARCHAR},'%')
+		</if>
+		</where>
+		order by PUB_ORG desc
+  </select>
+    <select id="getdeparUnit" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultType="java.lang.String">
+		SELECT distinct(DRAFT_UNIT) DRAFT_UNIT from S_STANDARD 
+		<where>
+		<if test="key != null">
+		DRAFT_UNIT  like  CONCAT('%',#{key,jdbcType=VARCHAR},'%')
+		</if>
+		</where>
+		order by DRAFT_UNIT desc
+  </select>
+   <select id="getStandardById" parameterType="string" resultMap="BaseResultMap">
+		select * from S_STANDARD where  STANDARD_ID = #{0}    
+  </select>
+  
+  <select id="getStandardByNo" parameterType="string" resultMap="BaseResultMap">
+		select * from S_STANDARD where  STANDARD_NO = #{0}    
+  </select>
+  
+  <select id="getStandardByNoTrim" parameterType="string" resultMap="BaseResultMap">
+		select * from S_STANDARD where  STANDARD_NO_TRIM = #{0}    
+  </select>
+  
+   <select id="searnull" parameterType="string" resultType="java.lang.Integer"> 
+		select count(STANDARD_ID) from S_STANDARD 
+		<where>
+		<if test="_parameter != null">
+		${_parameter} is not null
+		</if>
+		</where>
+  </select>
+  <select id="selectBnodeId" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+      SELECT * FROM S_STANDARD ss LEFT JOIN A_STANDARD_NODE an ON ss.STANDARD_ID = AN.STANDARD_ID
+      <where>
+         <!--  <if test="isback == null">
+		    <if test="searcQB != null or searcGB != null or searcHB != null or searcSB != null">
+		    (
+		    ss.STANDARD_TYPE != null
+		    <if test="searcQB != null">
+			or ss.STANDARD_TYPE like CONCAT('%',Q,'%')
+		    </if>
+		    <if test="searcGB != null">
+			or ss.STANDARD_TYPE like CONCAT('%',G,'%')
+		    </if>
+		    <if test="searcHB != null">
+			or ss.STANDARD_TYPE like CONCAT('%',H,'%')
+		    </if>
+		    <if test="searcSB != null">
+			or ss.STANDARD_TYPE like CONCAT('%',S,'%')
+		    </if>
+		    )
+		    </if>
+		    <if test="searcQB == null and searcGB == null and searcHB == null and searcSB == null">
+		        and ss.STANDARD_TYPE = null
+		    </if>
+		    </if> -->
+          <if test="nodeId != null">
+                 an.NODE_ID = #{nodeId}
+          </if>
+      </where>
+  </select>
+   
+  <select id="listStandardByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+      	<!-- select * from ( -->
+	      	select * from S_STANDARD 
+			<where>		    
+			    <if test="standardNo != null">
+					STANDARD_NO like CONCAT('%',#{standardNo},'%')
+				</if>
+				<if test="standardCnName != null">
+				 ${relation} STANDARD_CN_NAME like CONCAT('%',#{standardCnName},'%')
+				</if>
+				<if test="standardType != null">
+				 ${relation} STANDARD_TYPE = #{standardType}
+				</if>
+				<if test="replaceStandard != null">
+				 ${relation} REPLACE_STANDARD like CONCAT('%',#{replaceStandard},'%')
+				</if>
+				<if test="quoteStandard != null">
+				 ${relation} QUOTE_STANDARD like CONCAT('%',#{quoteStandard},'%')
+				</if>
+				<if test="draftUnit != null">
+				 ${relation} DRAFT_UNIT like CONCAT('%',#{draftUnit},'%')
+				</if>
+				<if test="draftStaff != null">
+				 ${relation} DRAFT_STAFF like CONCAT('%',#{draftStaff},'%')
+				</if>
+				<if test="pubOrg != null">
+				 ${relation} PUB_ORG like CONCAT('%',#{pubOrg},'%')
+				</if>
+				<if test="publishDate != null">
+				 ${relation} IMPLEMENTATION_DATE = to_date(#{publishDate} ,'YYYY-MM-DD hh24:mi:ss')
+				</if>
+				<if test="adoptRelation != null">
+				 ${relation} ADOPT_RELATION like CONCAT('%',#{adoptRelation},'%')
+				</if>
+				<if test="technicalField != null">
+				 ${relation} TECHNICAL_FIELD like CONCAT('%',#{technicalField},'%')
+				</if>
+				<if test="standardStatus != null">
+				 ${relation} STANDARD_STATUS = #{standardStatus}
+				</if>
+				<if test="uploadUnit != null">
+				 ${relation} UPLOAD_UNIT like CONCAT('%',#{uploadUnit},'%')
+				</if>
+				<if test="order != null">
+				    order by ${order}  ${sort}
+				 </if>
+		  	</where>
+	     <!-- temp 
+	    <where>
+	         <if test="isback == null">
+	       <if test="searcQB != null or searcGB != null or searcHB != null or searcSB != null">
+	        (
+	       	temp.STANDARD_TYPE != null
+	        <if test="searcQB != null">
+			or temp.STANDARD_TYPE like CONCAT('%',Q,'%')
+		    </if>
+		    <if test="searcGB != null">
+			or temp.STANDARD_TYPE like  CONCAT('%',G,'%')
+		    </if>
+		    <if test="searcHB != null">
+			or temp.STANDARD_TYPE like  CONCAT('%',H,'%')
+		    </if>
+		    <if test="searcSB != null">
+			or temp.STANDARD_TYPE like  CONCAT('%',S,'%')
+		    </if>
+		    )
+		    </if>
+		    <if test="searcQB == null and searcGB == null and searcHB == null and searcSB == null">
+		        and temp.STANDARD_TYPE = null
+		    </if>
+		    </if>
+	    </where> -->
+  </select>
+  
+  <select id="listStandardByNodeId" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+		select ss.* from S_STANDARD ss 
+		left join A_STANDARD_NODE ssn on ss.STANDARD_ID = ssn.STANDARD_ID
+		left join A_ARCHITECTURE_NODE aan on ssn.NODE_ID = aan.NODE_ID
+		<where>
+		    <!-- <if test="isback == null">
+		    <if test="searcQB != null or searcGB != null or searcHB != null or searcSB != null">
+		    (
+		    ss.STANDARD_TYPE != null
+		    <if test="searcQB != null">
+			or ss.STANDARD_TYPE like  CONCAT('%',Q,'%')
+		    </if>
+		    <if test="searcGB != null">
+			or ss.STANDARD_TYPE like  CONCAT('%',G,'%')
+		    </if>
+		    <if test="searcHB != null">
+			or ss.STANDARD_TYPE like  CONCAT('%',H,'%')
+		    </if>
+		    <if test="searcSB != null">
+			or ss.STANDARD_TYPE like  CONCAT('%',S,'%')
+		    </if>
+		    )
+		    </if>
+		    <if test="searcQB == null and searcGB == null and searcHB == null and searcSB == null">
+		        and ss.STANDARD_TYPE = null
+		    </if>
+		    </if> -->
+		    <if test="nodeId != null">
+			and aan.PATH like CONCAT('%',#{nodeId},'%')
+		    </if>
+		    <if test="standardCnName != null">
+			and ss.STANDARD_CN_NAME like CONCAT('%',#{standardCnName},'%')
+		    </if>
+		    <if test="standardNo != null">
+			and ss.STANDARD_NO likeCONCAT('%',#{standardNo},'%') 
+		    </if>
+		    <if test="publishDate != null">
+			and ss.PUBLISH_DATE = to_date(#{publishDate} ,'YYYY-MM-DD hh24:mi:ss')
+		    </if>
+		    <if test="pubOrg != null">
+			and ss.PUB_ORG like CONCAT('%',#{pubOrg},'%') 
+		    </if>
+		    <if test="standardType != null">
+			and ss.STANDARD_TYPE like CONCAT('%',#{standardType},'%')
+		    </if>
+		   	<if test="standardStatus != null">
+			and ss.STANDARD_STATUS like CONCAT('%',#{standardStatus},'%')
+		    </if>
+		</where>
+		<choose>
+        <when test="order != null and sort != null">
+            order by ${order} ${sort}
+        </when>
+        <otherwise>
+            order by ss.STANDARD_NO
+        </otherwise>
+        </choose>
+  </select>
+  
+  
+  
+    <select id="StandardByNodeId" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+		select ss.* from S_STANDARD ss 
+		left join A_STANDARD_NODE ssn on ss.STANDARD_ID = ssn.STANDARD_ID
+		left join A_ARCHITECTURE_NODE aan on ssn.NODE_ID = aan.NODE_ID
+		<where>
+		    <!--  <if test="isback == null">
+		    <if test="searcQB != null or searcGB != null or searcHB != null or searcSB != null">
+		    (
+		    ss.STANDARD_TYPE != null
+		    <if test="searcQB != null">
+			or ss.STANDARD_TYPE like CONCAT('%',Q,'%')
+		    </if>
+		    <if test="searcGB != null">
+			or ss.STANDARD_TYPE like  CONCAT('%',G,'%')
+		    </if>
+		    <if test="searcHB != null">
+			or ss.STANDARD_TYPE like  CONCAT('%',H,'%')
+		    </if>
+		    <if test="searcSB != null">
+			or ss.STANDARD_TYPE like  CONCAT('%',S,'%')
+		    </if>
+		    )
+		    </if>
+		    <if test="searcQB == null and searcGB == null and searcHB == null and searcSB == null">
+		        and ss.STANDARD_TYPE = null
+		    </if>
+		    </if> -->
+		    <if test="nodeId != null">
+			  aan.NODE_ID = #{nodeId} 
+		    </if>
+		    <if test="standardCnName != null">
+			and ss.STANDARD_CN_NAME like CONCAT('%',#{standardCnName},'%')
+		    </if>
+		    <if test="standardNo != null">
+			and ss.STANDARD_NO like CONCAT('%',#{standardNo},'%')
+		    </if>
+		    <if test="publishDate != null">
+			and ss.PUBLISH_DATE = to_date(#{publishDate} ,'YYYY-MM-DD hh24:mi:ss')
+		    </if>
+		    <if test="pubOrg != null">
+			and ss.PUB_ORG like CONCAT('%',#{pubOrg},'%')
+		    </if>
+		    <if test="standardType != null">
+			and ss.STANDARD_TYPE like CONCAT('%',#{standardType},'%')
+		    </if>
+		   	<if test="standardStatus != null">
+			and ss.STANDARD_STATUS like CONCAT('%',#{standardStatus},'%')
+		    </if>
+		</where>
+		<choose>
+        <when test="order != null and sort != null">
+            order by ${order} ${sort}
+        </when>
+        <otherwise>
+            order by ss.STANDARD_NO
+        </otherwise>
+        </choose>
+  </select>
+  
+  <delete id="deleteById" parameterType="string"> 
+   	 delete from S_STANDARD where STANDARD_ID = #{0}
+  </delete>
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.dm.S_StandardDo" >
+    insert into S_STANDARD
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="standardId != null" >
+        STANDARD_ID,
+      </if>
+      <if test="standardNo != null" >
+        STANDARD_NO,
+      </if>
+       <if test="standardNoTrim != null" >
+        STANDARD_NO_TRIM,
+      </if>
+      <if test="standardCnName != null" >
+        STANDARD_CN_NAME,
+      </if>
+      <if test="standardEnName != null" >
+        STANDARD_EN_NAME,
+      </if>
+      <if test="standardFileName != null" >
+        STANDARD_FILE_NAME,
+      </if>
+      <if test="pubOrg != null" >
+        PUB_ORG,
+      </if>
+      <if test="adoptRelation != null" >
+        ADOPT_RELATION,
+      </if>
+      <if test="replaceStandard != null" >
+        REPLACE_STANDARD,
+      </if>
+      <if test="replacedStandard != null" >
+        REPLACED_STANDARD,
+      </if>
+      <if test="quoteStandard != null" >
+        QUOTE_STANDARD,
+      </if>
+      <if test="modifyObject != null" >
+        MODIFY_OBJECT,
+      </if>
+      <if test="supplementaryObject != null" >
+        SUPPLEMENTARY_OBJECT,
+      </if>
+      <if test="publishDate != null" >
+        PUBLISH_DATE,
+      </if>
+      <if test="implementationDate != null" >
+        IMPLEMENTATION_DATE,
+      </if>
+      <if test="confirmDate != null" >
+        CONFIRM_DATE,
+      </if>
+      <if test="endDate != null" >
+        END_DATE,
+      </if>
+      <if test="invalidDate != null" >
+        INVALID_DATE,
+      </if>
+      <if test="belongToUnit != null" >
+        BELONG_TO_UNIT,
+      </if>
+      <if test="draftUnit != null" >
+        DRAFT_UNIT,
+      </if>
+      <if test="standardType != null" >
+        STANDARD_TYPE,
+      </if>
+      <if test="standardLevel2 != null" >
+        STANDARD_LEVEL2,
+      </if>
+      <if test="themeCnName != null" >
+        THEME_CN_NAME,
+      </if>
+      <if test="themeEnName != null" >
+        THEME_EN_NAME,
+      </if>
+      <if test="freeCnName != null" >
+        FREE_CN_NAME,
+      </if>
+      <if test="language != null" >
+        LANGUAGE,
+      </if>
+      <if test="country != null" >
+        COUNTRY,
+      </if>
+      <if test="internationClass != null" >
+        INTERNATION_CLASS,
+      </if>
+      <if test="chineseClass != null" >
+        CHINESE_CLASS,
+      </if>
+      <if test="standardLevel != null" >
+        STANDARD_LEVEL,
+      </if>
+      <if test="projectStartDate != null" >
+        PROJECT_START_DATE,
+      </if>
+      <if test="technicalField != null" >
+        TECHNICAL_FIELD,
+      </if>
+      <if test="draftStaff != null" >
+        DRAFT_STAFF,
+      </if>
+      <if test="contactWay != null" >
+        CONTACT_WAY,
+      </if>
+      <if test="jurisdiction != null" >
+        JURISDICTION,
+      </if>
+      <if test="translation != null" >
+        TRANSLATION,
+      </if>
+      <if test="udc != null" >
+        UDC,
+      </if>
+      <if test="pageNumber != null" >
+        PAGE_NUMBER,
+      </if>
+      <if test="publisher != null" >
+        PUBLISHER,
+      </if>
+      <if test="pubDate != null" >
+        PUB_DATE,
+      </if>
+      <if test="isbn != null" >
+        ISBN,
+      </if>
+      <if test="digest != null" >
+        DIGEST,
+      </if>
+      <if test="standardStatus != null" >
+        STANDARD_STATUS,
+      </if>
+      <if test="lastOperDate != null" >
+        LAST_OPER_DATE,
+      </if>
+      <if test="lastOperType != null" >
+        LAST_OPER_TYPE,
+      </if>
+      <if test="lastOperUser != null" >
+        LAST_OPER_USER,
+      </if>
+      <if test="uploadUnit != null" >
+        UPLOAD_UNIT,
+      </if>
+      <if test="htmlUrl != null">
+          HTML_URL,
+      </if>
+      <if test="icsCode != null">
+          ICS_CODE,
+      </if>
+      <if test="pinyin != null">
+          PINGYING,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="standardId != null" >
+        #{standardId,jdbcType=VARCHAR},
+      </if>
+      <if test="standardNo != null" >
+        #{standardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="standardNoTrim != null" >
+        #{standardNoTrim,jdbcType=VARCHAR},
+      </if>
+      <if test="standardCnName != null" >
+        #{standardCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="standardEnName != null" >
+        #{standardEnName,jdbcType=VARCHAR},
+      </if>
+      <if test="standardFileName != null" >
+        #{standardFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="pubOrg != null" >
+        #{pubOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="adoptRelation != null" >
+        #{adoptRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="replaceStandard != null" >
+        #{replaceStandard,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="replacedStandard != null" >
+        #{replacedStandard,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="quoteStandard != null" >
+        #{quoteStandard,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="modifyObject != null" >
+        #{modifyObject,jdbcType=VARCHAR},
+      </if>
+      <if test="supplementaryObject != null" >
+        #{supplementaryObject,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null" >
+        #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="implementationDate != null" >
+        #{implementationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmDate != null" >
+        #{confirmDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invalidDate != null" >
+        #{invalidDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="belongToUnit != null" >
+        #{belongToUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="draftUnit != null" >
+        #{draftUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="standardType != null" >
+        #{standardType,jdbcType=VARCHAR},
+      </if>
+      <if test="standardLevel2 != null" >
+        #{standardLevel2,jdbcType=VARCHAR},
+      </if>
+      <if test="themeCnName != null" >
+        #{themeCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="themeEnName != null" >
+        #{themeEnName,jdbcType=VARCHAR},
+      </if>
+      <if test="freeCnName != null" >
+        #{freeCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null" >
+        #{language,jdbcType=INTEGER},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="internationClass != null" >
+        #{internationClass,jdbcType=VARCHAR},
+      </if>
+      <if test="chineseClass != null" >
+        #{chineseClass,jdbcType=VARCHAR},
+      </if>
+      <if test="standardLevel != null" >
+        #{standardLevel,jdbcType=INTEGER},
+      </if>
+      <if test="projectStartDate != null" >
+        #{projectStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="technicalField != null" >
+        #{technicalField,jdbcType=VARCHAR},
+      </if>
+      <if test="draftStaff != null" >
+        #{draftStaff,jdbcType=VARCHAR},
+      </if>
+      <if test="contactWay != null" >
+        #{contactWay,jdbcType=VARCHAR},
+      </if>
+      <if test="jurisdiction != null" >
+        #{jurisdiction,jdbcType=VARCHAR},
+      </if>
+      <if test="translation != null" >
+        #{translation,jdbcType=VARCHAR},
+      </if>
+      <if test="udc != null" >
+        #{udc,jdbcType=VARCHAR},
+      </if>
+      <if test="pageNumber != null" >
+        #{pageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="publisher != null" >
+        #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="pubDate != null" >
+        #{pubDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isbn != null" >
+        #{isbn,jdbcType=VARCHAR},
+      </if>
+      <if test="digest != null" >
+        #{digest,jdbcType=VARCHAR},
+      </if>
+      <if test="standardStatus != null" >
+        #{standardStatus,jdbcType=INTEGER},
+      </if>
+      <if test="lastOperDate != null" >
+        #{lastOperDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastOperType != null" >
+        #{lastOperType,jdbcType=INTEGER},
+      </if>
+      <if test="lastOperUser != null" >
+        #{lastOperUser,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadUnit != null" >
+        #{uploadUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="htmlUrl != null">
+         #{htmlUrl,jdbcType=VARCHAR},
+      </if>
+       <if test="icsCode != null">
+         #{icsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pinyin != null">
+           #{pinyin,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.dm.S_StandardDo" >
+    update S_STANDARD
+    <set >
+      <if test="standardNo != null" >
+        STANDARD_NO = #{standardNo,jdbcType=VARCHAR},
+      </if>
+        <if test="standardNoTrim != null" >
+        STANDARD_NO_TRIM = #{standardNoTrim,jdbcType=VARCHAR},
+      </if>
+      <if test="standardCnName != null" >
+        STANDARD_CN_NAME = #{standardCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="standardEnName != null" >
+        STANDARD_EN_NAME = #{standardEnName,jdbcType=VARCHAR},
+      </if>
+      <if test="standardFileName != null" >
+        STANDARD_FILE_NAME = #{standardFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="pubOrg != null" >
+        PUB_ORG = #{pubOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="adoptRelation != null" >
+        ADOPT_RELATION = #{adoptRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="replaceStandard != null" >
+        REPLACE_STANDARD = #{replaceStandard,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="replacedStandard != null" >
+        REPLACED_STANDARD = #{replacedStandard,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="quoteStandard != null" >
+        QUOTE_STANDARD = #{quoteStandard,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="modifyObject != null" >
+        MODIFY_OBJECT = #{modifyObject,jdbcType=VARCHAR},
+      </if>
+      <if test="supplementaryObject != null" >
+        SUPPLEMENTARY_OBJECT = #{supplementaryObject,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null" >
+        PUBLISH_DATE = #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="implementationDate != null" >
+        IMPLEMENTATION_DATE = #{implementationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmDate != null" >
+        CONFIRM_DATE = #{confirmDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        END_DATE = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invalidDate != null" >
+        INVALID_DATE = #{invalidDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="belongToUnit != null" >
+        BELONG_TO_UNIT = #{belongToUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="draftUnit != null" >
+        DRAFT_UNIT = #{draftUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="standardType != null" >
+        STANDARD_TYPE = #{standardType,jdbcType=VARCHAR},
+      </if>
+      <if test="standardLevel2 != null" >
+        STANDARD_LEVEL2 = #{standardLevel2,jdbcType=VARCHAR},
+      </if>
+      <if test="themeCnName != null" >
+        THEME_CN_NAME = #{themeCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="themeEnName != null" >
+        THEME_EN_NAME = #{themeEnName,jdbcType=VARCHAR},
+      </if>
+      <if test="freeCnName != null" >
+        FREE_CN_NAME = #{freeCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null" >
+        LANGUAGE = #{language,jdbcType=INTEGER},
+      </if>
+      <if test="country != null" >
+        COUNTRY = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="internationClass != null" >
+        INTERNATION_CLASS = #{internationClass,jdbcType=VARCHAR},
+      </if>
+      <if test="chineseClass != null" >
+        CHINESE_CLASS = #{chineseClass,jdbcType=VARCHAR},
+      </if>
+      <if test="standardLevel != null" >
+        STANDARD_LEVEL = #{standardLevel,jdbcType=INTEGER},
+      </if>
+      <if test="projectStartDate != null" >
+        PROJECT_START_DATE = #{projectStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="technicalField != null" >
+        TECHNICAL_FIELD = #{technicalField,jdbcType=VARCHAR},
+      </if>
+      <if test="draftStaff != null" >
+        DRAFT_STAFF = #{draftStaff,jdbcType=VARCHAR},
+      </if>
+      <if test="contactWay != null" >
+        CONTACT_WAY = #{contactWay,jdbcType=VARCHAR},
+      </if>
+      <if test="jurisdiction != null" >
+        JURISDICTION = #{jurisdiction,jdbcType=VARCHAR},
+      </if>
+      <if test="translation != null" >
+        TRANSLATION = #{translation,jdbcType=VARCHAR},
+      </if>
+      <if test="udc != null" >
+        UDC = #{udc,jdbcType=VARCHAR},
+      </if>
+      <if test="pageNumber != null" >
+        PAGE_NUMBER = #{pageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="publisher != null" >
+        PUBLISHER = #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="pubDate != null" >
+        PUB_DATE = #{pubDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isbn != null" >
+        ISBN = #{isbn,jdbcType=VARCHAR},
+      </if>
+      <if test="digest != null" >
+        DIGEST = #{digest,jdbcType=VARCHAR},
+      </if>
+      <if test="standardStatus != null" >
+        STANDARD_STATUS = #{standardStatus,jdbcType=INTEGER},
+      </if>
+      <if test="lastOperDate != null" >
+        LAST_OPER_DATE = #{lastOperDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastOperType != null" >
+        LAST_OPER_TYPE = #{lastOperType,jdbcType=INTEGER},
+      </if>
+      <if test="lastOperUser != null" >
+        LAST_OPER_USER = #{lastOperUser,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadUnit != null" >
+        UPLOAD_UNIT = #{uploadUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="htmlUrl != null">
+        HTML_URL = #{htmlUrl,jdbcType=VARCHAR},
+      </if>
+       <if test="icsCode != null">
+        ICS_CODE = #{icsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pinyin != null">
+        PINGYING = #{pinyin,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where STANDARD_ID = #{standardId,jdbcType=VARCHAR}
+  </update>
+</mapper>

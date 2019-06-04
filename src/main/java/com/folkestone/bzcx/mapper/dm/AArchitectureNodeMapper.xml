@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.dm.AArchitectureNodeMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.dm.ArchitectureNodeVo" >
+    <result column="NODE_ID" property="nodeId" jdbcType="VARCHAR" />
+    <result column="NODE_CODE" property="nodeCode" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+    <result column="ARCHITECTURE_ID" property="architectureId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="N_SORT" property="nodeSort" jdbcType="DECIMAL" />
+     <result column="NODE_CN_NAME" property="nodeCnName" jdbcType="LONGVARCHAR" />
+    <result column="NODE_EN_NAME" property="nodeEnName" jdbcType="LONGVARCHAR" />
+    <result column="PATH" property="path" jdbcType="LONGVARCHAR" />
+    <result column="NOTE" property="note" jdbcType="LONGVARCHAR" />
+  </resultMap>
+   <select id="listNodeByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+	select * from A_ARCHITECTURE_NODE
+	<where>
+	    <if test="nodeId != null">
+			and NODE_ID = #{nodeId}
+		</if>
+		<if test="parentId != null">
+			and PARENT_ID = #{parentId}
+		</if>
+		<if test="architectureId != null" >
+	        and ARCHITECTURE_ID = #{architectureId}
+	    </if> 
+		<if test="nodeCode != null" >
+	        and NODE_CODE = #{nodeCode}
+	    </if> 
+	    <!-- nodeCode也是很多个nodeCode拼接到一起的
+	    可以根据nodeCode知道当前节点所在的位置及其子节点
+	    在后台维护，新增体系节点的时候，用到这个查询参数 
+	    -->
+	    <if test="path != null" >
+	        and NODE_CODE like CONCAT(#{path},'%')
+	    </if> 
+	</where>
+    order by N_SORT
+  </select>
+  <select id="getNodeById" parameterType="string" resultMap="BaseResultMap">
+     select * from A_ARCHITECTURE_NODE where NODE_ID = #{0}
+  </select>	
+  <delete id="deleteNodeById" parameterType="string">
+    delete from A_ARCHITECTURE_NODE where NODE_ID = #{0}
+	
+  </delete>
+  <delete id="deleteNodeByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query">
+    delete from A_ARCHITECTURE_NODE where 1 = 1
+	<if test="architectureId != null">
+		and ARCHITECTURE_ID = #{architectureId}
+	</if>
+    <if test="nodeId != null">
+		and NODE_ID = #{nodeId}
+	</if>  
+  </delete>
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.dm.A_Architecture_NodeDo" >
+    insert into A_ARCHITECTURE_NODE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="nodeId != null" >
+        NODE_ID,
+      </if>
+      <if test="nodeCnName != null" >
+        NODE_CN_NAME,
+      </if>
+      <if test="nodeEnName != null" >
+        NODE_EN_NAME,
+      </if>
+      <if test="nodeCode != null" >
+        NODE_CODE,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="path != null" >
+        PATH,
+      </if>
+      <if test="architectureId != null" >
+        ARCHITECTURE_ID,
+      </if>
+      <if test="note != null" >
+        NOTE,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+     	<if test="nodeSort != null">
+     	    N_SORT,
+     	</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="nodeId != null" >
+        #{nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeCnName != null" >
+        #{nodeCnName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="nodeEnName != null" >
+        #{nodeEnName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="nodeCode != null" >
+        #{nodeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="architectureId != null" >
+        #{architectureId,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null" >
+        #{note,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nodeSort != null">
+          #{nodeSort,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.dm.A_Architecture_NodeDo" >
+    update A_ARCHITECTURE_NODE
+    <set >
+      <!-- <if test="nodeId != null" >
+        NODE_ID = #{nodeId,jdbcType=VARCHAR},
+      </if> -->
+      <if test="nodeCnName != null" >
+        NODE_CN_NAME = #{nodeCnName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="nodeEnName != null" >
+        NODE_EN_NAME = #{nodeEnName,jdbcType=LONGVARCHAR},
+      </if>
+      <!-- <if test="nodeCode != null" >
+        NODE_CODE = #{nodeCode,jdbcType=VARCHAR},
+      </if> -->
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        PATH = #{path,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="architectureId != null" >
+        ARCHITECTURE_ID = #{architectureId,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null" >
+        NOTE = #{note,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nodeSort != null">
+          N_SORT = #{nodeSort,jdbcType=DECIMAL},
+      </if>
+    </set>
+       where NODE_CODE = #{nodeCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

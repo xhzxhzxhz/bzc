@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.user.RRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.user.RoleVo" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="ROLE_DESCRIBE" property="roleDescribe" jdbcType="VARCHAR" />
+    <result column="NOTE" property="note" jdbcType="VARCHAR" />
+    <result column="SERIAL" property="serial" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="BIGINT" />
+    <result column="NOTE" jdbcType="VARCHAR" property="note" />
+    <result column="LASTOPERATE_TIME" property="lastoperateTime" jdbcType="TIMESTAMP" />
+    <result column="lastoperateUserName" property="lastoperateUserName" jdbcType="VARCHAR" />
+    <result column="LASTOPERATE_TYPE" property="lastoperateType" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="listRoleByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+  		<!--  select r.*, u.account as lastoperateUserName from r_role r LEFT JOIN r_user u on r.LASTOPERATE_USER = u.id  order by r.LASTOPERATE_TIME -->
+  		 select * from R_ROLE order by LASTOPERATE_TIME
+  </select>
+  <select id="getRoleById" parameterType="string" resultMap="BaseResultMap">
+  		 select * from R_ROLE where ID = #{0}
+  </select>
+  <select id="listRoleByUserId" parameterType="string" resultMap="BaseResultMap">
+		  select * from r_role r 
+  		  LEFT JOIN r_user_role ur on r.ID = ur.ROLE_ID 
+		  where ur.ALLOW_ID = #{0} order by r.LASTOPERATE_TIME
+  </select>
+  <select id="getRoleByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+  		 select r.*, u.account as lastoperateUserName from r_role r LEFT JOIN r_user u on r.LASTOPERATE_USER = u.id
+  		 where 1=1
+  		 <if test="roleId != null">
+  		 and r.id = #{roleId}
+  		 </if>
+  		 order by r.LASTOPERATE_TIME
+  </select>
+  <delete id="delete" parameterType="string">
+  		 delete from r_role where ID = #{0}
+  </delete>
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.user.R_RoleDo" >
+    insert into r_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="roleDescribe != null">
+        ROLE_DESCRIBE,
+      </if>
+      <if test="note != null">
+        NOTE,
+      </if>
+      <if test="serial != null">
+        SERIAL,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="lastoperateTime != null">
+        LASTOPERATE_TIME,
+      </if>
+      <if test="lastoperateUser != null">
+        LASTOPERATE_USER,
+      </if>
+      <if test="lastoperateType != null">
+        LASTOPERATE_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDescribe != null">
+        #{roleDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="serial != null">
+        #{serial,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIGINT},
+      </if>
+      <if test="lastoperateTime != null">
+        #{lastoperateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastoperateUser != null">
+        #{lastoperateUser,jdbcType=BIGINT},
+      </if>
+      <if test="lastoperateType != null">
+        #{lastoperateType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.user.R_RoleDo">
+    update r_role
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDescribe != null">
+        ROLE_DESCRIBE = #{roleDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        NOTE = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="serial != null">
+        SERIAL = #{serial,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="lastoperateTime != null">
+        LASTOPERATE_TIME = #{lastoperateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastoperateUser != null">
+        LASTOPERATE_USER = #{lastoperateUser,jdbcType=BIGINT},
+      </if>
+      <if test="lastoperateType != null">
+        LASTOPERATE_TYPE = #{lastoperateType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

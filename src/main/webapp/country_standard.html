@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>国家标准</title>
+    <style>
+        body{
+            background:#EFEFF4;
+            font-family:SourceHanSansCN-Regular;
+            margin:0;
+            padding: 0;
+            font-size: 0;
+        }
+        *{
+            margin:0;
+            padding: 0;
+        }
+        ul{
+            list-style: none;
+        }
+        a{
+        	text-decoration:none;
+        }
+        .search_box{
+            width:100%;
+            /* height:1rem; */
+            position: relative;
+            text-align: center;
+            margin-top:0.5rem;
+        }
+        .search_input{
+            width:7.2rem;
+            height:0.6rem;
+            border-radius:0.15rem;
+            text-align: center;
+            outline: none; 
+            border:none;
+            color:#666;
+            font-size: 0.3rem;
+        }
+        input::-webkit-input-placeholder{
+        	 color:#E6E6EA;
+        }
+        .search_box img{
+            width: 0.6rem;
+            height: 0.6rem;
+            position: absolute;
+            left: 2.6rem;
+        }
+        .classfiy{
+            width:7rem;
+            margin-top:0.6rem;
+            padding:0.2rem;
+           
+        }
+        .classfiy>ul{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width:7rem;
+            justify-content:space-around;
+        }
+        .classfiy>ul>li{
+            float:left;
+            /* width:2.2rem; */
+            height:0.4rem;
+            margin-top:-0.3rem;
+            font-size:0.25rem;
+            color:#666666;
+        }
+        .classfiy>ul>li>.selcect_bottom{
+            display: inline-block;
+            border:5px solid transparent;
+            border-top-color: #666;
+            position: relative;
+            top: 0.09rem;
+            left: 0.1rem;
+            width: 0;
+            height: 0;
+        }
+        .classfiy>ul>li>img{
+            width:0.3rem;
+            height:0.3rem;
+            vertical-align: middle;
+        }  
+        .select_content{
+            background:rgba(0,0,0,0.4);
+            display:none;
+            position: absolute;
+            height:100%;
+            width:7.5rem;
+            z-index: 10;
+            right:0;
+            margin-top:0.2rem;
+        }
+      
+        .select_content>ul{
+            background: #fff;
+          
+        }
+        .select_content>ul>li{
+            height: 0.8rem;
+            color:#666666;
+            border-bottom:1px solid #eee;
+            line-height:0.8rem;
+            box-sizing: border-box;
+            padding:0 0.3rem ;
+            position: relative;
+        }
+        .active{
+            color:#EBB003!important;
+        }
+        .active_bottom{
+            border-top-color:#EBB003!important;
+        }
+        .img_yes{
+            width: 0.11rem;
+            height: 0.25rem;
+            border-color: #EBB003;
+            position: absolute;
+            top:0.15rem;
+            right:1.63rem;
+            border-style: solid;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            display: none;
+        }
+        .conBlue{
+            background: #004BE2;
+        }
+        .highCon{
+            width: 100%;
+            height: .8rem;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            font-size: .3rem;
+            color: #333;
+            position: relative;
+        }
+        .standard{
+            flex: 2;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            border-right: 1px solid #dcdcdc;          
+            text-align:center;
+            position: relative;
+            color: #fff;
+            font-size: .27rem;
+        }
+        .standardName{
+            flex: 3;   
+            font-size: .27rem;
+            padding-left:.1rem;
+            padding-right:.1rem;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;                
+            text-align:center;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            position: relative;
+            color: #fff;
+        }
+       .standard_content>ul {
+        	text-align:center;
+        }
+        .standard_content>ul>li{
+            width: 100%;
+            height: 1.1rem;
+            color:#333333;
+            font-size:0.3rem;
+            background:#fff;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .standard_content>ul>li>span:first-child{
+            flex: 2;
+            display: -webkit-flex;
+            justify-content: center;
+        }
+        .standard_content>ul>li>span:last-child{
+            display: -webkit-flex;
+            justify-content: center;    
+            display: flex;
+            flex: 3;  
+        }
+    </style>
+</head>
+<body>
+    <div class='country_standard'>
+        <div class='search_box'>
+            <input class='search_input' type="text" placeholder="页内搜索" />
+            <img src="./imgs/search/search.png" alt="">
+        </div>
+        <div class='classfiy'>
+            <ul>
+                <li>
+                    <span>类型</span> 
+                    <i class='selcect_bottom'></i>
+                    <div class='select_content select_content1'>
+                        <ul>
+                            <li>
+                                <span>国家标准</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                            <li>
+                                <span>行业标准</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                            <li>
+                                <span>地方标准</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                            <li>
+                                <span>团体标准</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                            <li>
+                                <span>企业标准</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                            <li>
+                                <span>全部</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <span>状态</span> 
+                    <i class='selcect_bottom'></i>
+                    <div class='select_content select_content2'>
+                        <ul>
+                            <li>
+                                <span>即将实施</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                            <li>
+                                <span>现行</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                            <li>
+                                <span>废止</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                            <li>
+                                <span>全部</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <span>性质</span> 
+                    <i class='selcect_bottom'></i>
+                    <div class='select_content select_content3'>
+                        <ul>
+                            <li>
+                                <span>强制性</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                            <li>
+                                <span>推荐性</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                            <li>
+                                <span>全部</span>   
+                                <div class='img_yes'></div>
+                            </li>
+                         
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="highCon conBlue">
+            <div class="standard">标准号</div>
+            <div class="standardName">标准名称</div>
+        </div>
+        <div class='standard_content'>
+            <ul>
+               
+            </ul>
+        </div>
+    </div>
+    <script src="js/rem.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src='js/country_standard.js'></script>
+</body>
+</html>

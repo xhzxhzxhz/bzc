@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.folkestone.bzcx.mapper.dm.AArchitectureManageMapper" >
+  <resultMap id="BaseResultMap" type="com.folkestone.bzcx.bean.bean_vo.dm.ArchitectureManageVo" >
+    <result column="ARCHITECTURE_ID" property="architectureId" jdbcType="VARCHAR" />
+    <result column="ARCHITECTURE_CODE" property="architectureCode" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="PUBLISH_DATE" property="publishDate" jdbcType="TIMESTAMP" />
+    <result column="EFFECT_DATE" property="effectDate" jdbcType="TIMESTAMP" />
+    <result column="INVALID_DATE" property="invalidDate" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="PUBLISH_UNIT" property="publishUnit" jdbcType="VARCHAR" />
+     <result column="ARCHITECTURE_CN_NAME" property="architectureCnName" jdbcType="LONGVARCHAR" />
+    <result column="ARCHITECTURE_EN_NAME" property="architectureEnName" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <select id="listManageByQuery" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+		select aam.*, rd.DEPARTMENT_NAME as departmentName,rd.PARENT_ID as parentid from  A_ARCHITECTURE_MANAGE aam 
+		LEFT JOIN R_DEPARTMENT rd on aam.PUBLISH_UNIT = rd.ID
+		<where>
+		    <if test="publishUnit != null ">
+		     aam.PUBLISH_UNIT = #{publishUnit}
+		    </if>
+		</where>
+		order by ARCHITECTURE_CODE 
+ 	</select> 
+ 	
+ 	<select id="getmanageParend" parameterType="com.folkestone.bzcx.bean.bean_dto.common.Query" resultMap="BaseResultMap">
+ 	    select aam.*, rd.DEPARTMENT_NAME as departmentName from  A_ARCHITECTURE_MANAGE aam 
+		LEFT JOIN R_DEPARTMENT rd on aam.PUBLISH_UNIT = rd.ID
+		<where>
+		    rd.PARENT_ID = '0'
+		    <if test="publishUnit != null">
+		    and aam.PUBLISH_UNIT = #{publishUnit}
+		    </if>
+		</where>
+		order by ARCHITECTURE_CODE 
+ 	</select>
+ 	
+ 	<select id="getManageById" parameterType="string" resultMap="BaseResultMap">
+		select aam.*, rd.DEPARTMENT_NAME as departmentName from  A_ARCHITECTURE_MANAGE aam 
+		LEFT JOIN R_DEPARTMENT rd on aam.PUBLISH_UNIT = rd.ID
+		where ARCHITECTURE_ID = #{0}
+ 	</select> 
+ 	<delete id="deleteManageById" parameterType="string">
+ 	    delete from A_ARCHITECTURE_MANAGE where ARCHITECTURE_ID = #{0}
+ 	</delete>
+  <insert id="insert" parameterType="com.folkestone.bzcx.bean.bean_do.dm.A_Architecture_ManageDo" >
+    insert into A_ARCHITECTURE_MANAGE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="architectureId != null" >
+        ARCHITECTURE_ID,
+      </if>
+      <if test="architectureCnName != null" >
+        ARCHITECTURE_CN_NAME,
+      </if>
+      <if test="architectureEnName != null" >
+        ARCHITECTURE_EN_NAME,
+      </if>
+      <if test="architectureCode != null" >
+        ARCHITECTURE_CODE,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="publishDate != null" >
+        PUBLISH_DATE,
+      </if>
+      <if test="effectDate != null" >
+        EFFECT_DATE,
+      </if>
+      <if test="invalidDate != null" >
+        INVALID_DATE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="publishUnit != null" >
+        PUBLISH_UNIT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="architectureId != null" >
+        #{architectureId,jdbcType=VARCHAR},
+      </if>
+      <if test="architectureCnName != null" >
+        #{architectureCnName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="architectureEnName != null" >
+        #{architectureEnName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="architectureCode != null" >
+        #{architectureCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishDate != null" >
+        #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectDate != null" >
+        #{effectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invalidDate != null" >
+        #{invalidDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="publishUnit != null" >
+        #{publishUnit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.folkestone.bzcx.bean.bean_do.dm.A_Architecture_ManageDo" >
+    update A_ARCHITECTURE_MANAGE
+    <set >
+      <if test="architectureCnName != null" >
+        ARCHITECTURE_CN_NAME = #{architectureCnName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="architectureEnName != null" >
+        ARCHITECTURE_EN_NAME = #{architectureEnName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="architectureCode != null" >
+        ARCHITECTURE_CODE = #{architectureCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishDate != null" >
+        PUBLISH_DATE = #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectDate != null" >
+        EFFECT_DATE = #{effectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invalidDate != null" >
+        INVALID_DATE = #{invalidDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="publishUnit != null" >
+        PUBLISH_UNIT = #{publishUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ARCHITECTURE_ID = #{architectureId,jdbcType=VARCHAR}
+  </update>
+</mapper>
